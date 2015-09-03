@@ -1,0 +1,38 @@
+var	listTitle = document.getElementById("listTitle"),
+	words = document.getElementById("words"),
+	currentWord = document.getElementById("currentWord");
+
+function loadJSON(){
+	var data_file = "http://127.0.0.1:8000/words.json"
+	var http_request = new XMLHttpRequest();
+
+	http_request.onreadystatechange = function(){
+		if (http_request.readyState == 4){
+			var jsonObj = JSON.parse(http_request.responseText);
+			getWord(jsonObj.words[0].languageOne);
+			listTitle.innerHTML = jsonObj.listName;
+
+			var tableString = "<table><tr><th><b>" + jsonObj.languageOne + "</b></th><th><b>" + jsonObj.languageTwo + "</b></th></tr>";
+
+			for (var i = 0, x = jsonObj.words.length; i < x; i++){
+				tableString += "<tr>";
+				tableString += "<td>" + jsonObj.words[i].languageOne + "</td>";
+				tableString += "<td>" + jsonObj.words[i].languageTwo + "</td>";
+				tableString += "</tr>";
+			}
+			tableString += "</table>"
+			words.innerHTML = tableString;
+		}
+	}
+
+	http_request.open("GET", data_file, true);
+	http_request.send();
+}
+
+loadJSON();
+
+function getWord(word){
+	currentWord.innerHTML = word;
+}
+
+getWord();
