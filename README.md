@@ -1,7 +1,11 @@
 # Wording
 
 # Cor's awesome guide to his awesome api
-* $python hello.py 
+```bash
+cd api
+. env/bin/activate
+python hello.py 
+```
 
 # Leon's awesome guide to his awesome wording app
 * Run python -m SimpleHTTPServer 8000 in Leon folder (on Windows with python 3, you have to type "python -m http.server")
