@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import g
 from flask_restful import Resource, Api
+from flask.ext.sqlalchemy import SQLAlchemy
 
 import sqlite3
 
@@ -23,21 +24,27 @@ def get_db():
         db = g._database = connect_to_database()
     return db
 
+
 @app.before_request
 def before_request():
+	# Use g.db to store a database connection
     g.db = connect_db()
 
 @app.teardown_request
 def teardown_request(exception):
     db = getattr(g, 'db', None)
     if db is not None:
+    	# Close the database connection when we tear down the request
         db.close()
 
 # REST Resources
 class User(Resource):
 	def get(self, username):
+
+		username = 'cor'
+
 		return {
-			'name': g.execute("select username from user")
+			'name': username,
 			'lists': 
 				['lijst duits', 'lijst 2']
 		}
