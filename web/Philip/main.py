@@ -1,5 +1,5 @@
 from flask import Flask, request, session, render_template, abort, redirect, url_for, flash
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, login_user , logout_user , current_user , login_required
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
  
@@ -17,9 +17,33 @@ db = SQLAlchemy(app)
 
 # Database class
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
+    __tablename__ = "users"
+    id = db.Column('user_id',db.Integer , primary_key=True)
+    username = db.Column('username', db.String(20), unique=True , index=True)
+    password = db.Column('password' , db.String(20))
+    email = db.Column('email',db.String(50),unique=True , index=True)
+    registered_on = db.Column('registered_on' , db.DateTime)
+ 
+    def __init__(self , username ,password , email):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.registered_on = datetime.utcnow()
+ 
+    def is_authenticated(self):
+        return True
+ 
+    def is_active(self):
+        return True
+ 
+    def is_anonymous(self):
+        return False
+ 
+    def get_id(self):
+        return unicode(self.id)
+ 
+    def __repr__(self):
+        return '<User %r>' % (self.username)
 
 # Initialize database
 @app.before_first_request
@@ -47,10 +71,10 @@ def login():
     user = User.query.filter_by(username=username).filter_by(password=password)
     if user.count() == 1:
         login_user(user.one())
-        flash('Welcome back {0}'.format(username))
+        flash('Welcome back {0}'.format(username), 'succes')
         return render_template('login.html')
     else:
-        flash('Invalid login')
+        flash('Invalid login', 'error')
         return redirect(url_for('index'))
 
 # User register handler
@@ -59,20 +83,23 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        email = request.form['email']
+
+        if password == '':
+            flash('You have to type a password', 'error')
+            return redirect(url_for('index'))
         
         user = User.query.filter_by(username=username)
         if user.count() == 0:
-            user = User(username=username, password=password)
+            user = User(username=username, password=password, email=email)
             db.session.add(user)
             db.session.commit()
         
-            flash('You have registered the username {0}. Please login'.format(username))
+            flash('You have registered the username {0}. Please login'.format(username), 'succes')
             return redirect(url_for('index'))
         else:
-            flash('The username {0} is already in use.  Please try a new username.'.format(username))
+            flash('The username {0} is already in use.  Please try a new username.'.format(username), 'error')
             return redirect(url_for('index'))
-    # elif request.method == 'GET':
-    #     pass
     else:
         abort(405)
 
