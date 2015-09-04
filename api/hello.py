@@ -7,12 +7,32 @@ api = Api(app)
 
 class User(Resource):
 	def get(self, username):
-		return {'name': username, 'lists': ['lijst duits', 'lijst 2']}
+		return {
+			'name': username, 
+			'lists': 
+				['lijst duits', 'lijst 2']
+		}
 
 class List(Resource):
 	def get(self, username, listname):
-		return {'name': listname, 'languages': {'language-1' : 'Nederlands', 'language-2' : 'Engels'}, 'words': [{'language-1' : 'auto', 'language-2' : 'car'}, {'language-1' : 'boom', 'language-2' : 'tree'}]}
-
+		return {
+			'name': listname, 
+			'languages': {
+				'language-1' : 'Nederlands', 
+				'language-2' : 'Engels'
+			}, 
+			'words': [
+				{
+					'language-1' : 'auto', 
+					'language-2' : 'car'
+				}, 
+				{
+					'language-1' : 'boom', 
+					'language-2' : 'tree'
+				}
+			]
+		
+		}
 
 
 api.add_resource(User, '/<username>')
