@@ -11,7 +11,7 @@ class User(Resource):
 
 class List(Resource):
 	def get(self, username, listname):
-		return {'name': listname, 'languages': {'language_1' : 'Nederlands', 'language_2' : 'Engels'}, 'words': [{'language_1' : 'auto', 'language_2' : 'car'}, {'language_1' : 'boom', 'language_2' : 'tree'}]}
+		return {'name': listname, 'languages': {'language-1' : 'Nederlands', 'language-2' : 'Engels'}, 'words': [{'language-1' : 'auto', 'language-2' : 'car'}, {'language-1' : 'boom', 'language-2' : 'tree'}]}
 
 
 

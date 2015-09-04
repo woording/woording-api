@@ -3,7 +3,10 @@
 # Cor's awesome guide to his awesome api
 ```bash
 cd api
+virtualenv env
 . env/bin/activate
+pip install flask
+pip install flask-restful
 python hello.py 
 ```
 
