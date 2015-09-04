@@ -2,17 +2,23 @@
 	<head>
 		<title>Wording Test</title>
 		<link rel="stylesheet" href="CSS/style.css">
+		<script src="JS/frameworks/angular.min.js"></script>
 	</head>
-	<body>
-		<h1 id="listTitle"></h1>
-		<div id="words"></div>
+	<body ng-app="myApp">
+		<div ng-controller="MainController">
+			<h1> {{ jsonData.listName }} </h1>
+			<div id="words"></div>
 
-		<h2 id="currentWord"></h2>
-		<h2 id="rightOrWrong"></h2>
-		<input id="answerInput" type="text">
-		<button id="checkWord">Next</button>
+			<h2 id="currentWord"></h2>
+			<h2 id="rightOrWrong"></h2>
+			<input id="answerInput" type="text">
+			<button id="checkWord">Next</button>
+		</div>
 	</body>
 	<script src="JS/script.js"></script>
 	<script src="JS/getJSON.js"></script>
 	<script src="JS/words.js"></script>
+
+	<script src="JS/app.js"></script>
+	<script src="JS/controllers/MainController.js"></script>
 </html>
