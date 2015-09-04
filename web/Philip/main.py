@@ -2,23 +2,26 @@ from flask import Flask, request, session, render_template, abort, redirect, url
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
-    
+ 
+SQLALCHEMY_DATABASE_URI = 'sqlite:///users.db'
+DEBUG = True
+SECRET_KEY = 'development key'
+
 app = Flask(__name__)
-app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-# set the secret key.  keep this really secret:
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.config.from_object(__name__)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
  
 db = SQLAlchemy(app)
 
+# Database class
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
 
+# Initialize database
 @app.before_first_request
 def init_request():
     db.create_all()
@@ -30,10 +33,12 @@ def user_loader(user_id):
         return user.one()
     return None
 
+# Main page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# User login handler
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     username = request.form['username']
@@ -48,13 +53,14 @@ def login():
         flash('Invalid login')
         return redirect(url_for('index'))
 
+# User register handler
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         
-        user = User.query(filter_by=username)
+        user = User.query.filter_by(username=username)
         if user.count() == 0:
             user = User(username=username, password=password)
             db.session.add(user)
