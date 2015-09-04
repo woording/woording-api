@@ -2,9 +2,20 @@
 <html>
 	<head>
 		<title>Flask login</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	</head>
 	<body>
 		<h1>Log in</h1>
+
+		<!-- Show flash messages here -->
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		    {% if messages %}
+		    	{% for category, message in messages %}
+		        	<h4 class="{{ category }}">{{ message | safe }}</h4>
+		    	{% endfor %}
+		  	{% endif %}
+		{% endwith %}
+
 		<table>
 			<tbody>
 				<tr>
@@ -21,6 +32,7 @@
 						<form action="register" method="post" name="register">
 							<input type="text" name="username" placeholder="Username"><br>
 							<input type="password" name="password" placeholder="Password"><br>
+							<input type="email" name="email" placeholder="email"><br>
 							<input type="submit" value="Register">
 						</form>
 					</td>
