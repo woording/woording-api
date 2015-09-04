@@ -6,8 +6,14 @@
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController">
-			<h1> {{ jsonData.listName }} </h1>
-			<div id="words"></div>
+			<h3> {{ jsonData.listName }}:</h3>
+			<div id="words">
+				<ul style="list-style: none">
+					<li data-ng-repeat="word in jsonData.words">
+						<b>{{ word.languageOne }}:</b> {{ word.languageTwo }}
+					</li>
+				</ul>
+			</div>
 
 			<h2 id="currentWord"></h2>
 			<h2 id="rightOrWrong"></h2>
@@ -16,8 +22,6 @@
 		</div>
 	</body>
 	<script src="JS/script.js"></script>
-	<script src="JS/getJSON.js"></script>
-	<script src="JS/words.js"></script>
 
 	<script src="JS/app.js"></script>
 	<script src="JS/controllers/MainController.js"></script>
