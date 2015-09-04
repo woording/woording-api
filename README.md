@@ -7,6 +7,7 @@ virtualenv env
 . env/bin/activate
 pip install flask
 pip install flask-restful
+sqlite3 wording.db < schema.sql
 python hello.py 
 ```
 

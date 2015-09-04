@@ -1,14 +1,43 @@
 from flask import Flask
+from flask import g
 from flask_restful import Resource, Api
+
+import sqlite3
+
+# configuration
+DATABASE = 'wording.db'
+DEBUG = True
+SECRET_KEY = 'development key'
+USERNAME = 'admin'
+PASSWORD = 'default'
 
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 api = Api(app)
 
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = connect_to_database()
+    return db
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
+
+# REST Resources
 class User(Resource):
 	def get(self, username):
 		return {
-			'name': username, 
+			'name': g.execute("select username from user")
 			'lists': 
 				['lijst duits', 'lijst 2']
 		}
@@ -39,6 +68,10 @@ api.add_resource(User, '/<username>')
 api.add_resource(List, '/<username>/<listname>')
 
 
+#DATABASE
+def connect_db():
+    return sqlite3.connect(app.config['DATABASE'])
+
 # @app.route('/<username>')
 # def show_user_profile(username):
 # 	return 'Hello ' + username
@@ -51,5 +84,7 @@ api.add_resource(List, '/<username>/<listname>')
 # def show_about():
 # 	return 'Insert about page here'
 
+
+# Run app
 if __name__ == '__main__':
 	app.run('0.0.0.0', debug=True)
