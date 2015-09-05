@@ -85,7 +85,7 @@ class DatabaseManager(object):
 				list_id = self.get_list_id(username, listname)
 
 				query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
-				
+
 				db_conn.query(query_text)
 
 			else:
@@ -100,7 +100,6 @@ class DatabaseManager(object):
 
 	def get_list_id(self, username, listname):
 		return self.get_list(username, listname).get("id")
-
 
 
 	def get_user(self, username_to_check): 
@@ -205,6 +204,19 @@ class DatabaseManager(object):
 		else:
 			print('ERROR: User does not exist')
 
+	def get_translations_for_list(self, username, listname):
+
+		list_id = self.get_list(username, listname).get("id")
+		db_conn = DatabaseConnection(self.database_path)
+
+		query_text = 'SELECT * FROM translation WHERE list_id = ' + str(list_id)
+
+		translation_rows = db_conn.query(query_text).fetchall()
+
+		# Map the results of dictionary_from_translation on translation_dictionaries
+		translation_dictionaries = list(map(self.get_dictionary_from_translation_record, translation_rows))
+		return translation_dictionaries
+
 
 	def get_dictionary_from_user_record(self, user_record):
 		return {
@@ -224,8 +236,12 @@ class DatabaseManager(object):
 			"language_2_tag": list_record[4],
 		}
 
-
-
-
+	def get_dictionary_from_translation_record(self, translation_record):
+		return {
+			"id": translation_record[0],
+			"list_id": translation_record[1],
+			"language_1_text": translation_record[2],
+			"language_2_text": translation_record[3]
+		}
 
 
