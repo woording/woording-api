@@ -16,6 +16,8 @@ db_manager.create_user('cor', 'cor@pruijs.nl', False, 'Hunter2')
 # Create lists
 db_manager.create_list('cor', 'Duitse woorden', 'NL_nl', 'DE_de')
 db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
+
+# Trying to create a list with an existing username/list combo returns an error
 db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
 
 
@@ -28,14 +30,16 @@ print(db_manager.username_exists('henk')) # False
 
 
 # Get user info by name
-print(db_manager.get_user_info('cor'))
-print(db_manager.get_user_info('leon'))
-print(db_manager.get_user_info('philip'))
+print(db_manager.get_user('cor'))
+print(db_manager.get_user('leon'))
+print(db_manager.get_user('philip'))
 
 # Trying to get user info of a user that doesn't exist returns an error
-db_manager.get_user_info('henk')
+db_manager.get_user('henk')
 
 # Get allt he lists for a user
 print(db_manager.get_lists_for_user('cor'))
+
+print(db_manager.get_list('cor', 'Duitse woorden'))
 
 

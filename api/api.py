@@ -18,7 +18,7 @@ class User(Resource):
 		db_manager = DatabaseManager()
 		if db_manager.username_exists(username):
 
-			user_info = db_manager.get_user_info(username)
+			user_info = db_manager.get_user(username)
 
 			return {
 				'id' : user_info.get("id"),

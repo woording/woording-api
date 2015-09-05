@@ -72,10 +72,17 @@ class DatabaseManager(object):
 		else:
 			print ('ERROR: User does not exist')
 
-	def get_user_id(self, username):
-		return self.get_user_info(username).get("id")
 
-	def get_user_info(self, username_to_check): 
+
+	def get_user_id(self, username):
+		return self.get_user(username).get("id")
+
+	def get_list_id(self, username, listname):
+		return self.get_list(username, listname).get("id")
+
+
+
+	def get_user(self, username_to_check): 
 
 		# Check if the user exists
 		if self.username_exists(username_to_check):
@@ -111,17 +118,18 @@ class DatabaseManager(object):
 
 
 	def get_username_list(self):
-		
-		# Create a DatabaseConnection
-		db_conn = DatabaseConnection(self.database_path)
 
-		# Get all the username rows
-		username_rows = db_conn.query('SELECT username FROM user').fetchall()
+ 		# Create a DatabaseConnection
+ 		db_conn = DatabaseConnection(self.database_path)
+ 
+ 		# Get all the username rows
+ 		username_rows = db_conn.query('SELECT username FROM user').fetchall()
+ 
+ 		# Extract the first item
+ 		usernames = tuple(username[0] for username in username_rows)
+ 		
+ 		return usernames
 
-		# Extract the first item
-		usernames = tuple(username[0] for username in username_rows)
-		
-		return usernames
 
 	def get_listnames_for_user(self, username):
 
@@ -135,14 +143,13 @@ class DatabaseManager(object):
 		return listnames
 
 
-	def list_exists(self, username, listname):
-		db_conn = DatabaseConnection(self.database_path)
+	# TODO LIST EXISTS
 
 
 	def get_lists_for_user(self, username):
 		db_conn = DatabaseConnection(self.database_path)
 
-		user_id = self.get_user_info(username).get("id")
+		user_id = self.get_user(username).get("id")
 
 		# Get all list rows
 		list_rows = db_conn.query('SELECT * FROM list WHERE user_id = "' + str(user_id) + '"').fetchall()
@@ -151,6 +158,33 @@ class DatabaseManager(object):
 		list_dictionaries = list(map(self.get_dictionary_from_list_record, list_rows))
 
 		return list_dictionaries
+
+	def get_list(self, username, listname):
+
+		# Check if user exists
+		if self.username_exists(username):
+
+			# Check if list exists
+			if self.listname_exists_for_user(username, listname):
+
+				user_id = self.get_user_id(username)
+
+				db_conn = DatabaseConnection(self.database_path)
+
+				# Generate the query
+				query_text = 'SELECT * FROM list WHERE user_id = ' + str(user_id) + ' AND listname = "' + listname + '"'
+
+				list_row = db_conn.query(query_text).fetchone()
+
+				return self.get_dictionary_from_list_record(list_row)
+
+			else:
+				print('ERROR: List does not exist')
+
+		else:
+			print('ERROR: User does not exist')
+
+
 
 
 	def get_dictionary_from_user_record(self, user_record):
@@ -170,6 +204,8 @@ class DatabaseManager(object):
 			"language_1_tag": list_record[3],
 			"language_2_tag": list_record[4],
 		}
+
+
 
 
 
