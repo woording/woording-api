@@ -6,19 +6,10 @@
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController">
-			<h3> {{ jsonData.name }}'s lists</h3>
-			<div id="words">
-				<ul style="list-style: none">
-					<li data-ng-repeat="list in jsonData.lists">
-						{{ list }}
-					</li>
-				</ul>
-			</div>
-
-			<h2 id="currentWord"></h2>
-			<h2 id="rightOrWrong"></h2>
-			<input id="answerInput" type="text">
-			<button id="checkWord">Next</button>
+			<h3>Info about {{ jsonData.username }}: </h3>
+			<p>
+				<b>Email:</b> {{ jsonData.email }}			
+			</p>
 		</div>
 	</body>
 	<script src="JS/script.js"></script>
