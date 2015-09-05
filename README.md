@@ -1,18 +1,15 @@
 # Wording
 
-## How to use database
-```bash
-cd api
-./reset-database.sh
-./create-env.sh
-python3 database_test.py 
-```
-
 ## How to use api
 ```bash
+# navigate to directory
 cd api
+# Set up envoirement
 ./reset-database.sh
 ./create-env.sh
+# Create test data
+python3 database_test.py
+# Run the API
 python3 api.py 
 ```
 
@@ -22,6 +19,7 @@ cd web
 python -m "SimpleHTTPServer"
 open http://127.0.0.1:8000/
 ```
+
 ## How to use web/Philip
 ```bash
 cd web/Philip
