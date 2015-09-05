@@ -11,6 +11,10 @@ cd api
 python3 database_test.py
 # Run the API
 python3 api.py 
+
+
+# In another terminal window
+curl http://127.0.0.1:5000/cor
 ```
 
 ## How to use web
