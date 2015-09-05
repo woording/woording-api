@@ -19,6 +19,8 @@ db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
 
 # Trying to create a list with an existing username/list combo returns an error
 db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
+db_manager.create_translation('cor', 'Engelse woorden', 'auto', 'car')
+db_manager.create_translation('cor', 'Engelse woorden', 'boom', 'tree')
 
 
 # Get a list of all usernames

@@ -72,6 +72,27 @@ class DatabaseManager(object):
 		else:
 			print ('ERROR: User does not exist')
 
+	def create_translation(self, username, listname, language_1_text, language_2_text):
+
+		# Check if user exists
+		if self.username_exists(username):
+
+			# Check if list exists
+			if self.listname_exists_for_user(username, listname):
+
+				db_conn = DatabaseConnection(self.database_path)
+
+				list_id = self.get_list_id(username, listname)
+
+				query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
+				
+				db_conn.query(query_text)
+
+			else:
+				print('ERROR: List does not exist')
+
+		else:
+			print('ERROR: User does not exist')
 
 
 	def get_user_id(self, username):
@@ -183,8 +204,6 @@ class DatabaseManager(object):
 
 		else:
 			print('ERROR: User does not exist')
-
-
 
 
 	def get_dictionary_from_user_record(self, user_record):
