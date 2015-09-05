@@ -137,11 +137,11 @@ def register():
                 db.session.add(user)
                 db.session.commit()
 
-                # token = generate_confirmation_token(email)
-                # confirm_url = url_for('confirm_email', token=token, _external=True)
-                # template = render_template('email_confirmation.html', confirm_url=confirm_url)
-                # subject = "Please confirm your email"
-                # send_email(email, subject, template)
+                token = generate_confirmation_token(email)
+                confirm_url = url_for('confirm_email', token=token, _external=True)
+                template = render_template('email_confirmation.html', confirm_url=confirm_url)
+                subject = "Please confirm your email"
+                send_email(email, subject, template)
 
                 login_user(user)
 
