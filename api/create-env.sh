@@ -19,4 +19,3 @@ pip install flask-mail
 pip install flask-sqlalchemy
 pip install passlib
 
-
