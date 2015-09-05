@@ -7,12 +7,6 @@ from corsDecorator import crossdomain
 
 import sqlite3
 
-# configuration
-DATABASE = 'wording.db'
-DEBUG = True
-SECRET_KEY = 'development key'
-USERNAME = 'admin'
-PASSWORD = 'default'
 
 
 app = Flask(__name__)
@@ -20,24 +14,8 @@ app.config.from_object(__name__)
 api = Api(app)
 
 
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = connect_to_database()
-    return db
 
 
-@app.before_request
-def before_request():
-	# Use g.db to store a database connection
-    g.db = connect_db()
-
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-    	# Close the database connection when we tear down the request
-        db.close()
 
 # REST Resources
 class User(Resource):
@@ -77,9 +55,6 @@ class List(Resource):
 api.add_resource(List, '/<username>/<listname>')
 
 
-#DATABASE
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
 
 # REST Recource with app.route
 @app.route('/<username>')

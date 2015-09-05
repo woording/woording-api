@@ -1,5 +1,7 @@
 *.swo
 *.swp
+*.pyc
 .DS_Store
 api/env
 web/Philip/env
+api/__pycache__
