@@ -14,14 +14,14 @@ DROP TABLE IF EXISTS list;
 CREATE TABLE list (
 	id integer primary key autoincrement,
 	user_id integer not null,
-	name text not null,
+	listname text not null,
 	language_1_tag text not null,
 	language_2_tag text not null,
     FOREIGN KEY(user_id) REFERENCES user(id)
 );
 
 CREATE UNIQUE INDEX list_name_unique_for_user
-on list (user_id, name);
+on list (user_id, listname);
 
 DROP TABLE IF EXISTS translation;
 CREATE TABLE translation (

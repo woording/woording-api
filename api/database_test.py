@@ -1,5 +1,6 @@
 from database import *
 
+
 db_manager = DatabaseManager()
 
 # Create users
@@ -9,6 +10,12 @@ db_manager.create_user('philip', 'philip@debruijn.nl', False, 'Hunter23')
 
 # Trying to create a user with a username that is taken returns an error
 db_manager.create_user('cor', 'cor@pruijs.nl', False, 'Hunter2')
+
+
+
+# Create lists
+db_manager.create_list('cor', 'Duitse woorden', 'NL_nl', 'DE_de')
+db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
 
 
 # Get a list of all usernames
@@ -26,4 +33,5 @@ print(db_manager.get_user_info('philip'))
 
 # Trying to get user info of a user that doesn't exist returns an error
 db_manager.get_user_info('henk')
+
 

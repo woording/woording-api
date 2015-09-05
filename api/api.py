@@ -21,6 +21,7 @@ class User(Resource):
 			user_info = db_manager.get_user_info(username)
 
 			return {
+				'id' : user_info.get("id"),
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'email_verified' : user_info.get("email_verified"),

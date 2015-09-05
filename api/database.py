@@ -50,6 +50,31 @@ class DatabaseManager(object):
 			# TODO Handle username is not available error
 			print ('ERROR: Username is not available')
 
+	def create_list(self, username, listname, language_1_tag, language_2_tag):
+
+		# Check if user exists
+		if self.username_exists(username):
+
+			# TODO CHECK IF LIST DOESN'T EXISTS
+
+
+			user_id = self.get_user_id(username)
+
+			# Generate the query
+			query_text = 'INSERT INTO list (user_id, listname, language_1_tag, language_2_tag) VALUES (' + str(user_id) + ', "' + listname + '", "' + language_1_tag + '", "' + language_2_tag + '")'
+
+			# Use the query to create a new list
+
+			#Create a DatabaseConnection
+			db_conn = DatabaseConnection(self.database_path)
+			db_conn.query(query_text)
+
+		else:
+			print ('ERROR: User does not exist')
+
+
+	def get_user_id(self, username):
+		return self.get_user_info(username).get("id")
 
 	def get_user_info(self, username_to_check): 
 
@@ -62,10 +87,12 @@ class DatabaseManager(object):
 			# Generate the query
 			query_text = 'SELECT * FROM user WHERE username = "' + username_to_check + '"'
 
+			# Fetch the first record
 			user_info = db_conn.query(query_text).fetchone()
 
-
+			# Create a dictionary from the user_info and return it
 			return {
+				"id": user_info[0],
 				"username": user_info[1],
 				"email": user_info[2],
 				"email_verified": user_info[3],
@@ -95,4 +122,19 @@ class DatabaseManager(object):
 		usernames = tuple(username[0] for username in username_rows)
 		
 		return usernames
+
+	def list_exists(self, username, listname):
+		db_conn = DatabaseConnection(self.database_path)
+
+
+	def get_lists_from_user(username):
+		db_conn = DatabaseConnection(self.database_path)
+
+		user_id = self.get_user_info.get("id")
+
+		listname_rows = db_conn.query('SELECT * FROM list WHERE user_id = "' + user_id + '"')
+
+		print(listname_rows)
+
+
 
