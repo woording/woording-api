@@ -15,19 +15,19 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///users.db'
 # Encryption config
 SECURITY_PASSWORD_SALT = 'securitykey'
 # Email config
-MAIL_SERVER = "localhost" # SMTP Server
+MAIL_SERVER = "smtp.gmail.com" # SMTP Server
 MAIL_PORT = 587 # SMTP Port
 MAIL_USE_TLS = True
 MAIL_USE_SSL = False
 
 MAIL_DEBUG = DEBUG
 # Login information
-MAIL_USERNAME = None
+MAIL_USERNAME = "noreply.wording@gmail.com"
 MAIL_PASSWORD = None
 # Mail sender addres
-MAIL_DEFAULT_SENDER = None
+MAIL_DEFAULT_SENDER = "noreply.wording@gmail.com"
 
-
+# Init app
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -54,7 +54,7 @@ class User(db.Model):
         self.password = password
         self.email = email
         self.registered_on = datetime.utcnow()
-        self.confirmed = True
+        self.confirmed = False
  
     def is_authenticated(self):
         return True
@@ -70,6 +70,17 @@ class User(db.Model):
  
     def __repr__(self):
         return '<User %r>' % (self.username)
+
+# Now you can use @check_confirmed
+def check_confirmed(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.confirmed is False:
+            flash('Please confirm your account!', 'error')
+            return redirect(url_for('unconfirmed'))
+        return func(*args, **kwargs)
+
+    return decorated_function
 
 # Initialize database
 @app.before_first_request
@@ -101,8 +112,8 @@ def login():
             flash('Welcome back {0}'.format(username), 'success')
             return render_template('login.html')
         else:
-            flash("Your email has to be confirmed before loggin in.", 'error')
-            return redirect(url_for('index'))
+            login_user(user.one())
+            return redirect(url_for('unconfirmed'))
     else:
         flash('Invalid login', 'error')
         return redirect(url_for('index'))
@@ -132,6 +143,8 @@ def register():
                 # subject = "Please confirm your email"
                 # send_email(email, subject, template)
 
+                login_user(user)
+
                 flash('You have registered the username {0}. Please verify your email.'.format(username), 'success')
                 return redirect(url_for('index'))
             else:
@@ -143,6 +156,25 @@ def register():
     else:
         abort(405)
 
+@app.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    if current_user.confirmed:
+        return redirect('index')
+    flash('Please confirm your account!', 'error')
+    return render_template('unconfirmed.html')
+
+# Resend email
+@app.route('/resend')
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('confirm_email', token=token, _external=True)
+    html = render_template('email_confirmation.html', confirm_url=confirm_url)
+    subject = "Please confirm your email"
+    send_email(current_user.email, subject, html)
+    flash('A new confirmation email has been sent.', 'success')
+    return redirect(url_for('unconfirmed'))
 
 # Email verification token
 def generate_confirmation_token(email):
@@ -174,20 +206,21 @@ def confirm_token(token, expiration=3600):
 @app.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
-    try:
-        email = confirm_token(token)
-    except:
-        flash('The confirmation link is invalid or has expired.', 'error')
-    
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.confirmed:
+    if current_user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
-    else:
+        return redirect(url_for('index'))
+
+    email = confirm_token(token)
+    user = User.query.filter_by(email=current_user.email).first_or_404()
+    if user.email == email:
         user.confirmed = True
         db.session.add(user)
         db.session.commit()
         flash('You have confirmed your account. Thanks!', 'success')
+    else:
+        flash('The confirmation link is invalid or has expired.', 'error')
     return redirect(url_for('index'))
+
 
 # Run app
 if __name__ == '__main__':
