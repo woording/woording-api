@@ -15,6 +15,7 @@ pip install passlib
 ## How to use api
 ```bash
 cd api
+./reset-database.sh
 virtualenv env
 . env/bin/activate
 sqlite3 wording.db < schema.sql

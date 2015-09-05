@@ -1,5 +1,5 @@
-drop table if exists user;
-create table user (
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
 	id integer primary key autoincrement,
 	username text not null,
 	email text not null,
@@ -10,8 +10,8 @@ create table user (
 CREATE UNIQUE INDEX user_username_unique
 on user (username);
 
-drop table if exists list;
-create table list (
+DROP TABLE IF EXISTS list;
+CREATE TABLE list (
 	id integer primary key autoincrement,
 	user_id integer not null,
 	name text not null,
@@ -23,8 +23,8 @@ create table list (
 CREATE UNIQUE INDEX list_name_unique_for_user
 on list (user_id, name);
 
-drop table if exists translation;
-create table translation (
+DROP TABLE IF EXISTS translation;
+CREATE TABLE translation (
 	id integer primary key autoincrement not null,
 	list_id integer not null,
 	language_1_text text not null,
