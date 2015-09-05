@@ -32,10 +32,11 @@ python main.py
 ```
 
 ## How to use web/Leon
+Make sure you start the api script from above too
+and uncomment @app.route lines
 ```bash
 cd web/Leon
-cd ../..
-
-you don't use it, it's a mess
+python -m "SimpleHTTPServer"
+open http://127.0.0.1#username
 ```
 
