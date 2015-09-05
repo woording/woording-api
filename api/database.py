@@ -23,17 +23,59 @@ class DatabaseConnection(object):
 # A class that contains functions for
 # interacting with the database
 class DatabaseManager(object):
+
 	def __init__(self):
 		self.database_path = 'wording.db'
 
 	def get_user_list():
 		db_conn = DatabaseConnection(database_path)
 
-	def create_user(username, email, email_verified, password_hash):
-		db_conn = DatabaseConnection(database_path)
+	def create_user(self, username, email, email_verified, password_hash):
 
-	# Function that checks if username is available, returns a Boolean
-	def username_is_available(self, username_to_check):
+		# Check if the username is available
+		if not self.username_exists(username):
+			# TODO: MAKE THIS MORE SECURE!
+			# This method is really insecure and allows for SQL Injection
+
+			# Create a DatabaseConnection
+			db_conn = DatabaseConnection(self.database_path)
+
+			# Genereate the query
+			query_text = 'INSERT INTO user (username, email, email_verified, password_hash) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '")'
+
+			# Use the query to create a new user
+			db_conn.query(query_text)
+
+		else:
+			# TODO Handle username is not available error
+			print ('ERROR: Username is not available')
+
+
+	def get_user_info(self, username_to_check): 
+
+		# Check if the user exists
+		if self.username_exists(username_to_check):
+
+			# Create a DatabaseConnection
+			db_conn = DatabaseConnection(self.database_path)
+
+			# Generate the query
+			query_text = 'SELECT * FROM user WHERE username = "' + username_to_check + '"'
+
+			return db_conn.query(query_text).fetchone()
+		else:
+			print ('ERROR: User does not exist')
+
+
+
+	def username_exists(self, username_to_check):
+
+		# If the username is not in the username list, it is not available
+		return username_to_check in self.get_username_list()
+
+
+	def get_username_list(self):
+		
 		# Create a DatabaseConnection
 		db_conn = DatabaseConnection(self.database_path)
 
@@ -42,15 +84,6 @@ class DatabaseManager(object):
 
 		# Extract the first item
 		usernames = tuple(username[0] for username in username_rows)
-
-		# If the user name is in usernames, it is not available
-		return not username_to_check in usernames
-
-	def list_users(self):
 		
-		db_conn = DatabaseConnection(self.database_path)
-		rows = db_conn.query('SELECT username FROM user').fetchall()
-		
-		return rows
-
+		return usernames
 

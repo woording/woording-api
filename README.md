@@ -1,11 +1,19 @@
 # Wording
 
+## How to use database
+```bash
+cd api
+./reset-database.sh
+./create-env.sh
+python3 database_test.py 
+```
+
 ## How to use api
 ```bash
 cd api
 ./reset-database.sh
 ./create-env.sh
-python api.py 
+python3 api.py 
 ```
 
 ## How to use web
