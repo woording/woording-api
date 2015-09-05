@@ -62,7 +62,16 @@ class DatabaseManager(object):
 			# Generate the query
 			query_text = 'SELECT * FROM user WHERE username = "' + username_to_check + '"'
 
-			return db_conn.query(query_text).fetchone()
+			user_info = db_conn.query(query_text).fetchone()
+
+
+			return {
+				"username": user_info[1],
+				"email": user_info[2],
+				"email_verified": user_info[3],
+				"password_hash": user_info[4]
+			}
+
 		else:
 			print ('ERROR: User does not exist')
 

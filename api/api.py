@@ -1,13 +1,9 @@
 from flask import Flask
 from flask import g
 from flask_restful import Resource, Api
-from flask.ext.sqlalchemy import SQLAlchemy
 import json
 from corsDecorator import crossdomain
-
-import sqlite3
-
-
+from database import DatabaseManager
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -15,19 +11,24 @@ api = Api(app)
 
 
 
-
-
 # REST Resources
 class User(Resource):
 	def get(self, username):
 
-		username = 'cor'
+		db_manager = DatabaseManager()
+		if db_manager.username_exists(username):
 
-		return {
-			'name': 'leon', #g.execute("select username from user")
-			'lists':
-				['lijst duits', 'lijst 2']
-		}
+			user_info = db_manager.get_user_info(username)
+
+			return {
+				'username': user_info.get("username"),
+				'email' : user_info.get("email"),
+				'email_verified' : user_info.get("email_verified"),
+				'password_hash' : user_info.get("password_hash")
+			}
+		else:
+			print ('ERROR: User does not exists')
+
 
 class List(Resource):
 	def get(self, username, listname):
@@ -51,14 +52,14 @@ class List(Resource):
 		}
 
 
-# api.add_resource(User, '/<username>')
+api.add_resource(User, '/<username>')
 api.add_resource(List, '/<username>/<listname>')
 
 
 
 # REST Recource with app.route
 @app.route('/<username>')
-@crossdomain(origin='*')
+# @crossdomain(origin='*')
 def show_user_profile(username):
     return json.dumps({
 			'name': username, #g.execute("select username from user")
