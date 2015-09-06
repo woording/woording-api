@@ -5,3 +5,5 @@
 api/env
 web/Philip/env
 api/__pycache__
+*.sublime-workspace
+*.sublime-project

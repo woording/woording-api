@@ -14,14 +14,14 @@ db_manager.create_user('cor', 'cor@pruijs.nl', False, 'Hunter2')
 
 
 # Create lists
-db_manager.create_list('cor', 'Duitse woorden', 'NL_nl', 'DE_de')
-db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
+db_manager.create_list('cor', 'duitse_woorden', 'NL_nl', 'DE_de')
+db_manager.create_list('cor', 'engelse_woorden', 'NL_nl', 'EN_en')
 
 # Trying to create a list with an existing username/list combo returns an error
 db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
-db_manager.create_translation('cor', 'Engelse woorden', 'auto', 'car')
-db_manager.create_translation('cor', 'Engelse woorden', 'boom', 'tree')
-db_manager.create_translation('cor', 'Engelse woorden', 'moeder', 'mother')
+db_manager.create_translation('cor', 'engelse_woorden', 'auto', 'car')
+db_manager.create_translation('cor', 'engelse_woorden', 'boom', 'tree')
+db_manager.create_translation('cor', 'engelse_woorden', 'moeder', 'mother')
 
 
 # Get a list of all usernames
@@ -43,8 +43,8 @@ db_manager.get_user('henk')
 # Get allt he lists for a user
 print(db_manager.get_lists_for_user('cor'))
 
-print(db_manager.get_list('cor', 'Engelse woorden'))
+print(db_manager.get_list('cor', 'engelse_woorden'))
 
-print(db_manager.get_translations_for_list('cor', 'Engelse woorden'))
+print(db_manager.get_translations_for_list('cor', 'engelse_woorden'))
 
 

@@ -13,44 +13,52 @@ api = Api(app)
 
 # REST Resources
 class User(Resource):
+
 	def get(self, username):
 
 		db_manager = DatabaseManager()
+
 		if db_manager.username_exists(username):
 
 			user_info = db_manager.get_user(username)
 
 			return {
-				'id' : user_info.get("id"),
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
-				'email_verified' : user_info.get("email_verified"),
-				'password_hash' : user_info.get("password_hash")
+				'lists' : db_manager.get_listnames_for_user(username)
 			}
+
 		else:
 			print ('ERROR: User does not exists')
 
 
 class List(Resource):
 	def get(self, username, listname):
-		return {
-			'name': listname,
-			'languages': {
-				'language-1' : 'Nederlands',
-				'language-2' : 'Engels'
-			},
-			'words': [
-				{
-					'language-1' : 'auto',
-					'language-2' : 'car'
-				},
-				{
-					'language-1' : 'boom',
-					'language-2' : 'tree'
-				}
-			]
 
-		}
+		db_manager = DatabaseManager()
+
+		if db_manager.username_exists(username):
+
+			if db_manager.listname_exists_for_user(username, listname):
+
+				list_data = db_manager.get_list(username, listname)
+				translations = db_manager.get_translations_for_list(username, listname)
+
+				for translation in translations: del translation['id']; del translation['list_id']
+
+				return {
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+
+					'words' : translations
+				}
+
+			else:
+				print("ERROR, List doesn't exist")
+
+		else:
+			print("ERROR, User doesn't exists")
 
 
 api.add_resource(User, '/<username>')
