@@ -33,9 +33,9 @@ python main.py
 
 ## How to use web/Leon
 - Uncomment line 63 
-```bash # @crossdomain(origin='*')```
+```# @crossdomain(origin='*')```
 and make line 56 
-```bash api.add_resource(User, '/<username>')``` 
+```api.add_resource(User, '/<username>')``` 
 a comment in api.py
 - Make sure you start the api script from above too
 ```bash
