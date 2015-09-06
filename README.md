@@ -20,8 +20,8 @@ curl http://127.0.0.1:5000/cor
 ## How to use web
 ```bash
 cd web
-python -m "SimpleHTTPServer"
-open http://127.0.0.1:8000/
+python site.py
+open http://127.0.0.1:5001
 ```
 
 ## How to use web/Philip
