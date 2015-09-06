@@ -20,6 +20,7 @@ curl http://127.0.0.1:5000/cor
 ## How to use web
 ```bash
 cd web
+
 python3 -m http.server
 open http://127.0.0.1:5001/
 ```
