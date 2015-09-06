@@ -29,6 +29,7 @@ curl http://127.0.0.1:5000/cor
 ```bash
 # Start api server first
 cd web
+. ../api/env/bin/activate
 python3 site.py
 
 # Go to site
