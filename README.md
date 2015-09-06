@@ -1,6 +1,21 @@
 # Wording
 
-## How to use api
+## How to use
+```bash
+# Start api server and web server
+./start_all.sh
+
+# Use servers
+open http://127.0.0.1:5001/cor
+curl http://127.0.0.1:5000/cor
+
+# Stop api server and web server
+./stop_all.sh
+```
+
+
+
+### How to only use api
 ```bash
 cd api
 ./initialize.sh
@@ -10,7 +25,7 @@ python3 api.py
 curl http://127.0.0.1:5000/cor
 ```
 
-## How to use web
+### How to only use web
 ```bash
 cd web
 python3 -m http.server
@@ -19,7 +34,7 @@ python3 -m http.server
 open http://127.0.0.1:5001/
 ```
 
-## How to use login
+### How to only use login
 ```bash
 cd login
 ./create-env.sh
