@@ -21,11 +21,13 @@ class User(Resource):
 		if db_manager.username_exists(username):
 
 			user_info = db_manager.get_user(username)
+			list_lists = db_manager.get_lists_for_user(username)
+			for l in list_lists: del l['user_id']; del l['id']
 
 			return {
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
-				'lists' : db_manager.get_listnames_for_user(username)
+				'lists' : list_lists
 			}
 
 		else:
