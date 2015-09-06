@@ -10,6 +10,14 @@
 			<p>
 				<b>Email:</b> {{ jsonData.email }}
 			</p>
+
+			<b>{{ jsonData.username }}'s lists:</b>
+			<ul>
+				<li ng-repeat="list in jsonData.lists">
+					{{ list.listname }}
+				</li>
+			</ul>
+
 			<a href="#cor" ng-click="loadData()">Cor</a><br>
 			<a href="#leon">Leon</a><br>
 			<a href="#philip">Philip</a><br>

@@ -63,25 +63,26 @@ class List(Resource):
 			print("ERROR, User doesn't exists")
 
 
-api.add_resource(User, '/<username>')
+# api.add_resource(User, '/<username>')
 api.add_resource(List, '/<username>/<listname>')
 
 
 
 # REST Recource with app.route
 @app.route('/<username>')
-# @crossdomain(origin='*')
+@crossdomain(origin='*')
 def get(username):
     db_manager = DatabaseManager()
+
     if db_manager.username_exists(username):
         user_info = db_manager.get_user(username)
-
+        list_lists = db_manager.get_lists_for_user(username)
+        for l in list_lists: del l['user_id']; del l['id']
+        
         return json.dumps({
-            'id': user_info.get("id"),
             'username': user_info.get("username"),
-            'email': user_info.get("email"),
-            'email_verified': user_info.get("email_verified"),
-            'password_hash': user_info.get("password_hash")
+            'email' : user_info.get("email"),
+            'lists' : list_lists
             })
     else:
         return json.dumps({
