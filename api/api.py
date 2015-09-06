@@ -75,7 +75,7 @@ def get(username):
             })
     else:
         return json.dumps({
-            'username': 'ERROR: This shouldn\' happen'
+            'username': 'ERROR: This shouldn\'t happen'
             })
 
 # @app.route('/<username>/<list>')
