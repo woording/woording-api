@@ -20,8 +20,8 @@ curl http://127.0.0.1:5000/cor
 ## How to use web
 ```bash
 cd web
-python -m "SimpleHTTPServer"
-open http://127.0.0.1:8000/
+python3 -m http.server
+open http://127.0.0.1:5001/
 ```
 
 ## How to use web/Philip
@@ -29,18 +29,5 @@ open http://127.0.0.1:8000/
 cd web/Philip
 ./create-env.sh
 python main.py
-```
-
-## How to use web/Leon
-- Uncomment line 63 
-```# @crossdomain(origin='*')```
-and make line 56 
-```api.add_resource(User, '/<username>')``` 
-a comment in api.py
-- Make sure you start the api script from above too
-```bash
-cd web/Leon
-python -m "SimpleHTTPServer"
-open http://127.0.0.1#username
 ```
 
