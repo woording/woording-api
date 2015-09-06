@@ -24,11 +24,11 @@ class User(Resource):
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists: del l['user_id']; del l['id']
 
-			return {
+			return json.dumps({
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'lists' : list_lists
-			}
+			})
 
 		else:
 			print ('ERROR: User does not exists')
@@ -48,13 +48,13 @@ class List(Resource):
 
 				for translation in translations: del translation['id']; del translation['list_id']
 
-				return {
+				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
 					'language_2_tag' : list_data.get("language_2_tag"),
 
 					'words' : translations
-				}
+				})
 
 			else:
 				print("ERROR, List doesn't exist")
