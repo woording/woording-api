@@ -25,9 +25,9 @@ python3 -m http.server
 open http://127.0.0.1:5001/
 ```
 
-## How to use web/Philip
+## How to use login
 ```bash
-cd web/Philip
+cd login
 ./create-env.sh
 python main.py
 ```
