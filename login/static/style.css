@@ -1,0 +1,20 @@
+* {
+	font-family: Helvetica;
+
+}
+
+.info {
+	color: #00529B;
+}
+
+.error {
+	color: #D8000C;
+}
+
+.success {
+	color: #4F8A10;
+}
+
+.warning {
+	color: #9F6000;
+}
