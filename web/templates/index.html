@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Wording Test</title>
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='CSS/style.css') }}">
+		<script src="{{ url_for('static', filename='JS/frameworks/angular.min.js') }}"></script>
+	</head>
+	<body ng-app="myApp">
+		<div ng-controller="MainController">
+			<h3>Info about [[ jsonData.username ]]: </h3>
+			<p>
+				<b>Email:</b> [[ jsonData.email ]]
+			</p>
+
+			<b>[[ jsonData.username ]]'s lists:</b>
+			<ul>
+				<li ng-repeat="list in jsonData.lists">
+					[[ list.listname ]]
+				</li>
+			</ul>
+
+			<a href="" ng-click="loadData('/cor')">Cor</a><br>
+			<a href="" ng-click="loadData('/leon')">Leon</a><br>
+			<a href="" ng-click="loadData('/philip')">Philip</a><br>
+		</div>
+	</body>
+	<script src="{{ url_for('static', filename='JS/script.js') }}"></script>
+
+	<script src="{{ url_for('static', filename='JS/app.js') }}"></script>
+	<script src="{{ url_for('static', filename='JS/controllers/MainController.js') }}"></script>
+</html>
