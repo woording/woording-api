@@ -61,12 +61,22 @@ api.add_resource(List, '/<username>/<listname>')
 # REST Recource with app.route
 @app.route('/<username>')
 # @crossdomain(origin='*')
-def show_user_profile(username):
-    return json.dumps({
-			'name': username, #g.execute("select username from user")
-			'lists':
-				['lijst duits', 'lijst 2']
-		})
+def get(username):
+    db_manager = DatabaseManager()
+    if db_manager.username_exists(username):
+        user_info = db_manager.get_user(username)
+
+        return json.dumps({
+            'id': user_info.get("id"),
+            'username': user_info.get("username"),
+            'email': user_info.get("email"),
+            'email_verified': user_info.get("email_verified"),
+            'password_hash': user_info.get("password_hash")
+            })
+    else:
+        return json.dumps({
+            'username': 'ERROR: This shouldn\' happen'
+            })
 
 # @app.route('/<username>/<list>')
 # def show_user_list(username, list):
