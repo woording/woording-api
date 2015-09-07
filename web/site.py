@@ -17,8 +17,12 @@ def render():
     return render_template("index.html")
 
 @app.route('/<username>')
-def reroute(username):
+def show_user(username):
     return render_template("index.html", username=username)
+
+@app.route('/<username>/<listname>')
+def show_user_list(username, listname):
+    return render_template("index.html", username=username, listname=listname)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

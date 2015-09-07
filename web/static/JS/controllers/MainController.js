@@ -1,14 +1,25 @@
 app.controller('MainController', function($scope, $http) {
 	$scope.title = 'Wording';
-	$scope.loadData = function(url){
+
+	// json loading functions
+	$scope.loadUser = function(url){
 		$http.get('http://127.0.0.1:5000' + url).
 			success(function(data, status, headers, config) {
-				$scope.jsonData = data;
-				window.history.pushState('page2', 'Title', url);
+			window.history.pushState('page2', 'Title', url);
+				$scope.userData = data;
 			}).
 			error(function(data, status, headers, config) {
 				console.log("error");
-			}); 
-	}	
-	$scope.loadData(window.location.pathname);
+			});
+	};
+
+	$scope.loadList = function(url){
+		$http.get('http://127.0.0.1:5000' + url).
+			succes(function(data, status, headers, config) {
+				$scope.listData = data;
+			}).
+			error(function(data, status, headers, config) {
+				console.log("error");
+			});
+	};
 });

@@ -6,21 +6,31 @@
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController">
-			<h3>Info about [[ jsonData.username ]]: </h3>
-			<p>
-				<b>Email:</b> [[ jsonData.email ]]
-			</p>
+			{% if listname %}
+				<div ng-init="loadList('/{{username}}/{{listname}}')">
 
-			<b>[[ jsonData.username ]]'s lists:</b>
-			<ul>
-				<li ng-repeat="list in jsonData.lists">
-					[[ list.listname ]]
-				</li>
-			</ul>
+					{{ listname }}
 
-			<a href="" ng-click="loadData('/cor')">Cor</a><br>
-			<a href="" ng-click="loadData('/leon')">Leon</a><br>
-			<a href="" ng-click="loadData('/philip')">Philip</a><br>
+				</div>
+			{% else %}
+				<div ng-init="loadUser('/{{username}}')">
+					<h3>Info about [[ userData.username ]]: </h3>
+					<p>
+						<b>Email:</b> [[ userData.email ]]
+					</p>
+
+					<b>[[ userData.username ]]'s lists:</b>
+					<ul>
+						<li ng-repeat="list in userData.lists">
+							[[ list.listname ]]
+						</li>
+					</ul>
+				</div>
+			{% endif %}
+
+			<a href="" ng-click="loadUser('/cor')">Cor</a><br>
+			<a href="" ng-click="loadUser('/leon')">Leon</a><br>
+			<a href="" ng-click="loadUser('/philip')">Philip</a><br>
 		</div>
 	</body>
 	<script src="{{ url_for('static', filename='JS/script.js') }}"></script>
