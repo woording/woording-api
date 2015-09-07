@@ -102,21 +102,24 @@ def index():
 # User login handler
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    username = request.form['username']
-    password = sha512_crypt.encrypt(request.form['password'], salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-    
-    user = User.query.filter_by(username=username).filter_by(password=password)
-    if user.count() == 1:
-        if User.query.filter_by(username=username).filter_by(password=password).filter_by(confirmed=True).count() == 1:
-            login_user(user.one())
-            flash('Welcome back {0}'.format(username), 'success')
-            return render_template('login.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = sha512_crypt.encrypt(request.form['password'], salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+        
+        user = User.query.filter_by(username=username).filter_by(password=password)
+        if user.count() == 1:
+            if User.query.filter_by(username=username).filter_by(password=password).filter_by(confirmed=True).count() == 1:
+                login_user(user.one())
+                flash('Welcome back {0}'.format(username), 'success')
+                return render_template('login.html')
+            else:
+                login_user(user.one())
+                return redirect(url_for('unconfirmed'))
         else:
-            login_user(user.one())
-            return redirect(url_for('unconfirmed'))
+            flash('Invalid login', 'error')
+            return redirect(url_for('index'))
     else:
-        flash('Invalid login', 'error')
-        return redirect(url_for('index'))
+        abort(405)
 
 # User register handler
 @app.route('/register', methods=['POST', 'GET'])

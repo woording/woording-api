@@ -124,18 +124,47 @@ class DatabaseManager(object):
 		else:
 			print ('ERROR: User does not exist')
 
+	def check_password(self, username, password):
+		if self.username_exists(username):
 
+			db_conn = DatabaseConnection(self.database_path)
+
+			query_text = 'SELECT * FROM user WHERE username = "' + username + '" AND password_hash = "' + password + '"'
+
+			user = db_conn.query(query_text).fetchone();
+
+			return user
+
+	def verify_email(self, email_to_verify):
+		if is_email_verified(email_to_verify):
+			print('Email already verified')
+		else:
+
+			db_conn = DatabaseConnection(self.database_path)
+
+			query_text = 'UPDATE user SET email_verified = true WHERE email = "' + email_to_verify + '"'
+
+			db_conn.query(query_text)
+		
+	def is_email_verified(self, email_to_check):
+
+		db_conn = DatabaseConnection(self.database_path)
+
+		return db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
 
 	def username_exists(self, username):
 
 		# If the username is in the username list, it exists
 		return username in self.get_username_list()
 
+	def email_exists(self, email):
+
+		return email in self.get_email_list()
+
 	def listname_exists_for_user(self, username, listname):
 
 		# If the listname is in the user's list of lists, it exiss
 		return listname in self.get_listnames_for_user(username)
-
 
 	def get_username_list(self):
 
@@ -149,6 +178,17 @@ class DatabaseManager(object):
  		usernames = tuple(username[0] for username in username_rows)
  		
  		return usernames
+
+	def get_email_list(self):
+		# Create a DatabaseConnection
+		db_conn = DatabaseConnection(self.database_path)
+
+		# Get all email rows
+		email_rows = db_conn.query('SELECT email FROM user').fetchall()
+
+		emails = tuple(email[0] for email in email_rows)
+
+		return emails
 
 
 	def get_listnames_for_user(self, username):
