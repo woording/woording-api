@@ -18,12 +18,12 @@ api = Api(app)
 # HTTP Authentication
 auth = HTTPBasicAuth()
 
-db_manager = DatabaseManager()
-
 # REST Resources
 class User(Resource):
 
 	def get(self, username):
+
+		db_manager = DatabaseManager()
 
 		if db_manager.username_exists(username):
 
@@ -43,6 +43,8 @@ class User(Resource):
 
 class List(Resource):
 	def get(self, username, listname):
+
+		db_manager = DatabaseManager()
 
 		if db_manager.username_exists(username):
 
@@ -79,6 +81,8 @@ api.add_resource(List, '/<username>/<listname>')
 @auth.login_required
 def get(username):
 
+	db_manager = DatabaseManager()
+
     if db_manager.username_exists(username):
         user_info = db_manager.get_user(username)
         list_lists = db_manager.get_lists_for_user(username)
@@ -106,6 +110,8 @@ def get(username):
 # Verify password
 @auth.verify_password
 def verify_password(username, password):
+	db_manager = DatabaseManager()
+
 	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	user = db_manager.get_user(username)
@@ -133,6 +139,8 @@ def verify_password(username, password):
 # Register
 @app.route('/register', methods = ['POST'])
 def register():
+	db_manager = DatabaseManager()
+	
 	username = request.json.get('username')
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 	email = request.json.get('email')
