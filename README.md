@@ -43,3 +43,16 @@ cd login
 python main.py
 ```
 
+## How to use the login system in API
+```bash
+# First start the api
+cd api
+./initialize.sh
+python3 api.py
+
+# For registering users, do:
+curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
+
+# For Viewing your lists, do:
+curl -u username:password -i -X GET http://127.0.0.1:5000/username
+```

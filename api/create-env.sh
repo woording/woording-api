@@ -18,4 +18,4 @@ pip install flask-login
 pip install flask-mail
 pip install flask-sqlalchemy
 pip install passlib
-
+pip install flask-httpauth

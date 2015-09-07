@@ -5,23 +5,31 @@ db_manager = DatabaseManager()
 
 # Create users
 db_manager.create_user('cor', 'cor@pruijs.nl', True, 'Hunter2')
-db_manager.create_user('leon', 'leon@grasmeijer.nl', False, 'Hunter23')
-db_manager.create_user('philip', 'philip@debruijn.nl', False, 'Hunter23')
-
-# Trying to create a user with a username that is taken returns an error
-db_manager.create_user('cor', 'cor@pruijs.nl', False, 'Hunter2')
-
-
+db_manager.create_user('leon', 'leon@grasmeijer.nl', False, 'all_i_see_is_*****')
+db_manager.create_user('philip', 'philip@debruijn.nl', False, '***hunter***')
 
 # Create lists
 db_manager.create_list('cor', 'duitse_woorden', 'NL_nl', 'DE_de')
 db_manager.create_list('cor', 'engelse_woorden', 'NL_nl', 'EN_en')
 
-# Trying to create a list with an existing username/list combo returns an error
-db_manager.create_list('cor', 'Engelse woorden', 'NL_nl', 'EN_en')
+db_manager.create_list('leon', 'latijn_woorden', 'NL_nl', 'LAT_ijn')
+
+# Create translations
 db_manager.create_translation('cor', 'engelse_woorden', 'auto', 'car')
 db_manager.create_translation('cor', 'engelse_woorden', 'boom', 'tree')
 db_manager.create_translation('cor', 'engelse_woorden', 'moeder', 'mother')
+db_manager.create_translation('cor', 'engelse_woorden', 'vader', 'father')
+db_manager.create_translation('cor', 'engelse_woorden', 'broer', 'bro')
+db_manager.create_translation('cor', 'engelse_woorden', 'muis', 'mouse')
+db_manager.create_translation('cor', 'engelse_woorden', 'toetsenbord', 'keyboard')
+
+db_manager.create_translation('cor', 'duitse_woorden', 'auto', 'das Auto')
+db_manager.create_translation('cor', 'duitse_woorden', 'kamp', 'kampf')
+db_manager.create_translation('cor', 'duitse_woorden', 'geodriehoek', 'geometrie dreieick')
+
+db_manager.create_translation('leon', 'latijn_woorden', 'rust', 'requiescat')
+db_manager.create_translation('leon', 'latijn_woorden', 'in', 'im')
+db_manager.create_translation('leon', 'latijn_woorden', 'vrede', 'pace')
 
 
 # Get a list of all usernames
