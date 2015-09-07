@@ -121,7 +121,7 @@ def verify_email(token):
 	db_manager = DatabaseManager()
 	email = confirm_token(token)
 
-	if db_manager.email_verified(email):
+	if db_manager.email_is_verified(email):
 		return "Email already verified.\n"
 	else:
 		db_manager.verify_email(email)
@@ -133,10 +133,10 @@ def verify_password(username, password):
 	db_manager = DatabaseManager()
 
 	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-
+	
 	user = db_manager.get_user(username)
-
-	if not user or not db_manager.check_password(username, password):
+	
+	if not user or not user.get("password_hash") == password_hash:
 		return False
 	
 	g.user = user
@@ -150,7 +150,7 @@ def get(username):
 
 	db_manager = DatabaseManager()
 
-	if db_manager.username_exists(username):
+	if db_manager.username_exists(username) and username == g.user.get("username"):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']

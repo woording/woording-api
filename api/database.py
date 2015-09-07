@@ -129,7 +129,10 @@ class DatabaseManager(object):
 
 			user = db_conn.query(query_text).fetchone();
 
-			return user
+			if user is not None:
+				return True
+			else:
+				return False
 
 	def verify_email(self, email_to_verify):
 		if email_is_verified(email_to_verify):
@@ -278,5 +281,3 @@ class DatabaseManager(object):
 			"language_1_text": translation_record[2],
 			"language_2_text": translation_record[3]
 		}
-
-
