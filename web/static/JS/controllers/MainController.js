@@ -15,7 +15,7 @@ app.controller('MainController', function($scope, $http) {
 
 	$scope.loadList = function(url){
 		$http.get('http://127.0.0.1:5000' + url).
-			succes(function(data, status, headers, config) {
+			success(function(data, status, headers, config) {
 				$scope.listData = data;
 			}).
 			error(function(data, status, headers, config) {

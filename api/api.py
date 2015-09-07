@@ -89,7 +89,7 @@ class List(Resource):
 
 
 # api.add_resource(User, '/<username>')
-api.add_resource(List, '/<username>/<listname>')
+# api.add_resource(List, '/<username>/<listname>')
 
 # Register
 @app.route('/register', methods = ['POST'])
@@ -145,12 +145,12 @@ def verify_password(username, password):
 # REST Recource with app.route
 @app.route('/<username>')
 @crossdomain(origin='*')
-@auth.login_required
+# @auth.login_required
 def get(username):
 
 	db_manager = DatabaseManager()
 
-	if db_manager.username_exists(username) and username == g.user.get("username"):
+        if db_manager.username_exists(username):# and username == g.user.get("username"):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
@@ -165,9 +165,42 @@ def get(username):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
-# @app.route('/<username>/<list>')
-# def show_user_list(username, list):
-# 	return 'Show list ' + username + '/' + list
+@app.route('/<username>/<listname>')
+@crossdomain(origin='*')
+def show_user_list(username, listname):
+                db_manager = DatabaseManager()
+
+                if db_manager.username_exists(username):
+
+                        if db_manager.listname_exists_for_user(username, listname):
+
+                                list_data = db_manager.get_list(username, listname)
+                                translations = db_manager.get_translations_for_list(username, listname)
+
+                                for translation in translations: del translation['id']; del translation['list_id']
+
+                                return json.dumps({
+                                        'listname' : listname,
+                                        'language_1_tag' : list_data.get("language_1_tag"),
+                                        'language_2_tag' : list_data.get("language_2_tag"),
+
+                                        'words' : translations
+                                })
+
+                        else:
+                            return json.dumps({
+                                'username': 'ERROR: This shouldn\'t happen'
+                            })
+
+
+                else:
+                    return json.dumps({
+                        'username': 'ERROR: This shouldn\'t happen'
+                    })
+
+
+
+
 
 # @app.route('/about')
 # def show_about():
