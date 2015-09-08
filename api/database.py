@@ -150,10 +150,13 @@ class DatabaseManager(object):
 
 		db_conn = DatabaseConnection(self.database_path)
 
-		record = db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
+		if self.email_exists(email_to_check):
+			record = db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
 
-		if record[0] is 1:
-			return True
+			if record[0] is 1:
+				return True
+			else:
+				return False
 		else:
 			return False
 
