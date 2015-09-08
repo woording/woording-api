@@ -135,13 +135,13 @@ class DatabaseManager(object):
 				return False
 
 	def verify_email(self, email_to_verify):
-		if email_is_verified(email_to_verify):
+		if self.email_is_verified(email_to_verify):
 			print('Email already verified')
 		else:
 
 			db_conn = DatabaseConnection(self.database_path)
 
-			query_text = 'UPDATE user SET email_verified = true WHERE email = "' + email_to_verify + '"'
+			query_text = 'UPDATE user SET email_verified = 1 WHERE email = "' + email_to_verify + '"'
 
 			db_conn.query(query_text)
 		
@@ -150,7 +150,12 @@ class DatabaseManager(object):
 
 		db_conn = DatabaseConnection(self.database_path)
 
-		return db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
+		record = db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
+
+		if record[0] is 1:
+			return True
+		else:
+			return False
 
 	def username_exists(self, username):
 
