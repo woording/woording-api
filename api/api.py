@@ -95,7 +95,7 @@ class List(Resource):
 @app.route('/register', methods = ['POST'])
 def register():
 	db_manager = DatabaseManager()
-	
+
 	username = request.json.get('username')
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 	email = request.json.get('email')
@@ -133,12 +133,12 @@ def verify_password(username, password):
 	db_manager = DatabaseManager()
 
 	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-	
+
 	user = db_manager.get_user(username)
-	
+
 	if not user or not user.get("password_hash") == password_hash:
 		return False
-	
+
 	g.user = user
 	return True
 
@@ -154,7 +154,7 @@ def get(username):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
-        
+
 		return json.dumps({
 			'username': user_info.get("username"),
 			'email' : user_info.get("email"),
@@ -168,35 +168,27 @@ def get(username):
 @app.route('/<username>/<listname>')
 @crossdomain(origin='*')
 def show_user_list(username, listname):
-                db_manager = DatabaseManager()
+    db_manager = DatabaseManager()
 
-                if db_manager.username_exists(username):
-
-                        if db_manager.listname_exists_for_user(username, listname):
-
-                                list_data = db_manager.get_list(username, listname)
-                                translations = db_manager.get_translations_for_list(username, listname)
-
-                                for translation in translations: del translation['id']; del translation['list_id']
-
-                                return json.dumps({
-                                        'listname' : listname,
-                                        'language_1_tag' : list_data.get("language_1_tag"),
-                                        'language_2_tag' : list_data.get("language_2_tag"),
-
-                                        'words' : translations
-                                })
-
-                        else:
-                            return json.dumps({
-                                'username': 'ERROR: This shouldn\'t happen'
-                            })
-
-
-                else:
-                    return json.dumps({
-                        'username': 'ERROR: This shouldn\'t happen'
-                    })
+    if db_manager.username_exists(username):
+        if db_manager.listname_exists_for_user(username, listname):
+            list_data = db_manager.get_list(username, listname)
+            translations = db_manager.get_translations_for_list(username, listname)
+            for translation in translations: del translation['id']; del translation['list_id']
+            return json.dumps({
+                'listname' : listname,
+                'language_1_tag' : list_data.get("language_1_tag"),
+                'language_2_tag' : list_data.get("language_2_tag"),
+                'words' : translations
+                })
+        else:
+            return json.dumps({
+                'username': 'ERROR: This shouldn\'t happen'
+                })
+    else:
+        return json.dumps({
+            'username': 'ERROR: This shouldn\'t happen'
+            })
 
 
 

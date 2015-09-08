@@ -3,36 +3,36 @@
 		<title>Wording Test</title>
 		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='CSS/style.css') }}">
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/frameworks/ui-router.js') }}"></script>
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController">
+
 			{% if listname %}
-				<div ng-init="loadList('/{{username}}/{{listname}}')">
-
-					{{ listname }}:
-					<ul style="list-style: none">
-						[[ listData.language_1_tag ]] [[ listData.language_2_tag ]]
-						<li ng-repeat="word in listData.words">
-							[[ word.language_1_text ]]: [[ word.language_2_text ]]
-						</li>
-					</ul>
-
-				</div>
+				<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
 			{% else %}
 				<div ng-init="loadUser('/{{username}}')">
+			{% endif %}
 					<h3>Info about [[ userData.username ]]: </h3>
 					<p>
 						<b>Email:</b> [[ userData.email ]]
 					</p>
 
 					<b>[[ userData.username ]]'s lists:</b>
+
 					<ul>
 						<li ng-repeat="list in userData.lists">
-							[[ list.listname ]]
+							<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])">[[ list.listname ]]</a>
+						</li>
+					</ul>
+					<ul>
+						<b> [[ listData.listname ]]:</b><br>
+						[[ listData.language_1_tag ]] [[ listData.language_2_tag ]]
+						<li ng-repeat="word in listData.words">
+							[[ word.language_1_text ]]: [[ word.language_2_text ]]
 						</li>
 					</ul>
 				</div>
-			{% endif %}
 
 			<a href="" ng-click="loadUser('/cor')">Cor</a><br>
 			<a href="" ng-click="loadUser('/leon')">Leon</a><br>
