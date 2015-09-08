@@ -1,42 +1,68 @@
 <html>
 	<head>
-		<title>Wording Test</title>
-		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='CSS/style.css') }}">
+		<title>Wording</title>
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/reset.css') }}">
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController">
+			<header>
+				<h1>Wording</h1>
 
-			{% if listname %}
-				<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
-			{% else %}
-				<div ng-init="loadUser('/{{username}}')">
-			{% endif %}
-					<h3>Info about [[ userData.username ]]: </h3>
-					<p>
-						<b>Email:</b> [[ userData.email ]]
-					</p>
+				<div id="sign_or_log_in"><button id="sign_in">Sign In</button> <br> Or, <b id="log_in">Log In</b></div>
+			</header>
 
-					<b>[[ userData.username ]]'s lists:</b>
+			<div id="content">
 
-					<ul>
-						<li ng-repeat="list in userData.lists">
-							<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])">[[ list.listname ]]</a>
-						</li>
-					</ul>
-					<ul>
-						<b> [[ listData.listname ]]</b><br>
-						[[ listData.language_1_tag ]] [[ listData.language_2_tag ]]
-						<li ng-repeat="word in listData.words">
-							[[ word.language_1_text ]]: [[ word.language_2_text ]]
-						</li>
-					</ul>
-				</div>
+				{% if listname %}
+					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
+				{% else %}
+					<div ng-init="loadUser('/{{username}}')">
+				{% endif %}
+						<div id="left_content">
+							<h3>Info about [[ userData.username ]]: </h3>
+							<br>
+							<p>
+								<b>Email:</b> [[ userData.email ]]
+							</p>
 
-			<a href="" ng-click="loadUser('/cor')">Cor</a><br>
-			<a href="" ng-click="loadUser('/leon')">Leon</a><br>
-			<a href="" ng-click="loadUser('/philip')">Philip</a><br>
-		</div>
+							<br>
+
+							<b>[[ userData.username ]]'s lists:</b>
+							<br>
+							<ul>
+								<li ng-repeat="list in userData.lists">
+									<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])">[[ list.listname ]]</a>
+								</li>
+							</ul>
+
+							<br>
+
+							<b>Users:</b>
+							<br>
+							<a href="" ng-click="loadUser('/cor')">Cor</a><br>
+							<a href="" ng-click="loadUser('/leon')">Leon</a><br>
+							<a href="" ng-click="loadUser('/philip')">Philip</a><br>
+						</div> <!-- left_content -->
+
+						<div id="right_content">
+							<table>
+								<b><p> [[ listData.listname ]] </p></b><br>
+								<tr>
+									<th> [[ listData.language_1_tag ]] </th>
+									<th> [[ listData.language_2_tag ]] </th>
+								</tr>
+								<tr ng-repeat="word in listData.words">
+									<td> [[ word.language_1_text ]] </td>
+									<td> [[ word.language_2_text ]] </td>
+								</tr>
+							</table>
+						</div> <!-- right_content -->
+					</div> <!-- ng-init -->
+
+			</div> <!-- content -->
+		</div> <!-- MainController -->
 	</body>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 

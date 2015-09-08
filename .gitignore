@@ -1,6 +1,8 @@
 *.swo
 *.swp
 *.swn
+*.map
+.sass-cache
 *.pyc
 .DS_Store
 api/env
