@@ -47,10 +47,11 @@ header #sign_or_log_in #log_in:hover {
 #content {
   background: #90B2D4;
   width: 100%;
-  height: 600px; }
+  min-height: 500px;
+  overflow: hidden; }
 #content #left_content, #content #right_content {
-  position: absolute;
-  width: 46%;
+  display: inline-block;
+  width: 45%;
   margin: 1%;
   padding: 1%;
   background: #fff;
@@ -58,9 +59,9 @@ header #sign_or_log_in #log_in:hover {
   -moz-box-shadow: 10px 10px 5px 0px #323232;
   box-shadow: 10px 10px 5px 0px #323232; }
 #content #left_content {
-  left: 0; }
+  float: left; }
 #content #right_content {
-  right: 0; }
+  float: left; }
 #content #right_content table {
   text-align: left;
   width: 100%;
@@ -78,5 +79,9 @@ header #sign_or_log_in #log_in:hover {
   padding: 10px; }
 #content #right_content table tr:nth-child(even) {
   background: #f1f1f1; }
+
+footer {
+  text-align: center;
+  margin: 20px; }
 
 /*# sourceMappingURL=style.css.map */
