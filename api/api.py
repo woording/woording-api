@@ -165,30 +165,30 @@ def get(username):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
-		@app.route('/<username>/<listname>')
-		@crossdomain(origin='*')
-		def show_user_list(username, listname):
-			db_manager = DatabaseManager()
+@app.route('/<username>/<listname>')
+@crossdomain(origin='*')
+def show_user_list(username, listname):
+	db_manager = DatabaseManager()
 
-			if db_manager.username_exists(username):
-				if db_manager.listname_exists_for_user(username, listname):
-					list_data = db_manager.get_list(username, listname)
-					translations = db_manager.get_translations_for_list(username, listname)
-					for translation in translations: del translation['id']; del translation['list_id']
-					return json.dumps({
-						'listname' : listname,
-						'language_1_tag' : list_data.get("language_1_tag"),
-						'language_2_tag' : list_data.get("language_2_tag"),
-						'words' : translations
-						})
-				else:
-					return json.dumps({
-						'username': 'ERROR: This shouldn\'t happen'
-						})
-			else:
-				return json.dumps({
-					'username': 'ERROR: This shouldn\'t happen'
-					})
+	if db_manager.username_exists(username):
+		if db_manager.listname_exists_for_user(username, listname):
+			list_data = db_manager.get_list(username, listname)
+			translations = db_manager.get_translations_for_list(username, listname)
+			for translation in translations: del translation['id']; del translation['list_id']
+			return json.dumps({
+				'listname' : listname,
+				'language_1_tag' : list_data.get("language_1_tag"),
+				'language_2_tag' : list_data.get("language_2_tag"),
+				'words' : translations
+				})
+		else:
+			return json.dumps({
+				'username': 'ERROR: This shouldn\'t happen'
+				})
+	else:
+		return json.dumps({
+			'username': 'ERROR: This shouldn\'t happen'
+			})
 
 
 
