@@ -23,7 +23,7 @@ header #sign_or_log_in {
   position: absolute;
   top: 0;
   text-align: right; }
-header #sign_or_log_in #sign_in {
+header #sign_or_log_in #sign_up {
   width: 100px;
   height: 60px;
   font-size: 18px;
@@ -34,10 +34,10 @@ header #sign_or_log_in #sign_in {
   border: 1px solid #1C1E80;
   border-bottom: 4px solid #1C1E80;
   outline: none; }
-header #sign_or_log_in #sign_in:active {
+header #sign_or_log_in #sign_up:active {
   border-bottom: 1px solid #1C1E80;
   border-top: 4px solid #1C1E80; }
-header #sign_or_log_in #sign_in:hover {
+header #sign_or_log_in #sign_up:hover {
   cursor: pointer; }
 header #sign_or_log_in #log_in {
   color: #1C1E80; }
@@ -51,8 +51,8 @@ header #sign_or_log_in #log_in:hover {
   overflow: hidden; }
 #content #left_content, #content #right_content {
   display: inline-block;
-  width: 45%;
-  margin: 1%;
+  width: 44%;
+  margin: 2%;
   padding: 1%;
   background: #fff;
   -webkit-box-shadow: 10px 10px 5px 0px #323232;
