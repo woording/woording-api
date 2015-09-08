@@ -53,39 +53,39 @@ class User(Resource):
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'lists' : list_lists
-			})
+				})
 
 		else:
 			print ('ERROR: User does not exists')
 
 
-class List(Resource):
-	def get(self, username, listname):
+			class List(Resource):
+				def get(self, username, listname):
 
-		db_manager = DatabaseManager()
+					db_manager = DatabaseManager()
 
-		if db_manager.username_exists(username):
+					if db_manager.username_exists(username):
 
-			if db_manager.listname_exists_for_user(username, listname):
+						if db_manager.listname_exists_for_user(username, listname):
 
-				list_data = db_manager.get_list(username, listname)
-				translations = db_manager.get_translations_for_list(username, listname)
+							list_data = db_manager.get_list(username, listname)
+							translations = db_manager.get_translations_for_list(username, listname)
 
-				for translation in translations: del translation['id']; del translation['list_id']
+							for translation in translations: del translation['id']; del translation['list_id']
 
-				return json.dumps({
-					'listname' : listname,
-					'language_1_tag' : list_data.get("language_1_tag"),
-					'language_2_tag' : list_data.get("language_2_tag"),
+							return json.dumps({
+								'listname' : listname,
+								'language_1_tag' : list_data.get("language_1_tag"),
+								'language_2_tag' : list_data.get("language_2_tag"),
 
-					'words' : translations
-				})
+								'words' : translations
+								})
 
-			else:
-				print("ERROR, List doesn't exist")
+						else:
+							print("ERROR, List doesn't exist")
 
-		else:
-			print("ERROR, User doesn't exists")
+					else:
+						print("ERROR, User doesn't exists")
 
 
 # api.add_resource(User, '/<username>')
@@ -101,10 +101,10 @@ def register():
 	email = request.json.get('email')
 	if username is None or password is None or email is None:
 		abort(400) # missing arguments
-	if db_manager.username_exists(username) is not False or db_manager.email_exists(email) is not False:
-		abort(400)
+		if db_manager.username_exists(username) is not False or db_manager.email_exists(email) is not False:
+			abort(400)
 
-	db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
+			db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
 	# Email verification
 	token = generate_confirmation_token(email)
@@ -139,8 +139,8 @@ def verify_password(username, password):
 	if not user or not user.get("password_hash") == password_hash:
 		return False
 
-	g.user = user
-	return True
+		g.user = user
+		return True
 
 # REST Recource with app.route
 @app.route('/<username>')
@@ -150,7 +150,7 @@ def get(username):
 
 	db_manager = DatabaseManager()
 
-        if db_manager.username_exists(username):# and username == g.user.get("username"):
+	if db_manager.username_exists(username):# and username == g.user.get("username"):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
@@ -165,30 +165,30 @@ def get(username):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
-@app.route('/<username>/<listname>')
-@crossdomain(origin='*')
-def show_user_list(username, listname):
-    db_manager = DatabaseManager()
+		@app.route('/<username>/<listname>')
+		@crossdomain(origin='*')
+		def show_user_list(username, listname):
+			db_manager = DatabaseManager()
 
-    if db_manager.username_exists(username):
-        if db_manager.listname_exists_for_user(username, listname):
-            list_data = db_manager.get_list(username, listname)
-            translations = db_manager.get_translations_for_list(username, listname)
-            for translation in translations: del translation['id']; del translation['list_id']
-            return json.dumps({
-                'listname' : listname,
-                'language_1_tag' : list_data.get("language_1_tag"),
-                'language_2_tag' : list_data.get("language_2_tag"),
-                'words' : translations
-                })
-        else:
-            return json.dumps({
-                'username': 'ERROR: This shouldn\'t happen'
-                })
-    else:
-        return json.dumps({
-            'username': 'ERROR: This shouldn\'t happen'
-            })
+			if db_manager.username_exists(username):
+				if db_manager.listname_exists_for_user(username, listname):
+					list_data = db_manager.get_list(username, listname)
+					translations = db_manager.get_translations_for_list(username, listname)
+					for translation in translations: del translation['id']; del translation['list_id']
+					return json.dumps({
+						'listname' : listname,
+						'language_1_tag' : list_data.get("language_1_tag"),
+						'language_2_tag' : list_data.get("language_2_tag"),
+						'words' : translations
+						})
+				else:
+					return json.dumps({
+						'username': 'ERROR: This shouldn\'t happen'
+						})
+			else:
+				return json.dumps({
+					'username': 'ERROR: This shouldn\'t happen'
+					})
 
 
 
