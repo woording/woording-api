@@ -58,6 +58,43 @@ header #sign_or_log_in #log_in:hover {
 #content #slider_bar ul li {
   display: inline-block;
   margin-right: 30%; }
+#content #practice_div {
+  display: none;
+  width: 96%;
+  margin: 1%;
+  padding: 1%;
+  background: #fff;
+  -webkit-box-shadow: 10px 10px 5px 0px #323232;
+  -moz-box-shadow: 10px 10px 5px 0px #323232;
+  box-shadow: 10px 10px 5px 0px #323232; }
+#content #practice_div h1 {
+  font-size: 30px;
+  margin: 10px; }
+#content #practice_div h2 {
+  font-size: 40px;
+  margin: 10px; }
+#content #practice_div input {
+  width: 50%;
+  height: 50px;
+  font-size: 20px;
+  padding: 10px;
+  margin: 0 auto; }
+#content #practice_div button {
+  width: 100px;
+  height: 50px;
+  margin: 10px;
+  border-radius: 5px;
+  background: #90B2D4;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 20px;
+  border: 1px solid #1C1E80;
+  border-bottom: 4px solid #1C1E80;
+  cursor: pointer; }
+#content #practice_div button:active {
+  border: 1px solid #1C1E80;
+  border-top: 4px solid #1C1E80; }
 #content #left_content, #content #right_content, #content #middle_content {
   display: inline-block;
   width: 30.5%;

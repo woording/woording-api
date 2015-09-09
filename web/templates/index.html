@@ -7,11 +7,13 @@
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
 	</head>
 	<body ng-app="myApp">
-		<div ng-controller="MainController">
+		<div ng-controller="MainController" id="main_controller">
 			<header>
 				<h1>Wording</h1>
 
-				<div id="sign_or_log_in"><button id="sign_up">Sign up</button> <br> Or, <b id="log_in">Log In</b></div>
+				<div id="sign_or_log_in">
+					<button id="sign_up">Sign up</button> <br> Or, <b id="log_in">Log In</b>
+				</div>
 			</header>
 
 			<div id="content">
@@ -28,6 +30,20 @@
 				{% else %}
 					<div ng-init="loadUser('/{{username}}')">
 				{% endif %}
+
+						<div id="practice_div">
+							<h1><b> [[listData.listname]] </b></h1>
+
+							<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
+							<form onsubmit="checkWord(window.randomWord)">
+								<input id="word_input" type="text" placeholder="Word"><button type="submit">Next</button>
+							</form>
+
+							Right <span id="goed">0</span>
+							<br>
+							Wrong <span id="fout">0</span>
+						</div> <!-- practice_div -->
+
 						<div id="left_content">
 							<h3><b> [[ userData.username ]]: </b></h3>
 							<br>
@@ -67,7 +83,7 @@
 								</tr>
 							</table>
 
-							<button id="practice_button">Practice</button>
+							<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">Practice</button>
 						</div> <!-- right_content -->
 					</div> <!-- ng-init -->
 
