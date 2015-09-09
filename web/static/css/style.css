@@ -11,7 +11,6 @@ h1 {
 
 header {
   padding: 20px;
-  font-family: Helvetica;
   height: 60px; }
 header h1 {
   font-size: 40;
@@ -49,19 +48,28 @@ header #sign_or_log_in #log_in:hover {
   width: 100%;
   min-height: 500px;
   overflow: hidden; }
-#content #left_content, #content #right_content {
+#content #slider_bar {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  padding-left: 0; }
+#content #slider_bar ul li {
   display: inline-block;
-  width: 44%;
-  margin: 2%;
+  margin-right: 30%; }
+#content #left_content, #content #right_content, #content #middle_content {
+  display: inline-block;
+  width: 30.5%;
+  margin: 1% 0.3%;
   padding: 1%;
   background: #fff;
+  float: left;
   -webkit-box-shadow: 10px 10px 5px 0px #323232;
   -moz-box-shadow: 10px 10px 5px 0px #323232;
   box-shadow: 10px 10px 5px 0px #323232; }
-#content #left_content {
-  float: left; }
 #content #right_content {
-  float: left; }
+  text-align: center; }
 #content #right_content table {
   text-align: left;
   width: 100%;
@@ -79,6 +87,22 @@ header #sign_or_log_in #log_in:hover {
   padding: 10px; }
 #content #right_content table tr:nth-child(even) {
   background: #f1f1f1; }
+#content #right_content #practice_button {
+  width: 200px;
+  height: 50px;
+  font-size: 25px;
+  background: #90B2D4;
+  color: white;
+  border-radius: 5px;
+  margin: 10px 0 10px 10px;
+  border: 1px solid #1C1E80;
+  border-bottom: 4px solid #1C1E80;
+  outline: none; }
+#content #right_content #practice_button:active {
+  border-bottom: 1px solid #1C1E80;
+  border-top: 4px solid #1C1E80; }
+#content #right_content #practice_button:hover {
+  cursor: pointer; }
 
 footer {
   text-align: center;

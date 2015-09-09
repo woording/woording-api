@@ -4,6 +4,8 @@
 	padding: 0;
 }
 
+$wording_blue: #90B2D4;
+
 b { font-weight: bold; }
 
 h1 {
@@ -12,7 +14,6 @@ h1 {
 
 header {
 	padding: 20px;
-	font-family: Helvetica;
 	height: 60px;
 
 	h1 {
@@ -32,7 +33,7 @@ header {
 			width: 100px;
 			height: 60px;
 			font-size: 18px;
-			background: #90B2D4;
+			background: $wording_blue;
 			color: white;
 			border-radius: 5px;
 			margin: 10px 0 10px 10px;
@@ -61,17 +62,34 @@ header {
 }
 
 #content {
-	background: #90B2D4;
+	background: $wording_blue;
 	width: 100%;
 	min-height: 500px;
 	overflow: hidden;
 
-	#left_content, #right_content {
+	#slider_bar {
+		border-top: 2px solid black;
+		border-bottom: 2px solid black;
+		width: 100%;
+		padding: 10px;
+		margin-top: 10px;
+		padding-left: 0;
+
+		ul {
+			li {
+				display: inline-block;
+				margin-right: 30%;
+			}
+		}
+	}
+
+	#left_content, #right_content, #middle_content {
 		display: inline-block;
-		width: 44%;
-		margin: 2%;
+		width: 30.5%;
+		margin: 1% 0.3%;
 		padding: 1%;
 		background: #fff;
+		float: left;
 
 		-webkit-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
 		-moz-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
@@ -79,11 +97,15 @@ header {
 	}
 
 	#left_content {
-		float: left;
+	}
+
+	#middle_content {
+
 	}
 
 	#right_content {
-		float: left;
+
+		text-align: center;
 
 		table {
 			text-align: left;
@@ -111,6 +133,28 @@ header {
 
 			tr:nth-child(even) {
 				background: #f1f1f1;
+			}
+		}
+
+		#practice_button {
+			width: 200px;
+			height: 50px;
+			font-size: 25px;
+			background: $wording_blue;
+			color: white;
+			border-radius: 5px;
+			margin: 10px 0 10px 10px;
+			border: 1px solid #1C1E80;
+			border-bottom: 4px solid #1C1E80;
+			outline: none;
+
+			&:active {
+				border-bottom: 1px solid #1C1E80;
+				border-top: 4px solid #1C1E80;
+			}
+
+			&:hover {
+				cursor: pointer;
 			}
 		}
 	}

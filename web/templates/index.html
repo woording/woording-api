@@ -15,6 +15,13 @@
 			</header>
 
 			<div id="content">
+				<div id="slider_bar">
+					<ul>
+						<li>User</li>
+						<li>Lists</li>
+						<li>Practice</li>
+					</ul>
+				</div>
 
 				{% if listname %}
 					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
@@ -22,7 +29,7 @@
 					<div ng-init="loadUser('/{{username}}')">
 				{% endif %}
 						<div id="left_content">
-							<h3>Info about [[ userData.username ]]: </h3>
+							<h3><b> [[ userData.username ]]: </b></h3>
 							<br>
 							<p>
 								<b>Email:</b> [[ userData.email ]]
@@ -30,6 +37,14 @@
 
 							<br>
 
+							<b>Friends:</b>
+							<br>
+							<a href="" ng-click="loadUser('/cor')">Cor</a><br>
+							<a href="" ng-click="loadUser('/leon')">Leon</a><br>
+							<a href="" ng-click="loadUser('/philip')">Philip</a><br>
+						</div> <!-- left_content -->
+
+						<div id="middle_content">
 							<b>[[ userData.username ]]'s lists:</b>
 							<br>
 							<ul>
@@ -37,15 +52,7 @@
 									<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])">[[ list.listname ]]</a>
 								</li>
 							</ul>
-
-							<br>
-
-							<b>Users:</b>
-							<br>
-							<a href="" ng-click="loadUser('/cor')">Cor</a><br>
-							<a href="" ng-click="loadUser('/leon')">Leon</a><br>
-							<a href="" ng-click="loadUser('/philip')">Philip</a><br>
-						</div> <!-- left_content -->
+						</div> <!-- middle_content -->
 
 						<div id="right_content">
 							<table>
@@ -59,6 +66,8 @@
 									<td> [[ word.language_2_text ]] </td>
 								</tr>
 							</table>
+
+							<button id="practice_button">Practice</button>
 						</div> <!-- right_content -->
 					</div> <!-- ng-init -->
 
