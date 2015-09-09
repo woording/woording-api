@@ -5,6 +5,7 @@
 }
 
 $wording_blue: #90B2D4;
+$border_blue: #1C1E80;
 
 b { font-weight: bold; }
 
@@ -37,13 +38,13 @@ header {
 			color: white;
 			border-radius: 5px;
 			margin: 10px 0 10px 10px;
-			border: 1px solid #1C1E80;
-			border-bottom: 4px solid #1C1E80;
+			border: 1px solid $border_blue;
+			border-bottom: 4px solid $border_blue;
 			outline: none;
 
 			&:active {
-				border-bottom: 1px solid #1C1E80;
-				border-top: 4px solid #1C1E80;
+				border-bottom: 1px solid $border_blue;
+				border-top: 4px solid $border_blue;
 			}
 
 			&:hover {
@@ -52,7 +53,7 @@ header {
 		}
 
 		#log_in {
-			color: #1C1E80;
+			color: $border_blue;
 
 			&:hover{
 				cursor: pointer;
@@ -82,6 +83,59 @@ header {
 			}
 		}
 	}
+
+	#practice_div {
+		display: none;
+		width: 96%;
+		margin: 1%;
+		padding: 1%;
+		background: #fff;
+
+		-webkit-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
+		-moz-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
+		box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
+
+		h1 {
+			font-size: 30px;
+			margin: 10px;
+		}
+
+		h2 {
+			font-size: 40px;
+			margin: 10px;
+		}
+
+		input {
+			width: 50%;
+			height: 50px;
+			font-size: 20px;
+			padding: 10px;
+			margin: 0 auto;
+		}
+
+		button {
+			width: 100px;
+			height: 50px;
+
+			margin: 10px;
+			border-radius: 5px;
+			background: $wording_blue;
+			border: none;
+			outline: none;
+			color: white;
+			font-size: 20px;
+			border: 1px solid $border_blue;
+			border-bottom: 4px solid $border_blue;
+
+			cursor: pointer;
+
+			&:active {
+				border: 1px solid $border_blue;
+				border-top: 4px solid $border_blue;
+			}
+		}
+	}
+
 
 	#left_content, #right_content, #middle_content {
 		display: inline-block;

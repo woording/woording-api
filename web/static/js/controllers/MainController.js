@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $http) {
+app.controller('MainController', function($scope, $http, $window) {
 	$scope.title = 'Wording';
 
 	// json loading functions
@@ -23,5 +23,12 @@ app.controller('MainController', function($scope, $http) {
 			error(function(data, status, headers, config) {
 				console.log("error");
 			});
+	};
+
+	$scope.getRandomWord = function(){
+		if($scope.listData){
+			$scope.randomWord = $scope.listData.words[Math.floor(Math.random() * $scope.listData.words.length)];
+			$window.randomWord = $scope.randomWord;
+		}
 	};
 });
