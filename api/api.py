@@ -143,8 +143,8 @@ def verify_email(token):
 # 		g.user = user
 # 		return True
 
-@app.route('/authenticate', methods=['POST','GET','OPTIONS'])
-@crossdomain(origin='*', headers='content-type')
+@app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
+@crossdomain(origin='*', headers='content-type') # Headers need to be set
 def authenticate():
 	db_manager = DatabaseManager()
 
@@ -152,7 +152,7 @@ def authenticate():
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	if username and password and db_manager.check_password(username, password):
-		# Find a way to store a token...
+		# Find a way to store a token... Client side session could also be possible
 		return "Successfully authenticated"
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})

@@ -3,22 +3,17 @@ app.controller('MainController', function($scope, $http, $window) {
 
 	$scope.authenticate = function(username, password) {
 		var data = {
-				'username':username,
-				'password':password
+			'username':username,
+			'password':password
 		};
 		$http.post('http://127.0.0.1:5000/authenticate', data)
-		/*$http({
-			url: 'http://127.0.0.1:5000/authenticate',
-			method: 'POST',
-			data: { 'username':username, 'password':password },
-			headers: { "Content-Type":"application/json" }
-		})*/.success(function(data, status, headers, config) {
-			$scope.loadUser("/" + username);
-			console.log(data);
-		}).error(function(data, status, headers, config) {
-			console.error("could not authenticate");
-			// Function to go to home page
-		});
+			.success(function(data, status, headers, config) {
+				$scope.loadUser("/" + username);
+				console.log(data);
+			}).error(function(data, status, headers, config) {
+				console.error("could not authenticate");
+				// Function to go to home page
+			});
 	};
 
 	// json loading functions
@@ -26,7 +21,7 @@ app.controller('MainController', function($scope, $http, $window) {
 		$http.get('http://127.0.0.1:5000' + url)
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR: This shouldn\'t happen') {
-					$scope.authenticate("me", "password"); // Angular should get these values
+					$scope.authenticate("me", "password"); // Angular should get these values, now there is no function for it...
 				} else {
 					window.history.pushState('page2', 'Title', url);
 					$scope.userData = data;
