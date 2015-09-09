@@ -32,6 +32,7 @@ def crossdomain(origin=None, methods=None, headers=None,
                 return resp
 
             h = resp.headers
+            print(h)
 
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()

@@ -129,10 +129,10 @@ class DatabaseManager(object):
 
 			user = db_conn.query(query_text).fetchone();
 
-			if user is not None:
-				return True
-			else:
+			if user is None:
 				return False
+			else:
+				return True
 
 	def verify_email(self, email_to_verify):
 		if self.email_is_verified(email_to_verify):

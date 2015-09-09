@@ -1,7 +1,7 @@
-from flask import Flask, request, abort, url_for, render_template
+from flask import Flask, request, abort, url_for, render_template, session, Response
 from flask import g
 from flask_restful import Resource, Api
-from flask.ext.httpauth import HTTPBasicAuth
+# from flask.ext.httpauth import HTTPBasicAuth
 from flask_mail import Mail
 from passlib.hash import sha512_crypt
 import json
@@ -30,8 +30,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 api = Api(app)
 
-# HTTP Authentication
-auth = HTTPBasicAuth()
+# # HTTP Authentication
+# auth = HTTPBasicAuth()
 
 # Setup email
 mail = Mail(app)
@@ -99,21 +99,22 @@ def register():
 	username = request.json.get('username')
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 	email = request.json.get('email')
+
 	if username is None or password is None or email is None:
-		abort(400) # missing arguments
-		if db_manager.username_exists(username) is not False or db_manager.email_exists(email) is not False:
-			abort(400)
+		return abort(400) # missing arguments
+	elif db_manager.username_exists(username) or db_manager.email_exists(email):
+		return abort(400) # username and/or email do already exist
+	else:
+		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
-			db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
+		# Email verification
+		token = generate_confirmation_token(email)
+		confirm_url = url_for('verify_email', token=token, _external=True)
+		html = render_template('email.html', confirm_url=confirm_url)
+		subject = "Please confirm your email"
+		send_email(email, subject, html)
 
-	# Email verification
-	token = generate_confirmation_token(email)
-	confirm_url = url_for('verify_email', token=token, _external=True)
-	html = render_template('email.html', confirm_url=confirm_url)
-	subject = "Please confirm your email"
-	send_email(email, subject, html)
-
-	return "Successfully created user, please verify email.\n"
+		return "Successfully created user, please verify email.\n"
 
 # Verify email
 @app.route('/verify/<token>')
@@ -128,29 +129,42 @@ def verify_email(token):
 		return "Email Successfully verified.\n"
 
 # Verify password
-@auth.verify_password
-def verify_password(username, password):
+# @auth.verify_password
+# def verify_password(username, password):
+# 	db_manager = DatabaseManager()
+
+# 	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+
+# 	user = db_manager.get_user(username)
+
+# 	if not user or not user.get("password_hash") == password_hash:
+# 		return False
+
+# 		g.user = user
+# 		return True
+
+@app.route('/authenticate', methods=['POST','GET','OPTIONS'])
+@crossdomain(origin='*', headers='content-type')
+def authenticate():
 	db_manager = DatabaseManager()
 
-	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+	username = request.json.get('username') #request.json.get('username')
+	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
-	user = db_manager.get_user(username)
+	if username and password and db_manager.check_password(username, password):
+		# Find a way to store a token...
+		return "Successfully authenticated"
+	else:
+		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
-	if not user or not user.get("password_hash") == password_hash:
-		return False
-
-		g.user = user
-		return True
 
 # REST Recource with app.route
 @app.route('/<username>')
 @crossdomain(origin='*')
-# @auth.login_required
 def get(username):
-
 	db_manager = DatabaseManager()
 
-	if db_manager.username_exists(username):# and username == g.user.get("username"):
+	if db_manager.username_exists(username):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
