@@ -2,18 +2,16 @@
 
 ## How to use
 ```bash
-# Start api server and web server
-./start_all.sh
-
-# Use servers
-open http://127.0.0.1:5001/cor
-curl http://127.0.0.1:5000/cor
-
-# Stop api server and web server
-./stop_all.sh
+gulp
 ```
 
-
+### How to install gulp & required plugins
+```bash
+npm install -g gulp
+npm install --save-dev gulp
+npm install gulp-sass
+npm install gulp-shell
+```
 
 #### How to only use api
 ```bash
