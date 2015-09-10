@@ -9,6 +9,7 @@ gulp
 ```bash
 npm install -g gulp
 npm install --save-dev gulp
+npm install run-sequence
 npm install gulp-sass
 npm install gulp-shell
 ```
