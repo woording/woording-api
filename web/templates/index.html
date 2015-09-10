@@ -12,11 +12,10 @@
 				<h1>Wording</h1>
 
 				<div id="sign_or_log_in">
-					<button id="sign_up">Sign up</button> <br> Or, <b id="log_in">Log In</b>
+					<button id="sign_up">Sign up</button>
+					<button id="log_in">Log In</button>
 				</div>
 			</header>
-
-			<hr>
 
 			<div id="content">
 				<!--<div id="slider_bar">
@@ -63,13 +62,21 @@
 						</div> <!-- left_content -->
 
 						<div id="middle_content">
-							<b>[[ userData.username ]]'s lists:</b>
-							<br>
-							<ul>
-								<li ng-repeat="list in userData.lists">
-									<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])">[[ list.listname ]]</a>
-								</li>
-							</ul>
+							<table>
+								<tr>
+									<th>[[ userData.username ]]'s lists:</th>
+								</tr>
+								<tr ng-repeat="list in userData.lists">
+									<td>
+										<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])" onclick="showList()">[[ list.listname ]]</a>
+										<button id="delete_list">delete</button>
+										<button id="edit_list">edit</button>
+										<button id=practice_list ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])" onclick="showList()">practice</button>
+									</td>
+								</tr>
+							</table>
+
+
 						</div> <!-- middle_content -->
 
 						<div id="right_content">
@@ -95,7 +102,7 @@
 
 			<footer>
 
-				Wording Inc. &copy; 2015
+				Wording Inc. &copy; 2015 ¯\_(ツ)_/¯
 
 			</footer>
 		</div> <!-- MainController -->

@@ -4,8 +4,9 @@
 	padding: 0;
 }
 
-$wording_blue: #90B2D4;
+$wording_blue: #1673DE;
 $border_blue: #1C1E80;
+$url_blue: #3B96FF;
 
 b { font-weight: bold; }
 
@@ -14,14 +15,16 @@ h1 {
 }
 
 header {
-	padding: 20px;
-	height: 60px;
+	padding: 10px;
+	height: 40px;
+	background: #ddd;
+	border-bottom: 1px solid #aaa;
 
 	h1 {
-		font-size: 40;
+		font-size: 30;
 		font-weight: 100;
 		width: 300px;
-		margin: 10px 0 10px 0;
+		margin: 5px 0 10px 0;
 	}
 
 	#sign_or_log_in {
@@ -30,34 +33,26 @@ header {
 		top: 0;
 		text-align: right;
 
-		#sign_up {
-			width: 100px;
-			height: 60px;
-			font-size: 18px;
-			background: $wording_blue;
-			color: white;
+		#sign_up, #log_in {
+			margin: 10px 2px;
+			width: 80px;
+			height: 40px;
 			border-radius: 5px;
-			margin: 10px 0 10px 10px;
-			border: 1px solid $border_blue;
-			border-bottom: 4px solid $border_blue;
-			outline: none;
-
-			&:active {
-				border-bottom: 1px solid $border_blue;
-				border-top: 4px solid $border_blue;
-			}
-
-			&:hover {
-				cursor: pointer;
-			}
+			font-size: 15px;
+			cursor: pointer;
 		}
 
-		#log_in {
-			color: $border_blue;
+		#sign_up {
+			background: $wording_blue;
+			border: 1px solid $border_blue;
+			color: white;
+		}
 
-			&:hover{
-				cursor: pointer;
-			}
+
+		#log_in {
+			background: #eee;
+			border: 1px solid #aaa;
+			color: black;
 		}
 	}
 }
@@ -91,10 +86,6 @@ header {
 		padding: 1%;
 		background: #fff;
 
-		-webkit-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
-		-moz-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
-		box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
-
 		h1 {
 			font-size: 30px;
 			margin: 10px;
@@ -125,53 +116,118 @@ header {
 			color: white;
 			font-size: 20px;
 			border: 1px solid $border_blue;
-			border-bottom: 4px solid $border_blue;
 
 			cursor: pointer;
-
-			&:active {
-				border: 1px solid $border_blue;
-				border-top: 4px solid $border_blue;
-			}
 		}
 	}
 
 
 	#left_content, #right_content, #middle_content {
 		display: inline-block;
-		width: 30.5%;
-		margin: 1% 0.3%;
+		width: 32.6%;
+		height: 100%;
+		/*margin: 1% 0.3%;*/
 		padding: 1%;
-		background: #fff;
 		float: left;
+		border: 1px solid #ddd;
+		border-top: none;
+		border-bottom: none;
 	}
 
 	#left_content {
+		border: 1px solid #ddd;
+		border-top: none;
+		border-bottom: none;
 		margin: 0;
 		width: 150px;
-		background: $wording_blue;
 		height: 100%;
+
+		a {
+			color: #3B96FF;
+
+			&:hover {
+				color: black;
+			}
+		}
 	}
 
 	#middle_content {
-		ul {
-			li {
-				margin: 20px;
+		a {
+			color: $url_blue;
+		}
+
+		table {
+			text-align: left;
+			width: 100%;
+			border: 1px solid #ddd;
+			border-top: none;
+
+			p {
+				padding: 5px;
+			}
+
+			th {
+				font-weight: bold;
+				padding: 10px;
+			}
+
+			tr:nth-child(even) {
+				background: #f1f1f1;
+			}
+
+			tr {
+				border: 1px solid #ccc;
+			}
+
+			td {
+				padding: 10px;
+
+				&:hover > button {
+					opacity: 1;
+				}
+			}
+
+			button {
+				transition: opacity 0.3s;
+				opacity: 0;
+				margin: 0 10px;
+				float: right;
+				padding: 0 10px;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 12px;
+				color: white;
+			}
+
+			#practice_list {
+				background: $wording_blue;
+				border: 1px solid $border_blue;
+			}
+
+			#delete_list {
+				background: #F20000;
+				border: 1px solid #960303;
+			}
+
+			#edit_list {
+				background: #FA6900;
+				border: 1px solid #913D00;
 			}
 		}
 	}
 
 	#right_content {
 		display: none;
+		width: 50%;
+		border-right: none;
 
 		text-align: center;
 
 		table {
 			text-align: left;
 			width: 100%;
-			border-left: 1px solid #dddddd;
-			border-right: 1px solid #dddddd;
-			border-bottom: 1px solid #dddddd;
+			border: 1px solid #ddd;
+			border-top: none;
 
 			p {
 				padding: 5px;
@@ -204,17 +260,8 @@ header {
 			border-radius: 5px;
 			margin: 10px 0 10px 10px;
 			border: 1px solid #1C1E80;
-			border-bottom: 4px solid #1C1E80;
 			outline: none;
-
-			&:active {
-				border-bottom: 1px solid #1C1E80;
-				border-top: 4px solid #1C1E80;
-			}
-
-			&:hover {
-				cursor: pointer;
-			}
+			cursor: pointer;
 		}
 	}
 }

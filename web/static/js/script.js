@@ -1,3 +1,5 @@
+var right = document.getElementById('right_content');
+
 function checkWord(word){
 	var input = document.getElementById('word_input').value;
 
@@ -19,7 +21,6 @@ function showPractice() {
 	var practice = document.getElementById('practice_div');
 	var left = document.getElementById('left_content');
 	var middle = document.getElementById('middle_content');
-	var right = document.getElementById('right_content');
 
 	var content = [left, middle, right];
 
@@ -28,4 +29,8 @@ function showPractice() {
 	for (item of content){
 		item.style.display = 'none';
 	}
+}
+
+function showList() {
+	right.style.display = 'block';
 }
