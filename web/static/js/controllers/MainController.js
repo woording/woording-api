@@ -45,9 +45,23 @@ app.controller('MainController', function($scope, $http, $window) {
 	};
 
 	$scope.getRandomWord = function(){
+		if ($scope.usedWords.length == $scope.listData.words.length){
+			console.log('done');
+			return true;
+		}
+
 		if($scope.listData){
 			$scope.randomWord = $scope.listData.words[Math.floor(Math.random() * $scope.listData.words.length)];
+
+			if ($scope.usedWords.indexOf($scope.randomWord) > -1){
+				$scope.getRandomWord();
+			}
+
 			$window.randomWord = $scope.randomWord;
+			$scope.usedWords.push($scope.randomWord)
+
 		}
 	};
+
+	$scope.usedWords = [];
 });
