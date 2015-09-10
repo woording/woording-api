@@ -1,23 +1,26 @@
 import sqlite3
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+
+SECRET_KEY = "SECRET"
 
 # A class that makes connecting to the database safe and easy
 class DatabaseConnection(object):
-    def __init__(self, db):
-    	# Create a database connection when initializing
-        self.conn = sqlite3.connect(db)
-        # Enable foreign_keys for extra safety
-        self.conn.execute('pragma foreign_keys = on')
-        self.conn.commit()
-        self.cur = self.conn.cursor()
+	def __init__(self, db):
+		# Create a database connection when initializing
+		self.conn = sqlite3.connect(db)
+		# Enable foreign_keys for extra safety
+		self.conn.execute('pragma foreign_keys = on')
+		self.conn.commit()
+		self.cur = self.conn.cursor()
 
-    def query(self, arg):
-        self.cur.execute(arg)
-        self.conn.commit()
-        return self.cur
+	def query(self, arg):
+		self.cur.execute(arg)
+		self.conn.commit()
+		return self.cur
 
-    def __del__(self):
-    	# Close the database connection when done
-        self.conn.close()
+	def __del__(self):
+		# Close the database connection when done
+		self.conn.close()
 
 
 # A class that contains functions for
@@ -26,6 +29,22 @@ class DatabaseManager(object):
 
 	def __init__(self):
 		self.database_path = 'wording.db'
+
+	# Token
+	def generate_auth_token(self, username, expiration = 600):
+		s = Serializer(SECRET_KEY, expires_in=expiration)
+		return s.dumps({ 'username': username })
+
+	def verify_auth_token(self, token):
+		s = Serializer(SECRET_KEY)
+		try:
+			data = s.loads(token)
+		except SignatureExpired:
+			return None # valid token, but expired
+		except BadSignature:
+			return None # invalid token
+		user = self.get_user(data['username'])
+		return user
 
 	# Create a user database record
 	def create_user(self, username, email, email_verified, password_hash):

@@ -1,5 +1,6 @@
 app.controller('MainController', function($scope, $http, $window) {
 	$scope.title = 'Wording';
+	$scope.token = "";
 
 	$scope.authenticate = function(username, password) {
 		var data = {
@@ -8,6 +9,7 @@ app.controller('MainController', function($scope, $http, $window) {
 		};
 		$http.post('http://127.0.0.1:5000/authenticate', data)
 			.success(function(data, status, headers, config) {
+				$scope.token = data;
 				$scope.loadUser("/" + username);
 				console.log(data);
 			}).error(function(data, status, headers, config) {
@@ -18,9 +20,11 @@ app.controller('MainController', function($scope, $http, $window) {
 
 	// json loading functions
 	$scope.loadUser = function(url){
-		$http.get('http://127.0.0.1:5000' + url)
+		$http.post('http://127.0.0.1:5000' + url, { 'token':$scope.token })
 			.success(function(data, status, headers, config) {
-				if (data.username == 'ERROR: This shouldn\'t happen') {
+				if (data.username == 'ERROR: This shouldn\'t happen' 
+					|| data.username == 'ERROR, No token'
+					|| data.username == 'ERROR, No user') {
 					$scope.authenticate("me", "password"); // Angular should get these values, now there is no function for it...
 				} else {
 					window.history.pushState('page2', 'Title', url);

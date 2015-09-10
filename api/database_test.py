@@ -1,12 +1,14 @@
 from database import *
+from passlib.hash import sha512_crypt
 
+SECURITY_PASSWORD_SALT = 'securitykey'
 
 db_manager = DatabaseManager()
 
 # Create users
-db_manager.create_user('cor', 'cor@pruijs.nl', True, 'Hunter2')
-db_manager.create_user('leon', 'leon@grasmeijer.nl', False, 'all_i_see_is_*****')
-db_manager.create_user('philip', 'philip@debruijn.nl', False, '***hunter***')
+db_manager.create_user('cor', 'cor@pruijs.nl', True, sha512_crypt.encrypt('Hunter2', salt=SECURITY_PASSWORD_SALT, rounds=5000))
+db_manager.create_user('leon', 'leon@grasmeijer.nl', False, sha512_crypt.encrypt('all_i_see_is_*****', salt=SECURITY_PASSWORD_SALT, rounds=5000))
+db_manager.create_user('philip', 'philip@debruijn.nl', False, sha512_crypt.encrypt('***hunter***', salt=SECURITY_PASSWORD_SALT, rounds=5000))
 
 # Create lists
 db_manager.create_list('cor', 'duitse_woorden', 'NL_nl', 'DE_de')

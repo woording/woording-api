@@ -153,18 +153,27 @@ def authenticate():
 
 	if username and password and db_manager.check_password(username, password):
 		# Find a way to store a token... Client side session could also be possible
-		return "Successfully authenticated"
+		# return "Successfully authenticated"
+		return db_manager.generate_auth_token(username)
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
 
 # REST Recource with app.route
-@app.route('/<username>')
-@crossdomain(origin='*')
+@app.route('/<username>', methods=["POST", "OPTIONS"])
+@crossdomain(origin='*', headers="content-type")
 def get(username):
 	db_manager = DatabaseManager()
 
-	if db_manager.username_exists(username):
+	token = request.json.get('token')
+	if token is None or token is "":
+		return json.dumps({ 'username':'ERROR, No token' })
+	print(token)
+	user = db_manager.verify_auth_token(token=token)
+	if user is None:
+		return json.dumps({ 'username':'ERROR, No user' })
+		
+	if db_manager.username_exists(username) and user.get('username'):
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
