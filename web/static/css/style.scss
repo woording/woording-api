@@ -63,7 +63,7 @@ header {
 }
 
 #content {
-	background: $wording_blue;
+	background: #fff;
 	width: 100%;
 	min-height: 500px;
 	overflow: hidden;
@@ -144,20 +144,25 @@ header {
 		padding: 1%;
 		background: #fff;
 		float: left;
-
-		-webkit-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
-		-moz-box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
-		box-shadow: 10px 10px 5px 0px rgba(50,50,50,1);
 	}
 
 	#left_content {
+		margin: 0;
+		width: 150px;
+		background: $wording_blue;
+		height: 100%;
 	}
 
 	#middle_content {
-
+		ul {
+			li {
+				margin: 20px;
+			}
+		}
 	}
 
 	#right_content {
+		display: none;
 
 		text-align: center;
 

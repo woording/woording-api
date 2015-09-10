@@ -16,14 +16,16 @@
 				</div>
 			</header>
 
+			<hr>
+
 			<div id="content">
-				<div id="slider_bar">
+				<!--<div id="slider_bar">
 					<ul>
 						<li>User</li>
 						<li>Lists</li>
 						<li>Practice</li>
 					</ul>
-				</div>
+					</div> -->
 
 				{% if listname %}
 					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
@@ -88,6 +90,9 @@
 					</div> <!-- ng-init -->
 
 			</div> <!-- content -->
+
+			<hr>
+
 			<footer>
 
 				Wording Inc. &copy; 2015

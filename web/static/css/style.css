@@ -44,7 +44,7 @@ header #sign_or_log_in #log_in:hover {
   cursor: pointer; }
 
 #content {
-  background: #90B2D4;
+  background: #fff;
   width: 100%;
   min-height: 500px;
   overflow: hidden; }
@@ -101,11 +101,16 @@ header #sign_or_log_in #log_in:hover {
   margin: 1% 0.3%;
   padding: 1%;
   background: #fff;
-  float: left;
-  -webkit-box-shadow: 10px 10px 5px 0px #323232;
-  -moz-box-shadow: 10px 10px 5px 0px #323232;
-  box-shadow: 10px 10px 5px 0px #323232; }
+  float: left; }
+#content #left_content {
+  margin: 0;
+  width: 150px;
+  background: #90B2D4;
+  height: 100%; }
+#content #middle_content ul li {
+  margin: 20px; }
 #content #right_content {
+  display: none;
   text-align: center; }
 #content #right_content table {
   text-align: left;
