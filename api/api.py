@@ -1,7 +1,6 @@
 from flask import Flask, request, abort, url_for, render_template, session, Response
 from flask import g
 from flask_restful import Resource, Api
-# from flask.ext.httpauth import HTTPBasicAuth
 from flask_mail import Mail
 from passlib.hash import sha512_crypt
 import json
@@ -29,9 +28,6 @@ MAIL_DEFAULT_SENDER = "noreply.wording@gmail.com"
 app = Flask(__name__)
 app.config.from_object(__name__)
 api = Api(app)
-
-# # HTTP Authentication
-# auth = HTTPBasicAuth()
 
 # Setup email
 mail = Mail(app)
@@ -128,32 +124,15 @@ def verify_email(token):
 		db_manager.verify_email(email)
 		return "Email Successfully verified.\n"
 
-# Verify password
-# @auth.verify_password
-# def verify_password(username, password):
-# 	db_manager = DatabaseManager()
-
-# 	password_hash = sha512_crypt.encrypt(password, salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-
-# 	user = db_manager.get_user(username)
-
-# 	if not user or not user.get("password_hash") == password_hash:
-# 		return False
-
-# 		g.user = user
-# 		return True
-
 @app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
 @crossdomain(origin='*', headers='content-type') # Headers need to be set
 def authenticate():
 	db_manager = DatabaseManager()
 
-	username = request.json.get('username') #request.json.get('username')
+	username = request.json.get('username')
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	if username and password and db_manager.check_password(username, password):
-		# Find a way to store a token... Client side session could also be possible
-		# return "Successfully authenticated"
 		return db_manager.generate_auth_token(username)
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
@@ -168,12 +147,12 @@ def get(username):
 	token = request.json.get('token')
 	if token is None or token is "":
 		return json.dumps({ 'username':'ERROR, No token' })
-	print(token)
+	
 	user = db_manager.verify_auth_token(token=token)
 	if user is None:
 		return json.dumps({ 'username':'ERROR, No user' })
-		
-	if db_manager.username_exists(username) and user.get('username'):
+	
+	if db_manager.username_exists(username) and user.get('username'): # Need to do something with shared lists...
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
@@ -212,28 +191,6 @@ def show_user_list(username, listname):
 		return json.dumps({
 			'username': 'ERROR: This shouldn\'t happen'
 			})
-
-
-
-
-
-# @app.route('/about')
-# def show_about():
-# 	return 'Insert about page here'
-
-# Login
-# @app.route('/login', methods = ['POST'])
-# def login():
-# 	username = request.json.get('username')
-#     password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-#     if username is None or password is None:
-#         abort(400) # missing arguments
-#     user = db_manager.get_user(username)
-
-#     valid_login = db_manager.check_password(username=username, password=password)
-
-#     if valid_login:
-#     	return "Successfully logged in"
 
 
 # Run app
