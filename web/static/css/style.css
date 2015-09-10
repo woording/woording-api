@@ -89,7 +89,6 @@ header {
     display: inline-block;
     width: 32.6%;
     height: 100%;
-    /*margin: 1% 0.3%;*/
     padding: 8px;
     float: left;
     border: 1px solid #ddd;
@@ -181,5 +180,3 @@ header {
 footer {
   text-align: center;
   margin: 20px; }
-
-/*# sourceMappingURL=style.css.map */
