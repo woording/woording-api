@@ -52,6 +52,5 @@ python3 api.py
 
 # For registering users, do:
 curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
-
-# Authenticating does not work for now. (WIP)
 ```
+Then in the main controller change the username and password on line 28 to succesfully login into the system
