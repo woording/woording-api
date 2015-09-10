@@ -22,9 +22,7 @@ app.controller('MainController', function($scope, $http, $window) {
 	$scope.loadUser = function(url){
 		$http.post('http://127.0.0.1:5000' + url, { 'token':$scope.token })
 			.success(function(data, status, headers, config) {
-				if (data.username == 'ERROR: This shouldn\'t happen' 
-					|| data.username == 'ERROR, No token'
-					|| data.username == 'ERROR, No user') {
+				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
 					$scope.authenticate("me", "password"); // Angular should get these values, now there is no function for it...
 				} else {
 					window.history.pushState('page2', 'Title', url);

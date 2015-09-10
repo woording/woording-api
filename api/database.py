@@ -37,14 +37,16 @@ class DatabaseManager(object):
 
 	def verify_auth_token(self, token):
 		s = Serializer(SECRET_KEY)
+		print(s)
 		try:
 			data = s.loads(token)
 		except SignatureExpired:
 			return None # valid token, but expired
 		except BadSignature:
 			return None # invalid token
-		user = self.get_user(data['username'])
-		return user
+		print(data)
+		username = data['username']
+		return username
 
 	# Create a user database record
 	def create_user(self, username, email, email_verified, password_hash):

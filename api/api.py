@@ -55,33 +55,33 @@ class User(Resource):
 			print ('ERROR: User does not exists')
 
 
-			class List(Resource):
-				def get(self, username, listname):
+class List(Resource):
+	def get(self, username, listname):
 
-					db_manager = DatabaseManager()
+		db_manager = DatabaseManager()
 
-					if db_manager.username_exists(username):
+		if db_manager.username_exists(username):
 
-						if db_manager.listname_exists_for_user(username, listname):
+			if db_manager.listname_exists_for_user(username, listname):
 
-							list_data = db_manager.get_list(username, listname)
-							translations = db_manager.get_translations_for_list(username, listname)
+				list_data = db_manager.get_list(username, listname)
+				translations = db_manager.get_translations_for_list(username, listname)
 
-							for translation in translations: del translation['id']; del translation['list_id']
+				for translation in translations: del translation['id']; del translation['list_id']
 
-							return json.dumps({
-								'listname' : listname,
-								'language_1_tag' : list_data.get("language_1_tag"),
-								'language_2_tag' : list_data.get("language_2_tag"),
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
 
-								'words' : translations
-								})
+					'words' : translations
+					})
 
-						else:
-							print("ERROR, List doesn't exist")
+			else:
+				print("ERROR, List doesn't exist")
 
-					else:
-						print("ERROR, User doesn't exists")
+		else:
+			print("ERROR, User doesn't exists")
 
 
 # api.add_resource(User, '/<username>')
@@ -148,11 +148,11 @@ def get(username):
 	if token is None or token is "":
 		return json.dumps({ 'username':'ERROR, No token' })
 	
-	user = db_manager.verify_auth_token(token=token)
-	if user is None:
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username is None:
 		return json.dumps({ 'username':'ERROR, No user' })
 	
-	if db_manager.username_exists(username) and user.get('username'): # Need to do something with shared lists...
+	if db_manager.username_exists(username) and token_username is username: # Need to do something with shared lists...
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
