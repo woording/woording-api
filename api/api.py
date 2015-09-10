@@ -152,7 +152,7 @@ def get(username):
 	if token_username is None:
 		return json.dumps({ 'username':'ERROR, No user' })
 	
-	if db_manager.username_exists(username) and token_username is username: # Need to do something with shared lists...
+	if db_manager.username_exists(username) and token_username == username: # Need to do something with shared lists...
 		user_info = db_manager.get_user(username)
 		list_lists = db_manager.get_lists_for_user(username)
 		for l in list_lists: del l['user_id']; del l['id']
