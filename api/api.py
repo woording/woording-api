@@ -14,9 +14,9 @@ SECRET_KEY = "development key"
 SECURITY_PASSWORD_SALT = 'securitykey'
 # Email config
 MAIL_SERVER = "smtp.gmail.com" # SMTP Server
-MAIL_PORT = 587 # SMTP Port
-MAIL_USE_TLS = True
-MAIL_USE_SSL = False
+MAIL_PORT = 465 # SMTP Port
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
 
 MAIL_DEBUG = True
 # Login information
@@ -88,7 +88,8 @@ class List(Resource):
 # api.add_resource(List, '/<username>/<listname>')
 
 # Register
-@app.route('/register', methods = ['POST'])
+@app.route('/register', methods = ['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers='content-type')
 def register():
 	db_manager = DatabaseManager()
 
@@ -109,6 +110,7 @@ def register():
 		html = render_template('email.html', confirm_url=confirm_url)
 		subject = "Please confirm your email"
 		send_email(email, subject, html)
+		print("Email send")
 
 		return "Successfully created user, please verify email.\n"
 
