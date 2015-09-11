@@ -80,15 +80,16 @@ header {
 	#slider_bar {
 		// border-top: 2px solid black;
 		// border-bottom: 2px solid black;
-		width: 100%;
-		padding: 10px;
+		width: calc(100% - 150px);
+		float: right;
+		/*padding: 10px;*/
 		margin-top: 10px;
 		padding-left: 0;
 
 		ul {
 			li {
 				display: inline-block;
-				margin-right: 30%;
+				margin: 0 20% 0 1%;
 			}
 		}
 	}
@@ -190,6 +191,7 @@ header {
 
 				&:hover {
 					color: black;
+					transition: color 0.3s;
 				}
 			}
 		}
