@@ -4,20 +4,19 @@
 	padding: 0;
 }
 
-$wording_blue: #1673DE;
-$border_blue: #1C1E80;
 $url_blue: #3B96FF;
 $user_list_item_height: 30px;
 
 $dark_color: #1D2025;
-$whiteish_color: #EBECEC;
+
 $white_color: #F5F6F6;
+$whiteish_color: #EBECEC;
+
 $dark_blue_color: #2E7C8A;
-$blue_color: #48BFD1;
-$lightish_color: #48BFD1;
-$light_color: #97A0B2;
-$user_list_item_background_color: #2E7C8A;
-$user_list_item_color: #EFEFEF;
+$light_blue_color: #48BFD1;
+
+$header-height: 60px;
+
 
 b { font-weight: bold; }
 
@@ -26,45 +25,47 @@ h1 {
 }
 
 header {
-	padding: 10px;
-	height: 40px;
+	height: $header-height;
 	background-color: $dark_color;
-	// border-bottom: 1px solid #aaa;
+	line-height: $header-height;
 
 	h1 {
 		font-size: 30;
 		font-weight: 120;
 		width: 300px;
-		margin: 5px 32px 10px 0;
+		padding-left: 16px;
 		color: $white_color;
+
 	}
 
 	#sign_or_log_in {
-		right: 10px;
+
+		right: 0;
 		position: absolute;
+		height: $header-height;
 		top: 0;
 		text-align: right;
 
 		#sign_up, #log_in {
-			margin: 10px 2px;
 			width: 80px;
-			height: 40px;
-			border-radius: 5px;
+			height: $header-height;
 			font-size: 15px;
 			cursor: pointer;
+			border: none;
+			// right: 0;
 		}
 
 		#sign_up {
-			background: $wording_blue;
-			border: 1px solid $border_blue;
-			color: white;
+			background: $dark_blue_color;
+			// border: 1px solid $dark_blue_color;
+			color: $white_color;
 		}
 
 
 		#log_in {
-			background: #eee;
-			border: 1px solid #aaa;
-			color: black;
+			background: $light_blue_color;
+			// border: 1px solid $dark_blue_color;
+			color: $white_color;
 		}
 	}
 }
@@ -77,8 +78,8 @@ header {
 	overflow: hidden;
 
 	#slider_bar {
-		border-top: 2px solid black;
-		border-bottom: 2px solid black;
+		// border-top: 2px solid black;
+		// border-bottom: 2px solid black;
 		width: 100%;
 		padding: 10px;
 		margin-top: 10px;
@@ -123,12 +124,12 @@ header {
 
 			margin: 10px;
 			border-radius: 5px;
-			background: $wording_blue;
+			background: $light_blue_color;
 			border: none;
 			outline: none;
 			color: white;
 			font-size: 20px;
-			border: 1px solid $border_blue;
+			// border: 1px solid $dark_blue_color;
 
 			cursor: pointer;
 		}
@@ -174,10 +175,10 @@ header {
 			// border-top: 1px solid $dark_color;
 
 			a {
-				color: $user_list_item_color;
+				color: $white_color;
 				text-decoration: none;
 				&:visited {
-					color: $user_list_item_color;
+					color: $white_color;
 				}
 
 				&:hover {
@@ -187,7 +188,7 @@ header {
 		}
 
 		.user_list_item.selected {
-			background-color: $blue_color;
+			background-color: $light_blue_color;
 		}
 
 	}
@@ -200,7 +201,7 @@ header {
 		table {
 			text-align: left;
 			width: 100%;
-			border: 1px solid #ddd;
+			// border: 1px solid #ddd;
 			border-top: none;
 
 			p {
@@ -241,17 +242,17 @@ header {
 			}
 
 			#practice_list {
-				background: $wording_blue;
-				border: 1px solid $border_blue;
+				background: $light_blue_color;
+				border: 1px solid $dark_blue_color;
 			}
 
 			#delete_list {
-				background: #F20000;
+				background: $dark_color;
 				border: 1px solid #960303;
 			}
 
 			#edit_list {
-				background: #FA6900;
+				background: $dark_blue_color;
 				border: 1px solid #913D00;
 			}
 		}
@@ -296,7 +297,7 @@ header {
 			width: 200px;
 			height: 50px;
 			font-size: 25px;
-			background: $wording_blue;
+			background: $light_blue_color;
 			color: white;
 			border-radius: 5px;
 			margin: 10px 0 10px 10px;
