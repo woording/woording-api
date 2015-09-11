@@ -12,8 +12,7 @@
 				<h1>Wording</h1>
 
 				<div id="sign_or_log_in">
-					<button id="sign_up">Sign up</button><!--
-					--><button id="log_in">Log In</button>
+					<button id="sign_up">Sign up</button><button id="log_in">Log In</button>
 				</div>
 			</header>
 
@@ -37,30 +36,18 @@
 
 							<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
 							<h2 id="wrong_word"></h2>
-							<!--<form onsubmit="checkWord(window.randomWord)">-->
-								<!--<input id="word_input" type="text" placeholder="Word">-->
-								<!--<button type="submit">Next</button>-->
-							<!--</form>-->
 
 							<form ng-submit="submit()" id="word_input">
-								<input type="text" placeholder="word" ng-model="text" name="text">
+								<input type="text" ng-model="text" name="text">
 								<button type="submit" id="submit">Next</button>
 							</form>
 
-							Right <span id="goed">0</span>
+							<p>Right <span id="correct">0</span></p>
 							<br>
-							Wrong <span id="fout">0</span>
+							<p>Wrong <span id="incorrect">0</span></p>
 						</div> <!-- practice_div -->
 
 						<div id="left_content">
-							<!-- <h3><b> [[ userData.username ]]: </b></h3> -->
-<!-- 							<br>
-							<p>
-								<b>Email:</b> [[ userData.email ]]
-							</p>
-
-							<br>
- -->
 							<h3>Friends</h3>
 
 							<div class="user_list_item selected">
@@ -94,19 +81,39 @@
 						</div> <!-- middle_content -->
 
 						<div id="right_content">
-							<table>
-								<b><p> [[ listData.listname ]] </p></b><br>
-								<tr>
-									<th> [[ listData.language_1_tag ]] </th>
-									<th> [[ listData.language_2_tag ]] </th>
-								</tr>
-								<tr ng-repeat="word in listData.words">
-									<td> [[ word.language_1_text ]] </td>
-									<td> [[ word.language_2_text ]] </td>
-								</tr>
-							</table>
+							<div id="list_items">
+								<table>
+									<h3> [[ listData.listname ]]</h3>
+									<tr>
+										<th> [[ listData.language_1_tag ]] </th>
+										<th> [[ listData.language_2_tag ]] </th>
+									</tr>
+									<tr ng-repeat="word in listData.words">
+										<td> [[ word.language_1_text ]] </td>
+										<td> [[ word.language_2_text ]] </td>
+									</tr>
+								</table>
 
-							<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">Practice</button>
+								<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">
+									Practice
+								</button>
+
+							</div> <!-- list_items -->
+
+							<div id="results">
+								<h1>Results:</h1>
+
+								<ul ng-if="incorrectWords.length != 0">
+									Incorrect words:
+									<li ng-repeat="word in incorrectWords">
+										[[ word.correctWord ]], typed: [[ word.incorrectWord ]]
+									</li>
+								</ul>
+
+								<div id="results_bar">
+									<p id="correct_bar"></p><p id="incorrect_bar"></p>
+								</div>
+							</div>
 						</div> <!-- right_content -->
 					</div> <!-- ng-init -->
 

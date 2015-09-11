@@ -95,13 +95,12 @@ header {
 
 	#practice_div {
 		display: none;
-		width: 96%;
-		margin: 1%;
+		width: 60%;
+		margin: auto 20%;
 		padding: 1%;
-		background: #fff;
 
 		h1 {
-			font-size: 30px;
+			font-size: 15px;
 			margin: 10px;
 		}
 
@@ -110,8 +109,12 @@ header {
 			margin: 10px;
 		}
 
+		form {
+			text-align: center;
+		}
+
 		input {
-			width: 50%;
+			width: 675px;
 			height: 50px;
 			font-size: 20px;
 			padding: 10px;
@@ -133,13 +136,17 @@ header {
 
 			cursor: pointer;
 		}
+
+		p {
+			margin-left: 12px;
+		}
 	}
 
 
 	#left_content, #right_content, #middle_content {
 		display: inline-block;
 		width: 32.6%;
-		height: 100%;
+		min-height: 100%;
 		// padding: 8px;
 		float: left;
 		border-top: none;
@@ -210,7 +217,7 @@ header {
 
 			th {
 				font-weight: bold;
-				padding: 10px;
+				padding: 8px;
 			}
 
 			tr:nth-child(even) {
@@ -265,31 +272,88 @@ header {
 
 		text-align: center;
 
-		table {
-			text-align: left;
-			width: 100%;
-			border: 1px solid #ddd;
-			border-top: none;
+		#list_items {
 
-			p {
-				padding: 5px;
-			}
-
-			th {
+			h3 {
 				font-weight: bold;
-				padding: 10px;
+				margin: 8.5px;
 			}
 
-			tr {
-				border: 1px solid #ccc;
+			table {
+				text-align: left;
+				width: 100%;
+				border: 1px solid #ddd;
+				border-top: none;
+
+
+				th {
+					font-weight: bold;
+					padding: 10px;
+				}
+
+				tr {
+					border: 1px solid #ccc;
+				}
+
+				td {
+					padding: 10px;
+				}
+
+				tr:nth-child(even) {
+					background: #f1f1f1;
+				}
+			}
+		}
+
+		#results {
+			display: none;
+			margin: 8px;
+			background: white;
+			border: 1px solid #ddd;
+			text-align: left;
+
+			h1 {
+				font-size: 20px;
+				font-weight: bold;
+				margin: 8px;
 			}
 
-			td {
-				padding: 10px;
+			ul {
+				margin: 8px;
 			}
 
-			tr:nth-child(even) {
-				background: #f1f1f1;
+			#results_bar {
+				width: 500px;
+				height: 30px;
+				border: 1px solid #ddd;
+				margin: 10px auto;
+				text-align: left;
+
+				#correct_bar, #incorrect_bar {
+					display: inline-block;
+					height: 50%;
+					padding: 10px 0 10px 1%;
+					transition: background 0.2s;
+					cursor: pointer;
+				}
+
+				#correct_bar {
+					width: 80%;
+					background: #3FA157;
+
+					&:hover {
+						background: #3DD963;
+					}
+				}
+
+				#incorrect_bar {
+					width: 20%;
+					background: #B52438;
+
+					&:hover {
+						background: #E62C44;
+					}
+				}
 			}
 		}
 

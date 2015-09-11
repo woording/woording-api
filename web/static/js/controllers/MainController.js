@@ -77,6 +77,9 @@ app.controller('MainController', function($scope, $http, $window) {
 	};
 
 	$scope.loadList = function(url){
+		$scope.usedWords = [];
+		$scope.incorrectWords = [];
+
 		$http.get('http://127.0.0.1:5000' + url).
 			success(function(data, status, headers, config) {
 				window.history.pushState('page2', 'Title', url);
@@ -89,8 +92,8 @@ app.controller('MainController', function($scope, $http, $window) {
 
 	$scope.getRandomWord = function(){
 		if ($scope.usedWords.length == $scope.listData.words.length){
-			document.getElementById('current_word').innerHTML = 'DONE';
-			console.log('done');
+			showResults();
+			setResult($scope.usedWords.length, $scope.incorrectWords.length);
 			return true;
 		}
 
@@ -108,6 +111,7 @@ app.controller('MainController', function($scope, $http, $window) {
 	};
 
 	$scope.usedWords = [];
+	$scope.incorrectWords = [];
 
 	$scope.submit = function(){
 		document.getElementById('wrong_word').innerHTML = '';
@@ -120,7 +124,7 @@ app.controller('MainController', function($scope, $http, $window) {
 
 	$scope.checkWord = function(wordOne, wordTwo){
 		if(wordOne == wordTwo.language_2_text){
-			console.log('correct');
+			document.getElementById('correct').innerHTML++;
 			$scope.getRandomWord();
 		}
 
@@ -128,6 +132,12 @@ app.controller('MainController', function($scope, $http, $window) {
 			document.getElementById('wrong_word').innerHTML = wordTwo.language_2_text;
 			document.getElementById('wrong_word').style.color = 'red';
 			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+			document.getElementById('incorrect').innerHTML++;
+
+			$scope.incorrectWords.push({
+				correctWord: wordTwo.language_2_text,
+				incorrectWord: wordOne
+			});
 		}
 
 		console.log($scope.usedWords);
