@@ -12,7 +12,7 @@ api/__pycache__
 *.sublime-project
 web.pid
 api.pid
-web/static/css/
-web/static/css/*
+#web/static/css/
+#web/static/css/*
 node_modules/
 node_modules/*
