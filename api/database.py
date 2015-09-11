@@ -43,7 +43,6 @@ class DatabaseManager(object):
 			return None # valid token, but expired
 		except BadSignature:
 			return None # invalid token
-		print(data)
 		return data['username']
 
 	# Create a user database record

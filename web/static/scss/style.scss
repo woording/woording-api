@@ -7,6 +7,17 @@
 $wording_blue: #1673DE;
 $border_blue: #1C1E80;
 $url_blue: #3B96FF;
+$user_list_item_height: 30px;
+
+$dark_color: #1D2025;
+$whiteish_color: #EBECEC;
+$white_color: #F5F6F6;
+$dark_blue_color: #2E7C8A;
+$blue_color: #48BFD1;
+$lightish_color: #48BFD1;
+$light_color: #97A0B2;
+$user_list_item_background_color: #2E7C8A;
+$user_list_item_color: #EFEFEF;
 
 b { font-weight: bold; }
 
@@ -17,14 +28,15 @@ h1 {
 header {
 	padding: 10px;
 	height: 40px;
-	background: #ddd;
-	border-bottom: 1px solid #aaa;
+	background-color: $dark_color;
+	// border-bottom: 1px solid #aaa;
 
 	h1 {
 		font-size: 30;
-		font-weight: 100;
+		font-weight: 120;
 		width: 300px;
-		margin: 5px 0 10px 0;
+		margin: 5px 32px 10px 0;
+		color: $white_color;
 	}
 
 	#sign_or_log_in {
@@ -57,8 +69,9 @@ header {
 	}
 }
 
+
 #content {
-	background: #fff;
+	background: $whiteish_color;
 	width: 100%;
 	min-height: 500px;
 	overflow: hidden;
@@ -126,28 +139,57 @@ header {
 		display: inline-block;
 		width: 32.6%;
 		height: 100%;
-		padding: 8px;
+		// padding: 8px;
 		float: left;
-		border: 1px solid #ddd;
 		border-top: none;
 		border-bottom: none;
 	}
 
 	#left_content {
-		border: 1px solid #ddd;
-		border-top: none;
-		border-bottom: none;
+		// border-right: 1px solid $dark_color;
+		background: $dark_blue_color;
+
 		margin: 0;
 		width: 150px;
 		height: 100%;
+		color: $whiteish_color;
 
-		a {
-			color: #3B96FF;
+		h3 {
+			padding-left: 8px;
+			padding-bottom: 4px;
+			padding-top: 8px;
 
-			&:hover {
-				color: black;
+			font-weight: bolder;
+		}
+
+
+		.user_list_item {
+			height: $user_list_item_height;
+			background-color: $dark_blue_color;
+			vertical-align: center;
+			line-height: $user_list_item_height;
+			padding-left: 8px;
+			box-sizing: border-box;
+			width: auto;
+			// border-top: 1px solid $dark_color;
+
+			a {
+				color: $user_list_item_color;
+				text-decoration: none;
+				&:visited {
+					color: $user_list_item_color;
+				}
+
+				&:hover {
+					color: black;
+				}
 			}
 		}
+
+		.user_list_item.selected {
+			background-color: $blue_color;
+		}
+
 	}
 
 	#middle_content {

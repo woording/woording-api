@@ -53,19 +53,26 @@
 						</div> <!-- practice_div -->
 
 						<div id="left_content">
-							<h3><b> [[ userData.username ]]: </b></h3>
-							<br>
+							<!-- <h3><b> [[ userData.username ]]: </b></h3> -->
+<!-- 							<br>
 							<p>
 								<b>Email:</b> [[ userData.email ]]
 							</p>
 
 							<br>
+ -->
+							<h3>Friends</h3>
 
-							<b>Friends:</b>
-							<br>
-							<a href="" ng-click="loadUser('/cor')">Cor</a><br>
-							<a href="" ng-click="loadUser('/leon')">Leon</a><br>
-							<a href="" ng-click="loadUser('/philip')">Philip</a><br>
+							<div class="user_list_item selected">
+								<a href="" ng-click="loadUser('/cor')">Cor</a><br>
+							</div>
+							<div class="user_list_item">
+								<a href="" ng-click="loadUser('/leon')">Leon</a><br>
+							</div>
+							<div class="user_list_item">
+								<a href="" ng-click="loadUser('/philip')">Philip</a><br>
+							</div>
+
 						</div> <!-- left_content -->
 
 						<div id="middle_content">
