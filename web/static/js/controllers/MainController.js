@@ -11,7 +11,6 @@ app.controller('MainController', function($scope, $http, $window) {
 			.success(function(data, status, headers, config) {
 				$scope.token = data;
 				$scope.loadUser("/" + username);
-				console.log(data);
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
 				// Function to go to home page
@@ -54,6 +53,7 @@ app.controller('MainController', function($scope, $http, $window) {
 
 	$scope.getRandomWord = function(){
 		if ($scope.usedWords.length == $scope.listData.words.length){
+			document.getElementById('current_word').innerHTML = 'DONE';
 			console.log('done');
 			return true;
 		}
@@ -65,11 +65,35 @@ app.controller('MainController', function($scope, $http, $window) {
 				$scope.getRandomWord();
 			}
 
-			$window.randomWord = $scope.randomWord;
-			$scope.usedWords.push($scope.randomWord)
-
+			else {
+				$scope.usedWords.push($scope.randomWord)
+			}
 		}
 	};
 
 	$scope.usedWords = [];
+
+	$scope.submit = function(){
+		document.getElementById('wrong_word').innerHTML = '';
+
+		if ($scope.text || !$scope.text) {
+			$scope.checkWord(this.text, $scope.randomWord);
+			this.text = '';
+        }
+	}
+
+	$scope.checkWord = function(wordOne, wordTwo){
+		if(wordOne == wordTwo.language_2_text){
+			console.log('correct');
+			$scope.getRandomWord();
+		}
+
+		else {
+			document.getElementById('wrong_word').innerHTML = wordTwo.language_2_text;
+			document.getElementById('wrong_word').style.color = 'red';
+			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+		}
+
+		console.log($scope.usedWords);
+	}
 });

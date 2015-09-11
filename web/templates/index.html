@@ -36,8 +36,15 @@
 							<h1><b> [[listData.listname]] </b></h1>
 
 							<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
-							<form onsubmit="checkWord(window.randomWord)">
-								<input id="word_input" type="text" placeholder="Word"><button type="submit">Next</button>
+							<h2 id="wrong_word"></h2>
+							<!--<form onsubmit="checkWord(window.randomWord)">-->
+								<!--<input id="word_input" type="text" placeholder="Word">-->
+								<!--<button type="submit">Next</button>-->
+							<!--</form>-->
+
+							<form ng-submit="submit()" id="word_input">
+								<input type="text" placeholder="word" ng-model="text" name="text">
+								<button type="submit" id="submit">Next</button>
 							</form>
 
 							Right <span id="goed">0</span>
