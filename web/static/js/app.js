@@ -1,4 +1,4 @@
-var app = angular.module("myApp", []);
+var app = angular.module("myApp", ['ngDialog']);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
