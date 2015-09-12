@@ -4,10 +4,7 @@
 		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/reset.css') }}">
 		<title>Wording Test</title>
 		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog-theme-default.min.css') }}">
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/frameworks/ngDialog.min.js') }}"></script>
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController" id="main_controller">
@@ -21,13 +18,13 @@
 			</header>
 
 			<div id="content">
-				<!--<div id="slider_bar">
-					<ul>
-						<li>User</li>
-						<li>Lists</li>
-						<li>Practice</li>
-					</ul>
-					</div> -->
+				<!--<div id="slider_bar">-->
+					<!--<ul>-->
+						<!--<li>User</li>-->
+						<!--<li>Lists</li>-->
+						<!--<li>Practice</li>-->
+					<!--</ul>-->
+				<!--</div>-->
 
 				{% if listname %}
 					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
@@ -40,30 +37,18 @@
 
 							<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
 							<h2 id="wrong_word"></h2>
-							<!--<form onsubmit="checkWord(window.randomWord)">-->
-								<!--<input id="word_input" type="text" placeholder="Word">-->
-								<!--<button type="submit">Next</button>-->
-							<!--</form>-->
 
 							<form ng-submit="submit()" id="word_input">
-								<input type="text" placeholder="word" ng-model="text" name="text">
+								<input type="text" ng-model="text" name="text">
 								<button type="submit" id="submit">Next</button>
 							</form>
 
-							Right <span id="goed">0</span>
+							<p>Right <span id="correct">0</span></p>
 							<br>
-							Wrong <span id="fout">0</span>
+							<p>Wrong <span id="incorrect">0</span></p>
 						</div> <!-- practice_div -->
 
 						<div id="left_content">
-							<!-- <h3><b> [[ userData.username ]]: </b></h3> -->
-<!-- 							<br>
-							<p>
-								<b>Email:</b> [[ userData.email ]]
-							</p>
-
-							<br>
- -->
 							<h3>Friends</h3>
 
 							<div class="user_list_item selected">
@@ -97,19 +82,43 @@
 						</div> <!-- middle_content -->
 
 						<div id="right_content">
-							<table>
-								<b><p> [[ listData.listname ]] </p></b><br>
-								<tr>
-									<th> [[ listData.language_1_tag ]] </th>
-									<th> [[ listData.language_2_tag ]] </th>
-								</tr>
-								<tr ng-repeat="word in listData.words">
-									<td> [[ word.language_1_text ]] </td>
-									<td> [[ word.language_2_text ]] </td>
-								</tr>
-							</table>
+							<div id="list_items">
+								<table>
+									<h3> [[ listData.listname ]]</h3>
+									<tr>
+										<th> [[ listData.language_1_tag ]] </th>
+										<th> [[ listData.language_2_tag ]] </th>
+									</tr>
+									<tr ng-repeat="word in listData.words">
+										<td> [[ word.language_1_text ]] </td>
+										<td> [[ word.language_2_text ]] </td>
+									</tr>
+								</table>
 
-							<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">Practice</button>
+								<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">
+									Practice
+								</button>
+
+							</div> <!-- list_items -->
+
+							<div id="results">
+								<table ng-if="incorrectWords.length != 0">
+									<h3> Resuslts: </h3>
+									Incorrect words:
+									<tr>
+										<th> Correct </th>
+										<th> Typed </th>
+									</tr>
+									<tr ng-repeat="word in incorrectWords">
+										<td> [[ word.correctWord ]] </td>
+										<td> [[ word.incorrectWord ]] </td>
+									</tr>
+								</table>
+
+								<div id="results_bar">
+									<p id="correct_bar"></p><p id="incorrect_bar"></p>
+								</div>
+							</div>
 						</div> <!-- right_content -->
 					</div> <!-- ng-init -->
 
@@ -122,9 +131,6 @@
 				Wording Inc. &copy; 2015 ¯\_(ツ)_/¯
 
 			</footer>
-
-			
-
 		</div> <!-- MainController -->
 	</body>
 

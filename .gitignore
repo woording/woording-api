@@ -1,5 +1,6 @@
 *.swo
 *.swp
+*.swm
 *.swn
 *.map
 .sass-cache

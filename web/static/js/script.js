@@ -1,29 +1,43 @@
 var right = document.getElementById('right_content');
+var practice = document.getElementById('practice_div');
+var left = document.getElementById('left_content');
+var middle = document.getElementById('middle_content');
 
-function checkWord(word){
-	var input = document.getElementById('word_input').value;
+var content = [left, middle, right];
 
-	if(input == word.language_2_text){
-		document.getElementById('word_input').value = '';
-		document.getElementById('goed').innerHTML++;
+function setResult(total, wrong){
+	var correct = document.getElementById('correct_bar');
+	var incorrect = document.getElementById('incorrect_bar');
+	if (!wrong){
+		incorrect.innerHTML = '0%';
+		incorrect.style.width = '0%';
+		correct.style.width = (100 - (wrong/total * 100) - 2) + '%';
+		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
 
 	else {
-		document.getElementById('current_word').innerHTML = word.language_2_text;
-		document.getElementById('fout').innerHTML++;
+		incorrect.style.width = ((wrong/total * 100) - 1) + '%';
+		incorrect.innerHTML = Math.round((wrong/total * 100)) + '%';
+		correct.style.width = (100 - (wrong/total * 100) - 1) + '%';
+		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
-
-	document.getElementById('word_input').value = '';
-	angular.element(document.getElementById('main_controller')).scope().getRandomWord();
 }
 
+function showResults() {
+	practice.style.display = 'none';
+	document.getElementById('correct').innerHTML = 0;
+	document.getElementById('incorrect').innerHTML = 0;
+
+	for (item of content){
+		item.style.display = 'block';
+	}
+
+	document.getElementById('list_items').style.display = 'none';
+	document.getElementById('results').style.display = 'block';
+}
+
+
 function showPractice() {
-	var practice = document.getElementById('practice_div');
-	var left = document.getElementById('left_content');
-	var middle = document.getElementById('middle_content');
-
-	var content = [left, middle, right];
-
 	practice.style.display = 'block';
 
 	for (item of content){
@@ -33,4 +47,6 @@ function showPractice() {
 
 function showList() {
 	right.style.display = 'block';
+	document.getElementById('results').style.display = 'none';
+	document.getElementById('list_items').style.display = 'block';
 }
