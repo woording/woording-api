@@ -17,3 +17,4 @@ web/static/css/
 web/static/css/*
 node_modules/
 node_modules/*
+api/wording.db
