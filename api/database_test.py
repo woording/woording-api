@@ -27,14 +27,14 @@ db_manager.create_translation('cor', 'engelse_woorden', 'toetsenbord', 'keyboard
 db_manager.create_translation('cor', 'engelse_woorden', 'fiets', 'bike')
 db_manager.create_translation('cor', 'engelse_woorden', 'appel', 'apple')
 db_manager.create_translation('cor', 'engelse_woorden', 'ding', 'thing')
-db_manager.create_translation('cor', 'engelse_woorden', 'wolk', 'cload')
+db_manager.create_translation('cor', 'engelse_woorden', 'wolk', 'cloud')
 db_manager.create_translation('cor', 'engelse_woorden', 'scherm', 'screen')
-db_manager.create_translation('cor', 'engelse_woorden', 'potloot', 'pencil')
+db_manager.create_translation('cor', 'engelse_woorden', 'potlood', 'pencil')
 db_manager.create_translation('cor', 'engelse_woorden', 'muziek', 'music')
 
-db_manager.create_translation('cor', 'duitse_woorden', 'auto', 'das Auto')
+db_manager.create_translation('cor', 'duitse_woorden', 'de auto', 'das Auto')
 db_manager.create_translation('cor', 'duitse_woorden', 'kamp', 'kampf')
-db_manager.create_translation('cor', 'duitse_woorden', 'geodriehoek', 'geometrie dreieick')
+db_manager.create_translation('cor', 'duitse_woorden', 'geodriehoek', 'geometrie dreieck')
 
 db_manager.create_translation('leon', 'latijn_woorden', 'rust', 'requiescat')
 db_manager.create_translation('leon', 'latijn_woorden', 'in', 'im')

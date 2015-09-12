@@ -13,7 +13,7 @@ npm install run-sequence
 npm install gulp-sass
 npm install gulp-shell
 ```
-### Required other plugins
+### Other required plugins
 ```bash
 npm install ng-dialog
 ```
