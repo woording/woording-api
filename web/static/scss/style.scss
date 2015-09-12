@@ -320,9 +320,36 @@ header {
 				margin: 8px;
 			}
 
-			ul {
-				margin: 8px;
+			h3 {
+				font-weight: bold;
+				margin: 8.5px;
 			}
+
+			table {
+				text-align: left;
+				width: 90%;
+				border: 1px solid #ddd;
+				border-top: none;
+
+
+				th {
+					font-weight: bold;
+					padding: 10px;
+				}
+
+				tr {
+					border: 1px solid #ccc;
+				}
+
+				td {
+					padding: 10px;
+				}
+
+				tr:nth-child(even) {
+					background: #f1f1f1;
+				}
+			}
+
 
 			#results_bar {
 				width: 500px;

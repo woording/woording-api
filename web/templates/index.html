@@ -101,14 +101,18 @@
 							</div> <!-- list_items -->
 
 							<div id="results">
-								<h1>Results:</h1>
-
-								<ul ng-if="incorrectWords.length != 0">
+								<table ng-if="incorrectWords.length != 0">
+									<h3> Resuslts: </h3>
 									Incorrect words:
-									<li ng-repeat="word in incorrectWords">
-										[[ word.correctWord ]], typed: [[ word.incorrectWord ]]
-									</li>
-								</ul>
+									<tr>
+										<th> Correct </th>
+										<th> Typed </th>
+									</tr>
+									<tr ng-repeat="word in incorrectWords">
+										<td> [[ word.correctWord ]] </td>
+										<td> [[ word.incorrectWord ]] </td>
+									</tr>
+								</table>
 
 								<div id="results_bar">
 									<p id="correct_bar"></p><p id="incorrect_bar"></p>
