@@ -153,23 +153,22 @@ header {
 		border-top: none;
 		border-bottom: none;
 	}
+	h3 {
+		padding-left: 8px;
+		padding-bottom: 4px;
+		padding-top: 8px;
+
+		font-weight: bolder;
+	}
 
 	#left_content {
 		// border-right: 1px solid $dark_color;
 		background: $dark_blue_color;
-
 		margin: 0;
 		width: 150px;
 		height: 100%;
 		color: $whiteish_color;
 
-		h3 {
-			padding-left: 8px;
-			padding-bottom: 4px;
-			padding-top: 8px;
-
-			font-weight: bolder;
-		}
 
 
 		.user_list_item {
@@ -203,6 +202,21 @@ header {
 	}
 
 	#middle_content {
+
+		input {
+			width: 100%;
+			border: none;
+			padding: 8px;
+			font-size: 12px;
+			&:focus {
+				outline: none;
+			}
+		}
+
+		h3 {
+			color: $dark_color;
+		}
+
 		a {
 			color: $url_blue;
 		}

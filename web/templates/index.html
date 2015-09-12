@@ -8,6 +8,9 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog-theme-default.min.css') }}">
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/frameworks/ngDialog.min.js') }}"></script>
+
+		<link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
+	
 	</head>
 	<body ng-app="myApp">
 		<div ng-controller="MainController" id="main_controller">
@@ -15,8 +18,8 @@
 				<h1>Wording</h1>
 
 				<div id="sign_or_log_in">
-					<button id="sign_up" ng-click="openSignUp()">Sign up</button>
-					<button id="log_in" ng-click="openLogIn()">Log In</button>
+					<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
+				 --><button id="log_in" ng-click="openLogIn()">Log In</button>
 				</div>
 			</header>
 
@@ -67,11 +70,15 @@
 						</div> <!-- left_content -->
 
 						<div id="middle_content">
+
+							<div id="list_header">
+								<h3>Lists</h3>
+							</div>
+
+							<input ng-model="searchQuery" placeholder="Search">
+
 							<table>
-								<tr>
-									<th>[[ userData.username ]]'s lists:</th>
-								</tr>
-								<tr ng-repeat="list in userData.lists">
+								<tr ng-repeat="list in userData.lists | filter:searchQuery">
 									<td>
 										<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])" onclick="showList()">[[ list.listname ]]</a>
 										<button id="delete_list">delete</button>
