@@ -36,6 +36,27 @@
 			}
 		}
 
+		input[type="submit"] {
+			transition: background-color 0.25s ease 0s;
+			border-radius: 5px;
+			border-width: 0px;
+			background-color: #AAA;
+			font-size: inherit;
+			font-family: inherit;
+			font-weight: inherit;
+			margin: 0 0 .15em;
+			min-height: 1.8em;
+			padding: .25em .67em;
+
+			&:hover {
+				background-color: #999;
+			}
+
+			&:active {
+				background-color: #888;
+			}
+		}
+
 		table {
 			tr {
 				td {
