@@ -1,76 +1,3 @@
-*,html,body {
-	font-family: Helvetica;
-	margin: 0;
-	padding: 0;
-}
-
-$url_blue: #3B96FF;
-$user_list_item_height: 30px;
-
-$dark_color: #1D2025;
-
-$white_color: #F5F6F6;
-$whiteish_color: #EBECEC;
-
-$dark_blue_color: #2E7C8A;
-$light_blue_color: #48BFD1;
-
-$header-height: 60px;
-
-
-b { font-weight: bold; }
-
-h1 {
-	margin: 0;
-}
-
-header {
-	height: $header-height;
-	background-color: $dark_color;
-	line-height: $header-height;
-
-	h1 {
-		font-size: 30;
-		font-weight: 120;
-		width: 300px;
-		padding-left: 16px;
-		color: $white_color;
-
-	}
-
-	#sign_or_log_in {
-
-		right: 0;
-		position: absolute;
-		height: $header-height;
-		top: 0;
-		text-align: right;
-
-		#sign_up, #log_in {
-			width: 80px;
-			height: $header-height;
-			font-size: 15px;
-			cursor: pointer;
-			border: none;
-			// right: 0;
-		}
-
-		#sign_up {
-			background: $dark_blue_color;
-			// border: 1px solid $dark_blue_color;
-			color: $white_color;
-		}
-
-
-		#log_in {
-			background: $light_blue_color;
-			// border: 1px solid $dark_blue_color;
-			color: $white_color;
-		}
-	}
-}
-
-
 #content {
 	background: $whiteish_color;
 	width: 100%;
@@ -169,29 +96,27 @@ header {
 		height: 100%;
 		color: $whiteish_color;
 
+		a {
+			.user_list_item {
+				height: $user_list_item_height;
+				background-color: $dark_blue_color;
+				vertical-align: center;
+				line-height: $user_list_item_height;
+				padding-left: 8px;
+				box-sizing: border-box;
+				width: auto;
+				// border-top: 1px solid $dark_color;
 
-
-		.user_list_item {
-			height: $user_list_item_height;
-			background-color: $dark_blue_color;
-			vertical-align: center;
-			line-height: $user_list_item_height;
-			padding-left: 8px;
-			box-sizing: border-box;
-			width: auto;
-			// border-top: 1px solid $dark_color;
-
-			a {
+			}
+			color: $white_color;
+			text-decoration: none;
+			&:visited {
 				color: $white_color;
-				text-decoration: none;
-				&:visited {
-					color: $white_color;
-				}
+			}
 
-				&:hover {
-					color: black;
-					transition: color 0.3s;
-				}
+			&:hover {
+				color: black;
+				transition: color 0.3s;
 			}
 		}
 
@@ -415,7 +340,3 @@ header {
 	}
 }
 
-footer {
-	text-align: center;
-	margin: 20px;
-}

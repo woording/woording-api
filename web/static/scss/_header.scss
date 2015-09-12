@@ -1,0 +1,45 @@
+header {
+	height: $header-height;
+	background-color: $dark_color;
+	line-height: $header-height;
+
+	h1 {
+		font-size: 30;
+		font-weight: 120;
+		width: 300px;
+		padding-left: 16px;
+		color: $white_color;
+
+	}
+
+	#sign_or_log_in {
+
+		right: 0;
+		position: absolute;
+		height: $header-height;
+		top: 0;
+		text-align: right;
+
+		#sign_up, #log_in {
+			width: 80px;
+			height: $header-height;
+			font-size: 15px;
+			cursor: pointer;
+			border: none;
+			// right: 0;
+		}
+
+		#sign_up {
+			background: $dark_blue_color;
+			// border: 1px solid $dark_blue_color;
+			color: $white_color;
+		}
+
+
+		#log_in {
+			background: $light_blue_color;
+			// border: 1px solid $dark_blue_color;
+			color: $white_color;
+		}
+	}
+}

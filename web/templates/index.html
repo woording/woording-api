@@ -1,37 +1,36 @@
 <html>
 	<head>
 		<title>Wording</title>
-		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/reset.css') }}">
-		<title>Wording Test</title>
-		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+
+		<!-- stylesheets -->
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
+
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog-theme-default.min.css') }}">
+
+		<!-- scripts -->
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/frameworks/ngDialog.min.js') }}"></script>
-
-		<link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
-	
 	</head>
+
 	<body ng-app="myApp">
+
 		<div ng-controller="MainController" id="main_controller">
+
 			<header>
+
 				<h1>Wording</h1>
 
 				<div id="sign_or_log_in">
 					<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
 				 --><button id="log_in" ng-click="openLogIn()">Log In</button>
 				</div>
+
 			</header>
 
 			<div id="content">
-				<!--<div id="slider_bar">-->
-					<!--<ul>-->
-						<!--<li>User</li>-->
-						<!--<li>Lists</li>-->
-						<!--<li>Practice</li>-->
-					<!--</ul>-->
-				<!--</div>-->
 
+				<!-- load data -->
 				{% if listname %}
 					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
 				{% else %}
@@ -39,6 +38,7 @@
 				{% endif %}
 
 						<div id="practice_div">
+
 							<h1><b> [[listData.listname]] </b></h1>
 
 							<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
@@ -52,20 +52,30 @@
 							<p>Right <span id="correct">0</span></p>
 							<br>
 							<p>Wrong <span id="incorrect">0</span></p>
+
 						</div> <!-- practice_div -->
 
 						<div id="left_content">
-							<h3>Friends</h3>
 
-							<div class="user_list_item selected">
-								<a href="" ng-click="loadUser('/cor')">Cor</a><br>
-							</div>
-							<div class="user_list_item">
-								<a href="" ng-click="loadUser('/leon')">Leon</a><br>
-							</div>
-							<div class="user_list_item">
-								<a href="" ng-click="loadUser('/philip')">Philip</a><br>
-							</div>
+							<h3>Friends</h3>
+							
+							<a href="" ng-click="loadUser('/cor')">
+								<div class="user_list_item selected">
+									Cor
+								</div>
+							</a>
+							
+							<a href="" ng-click="loadUser('/leon')">
+								<div class="user_list_item">
+									Leon
+								</div>
+							</a>
+
+							<a href="" ng-click="loadUser('/philip')">
+								<div class="user_list_item">
+									Philip
+								</div>
+							</a>
 
 						</div> <!-- left_content -->
 
@@ -137,9 +147,7 @@
 			<hr>
 
 			<footer>
-
 				Wording Inc. &copy; 2015 ¯\_(ツ)_/¯
-
 			</footer>
 		</div> <!-- MainController -->
 	</body>
