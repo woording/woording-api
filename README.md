@@ -13,6 +13,10 @@ npm install run-sequence
 npm install gulp-sass
 npm install gulp-shell
 ```
+### Required other plugins
+```bash
+npm install ng-dialog
+```
 
 #### How to only use api
 ```bash
