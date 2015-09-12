@@ -4,72 +4,6 @@
 	min-height: 500px;
 	overflow: hidden;
 
-	#slider_bar {
-		// border-top: 2px solid black;
-		// border-bottom: 2px solid black;
-		width: calc(100% - 150px);
-		float: right;
-		/*padding: 10px;*/
-		margin-top: 10px;
-		padding-left: 0;
-
-		ul {
-			li {
-				display: inline-block;
-				margin: 0 20% 0 1%;
-			}
-		}
-	}
-
-	#practice_div {
-		display: none;
-		width: 60%;
-		margin: auto 20%;
-		padding: 1%;
-
-		h1 {
-			font-size: 15px;
-			margin: 10px;
-		}
-
-		h2 {
-			font-size: 40px;
-			margin: 10px;
-		}
-
-		form {
-			text-align: center;
-		}
-
-		input {
-			width: 675px;
-			height: 50px;
-			font-size: 20px;
-			padding: 10px;
-			margin: 0 auto;
-		}
-
-		button {
-			width: 100px;
-			height: 50px;
-
-			margin: 10px;
-			border-radius: 5px;
-			background: $light_blue_color;
-			border: none;
-			outline: none;
-			color: white;
-			font-size: 20px;
-			// border: 1px solid $dark_blue_color;
-
-			cursor: pointer;
-		}
-
-		p {
-			margin-left: 12px;
-		}
-	}
-
 
 	#left_content, #right_content, #middle_content {
 		display: inline-block;
@@ -88,43 +22,6 @@
 		font-weight: bolder;
 	}
 
-	#left_content {
-		// border-right: 1px solid $dark_color;
-		background: $dark_blue_color;
-		margin: 0;
-		width: 150px;
-		height: 100%;
-		color: $whiteish_color;
-
-		a {
-			.user_list_item {
-				height: $user_list_item_height;
-				background-color: $dark_blue_color;
-				vertical-align: center;
-				line-height: $user_list_item_height;
-				padding-left: 8px;
-				box-sizing: border-box;
-				width: auto;
-				// border-top: 1px solid $dark_color;
-
-			}
-			color: $white_color;
-			text-decoration: none;
-			&:visited {
-				color: $white_color;
-			}
-
-			&:hover {
-				color: black;
-				transition: color 0.3s;
-			}
-		}
-
-		.user_list_item.selected {
-			background-color: $light_blue_color;
-		}
-
-	}
 
 	#middle_content {
 

@@ -1,0 +1,48 @@
+#content #practice_div {
+	display: none;
+	width: 60%;
+	margin: auto 20%;
+	padding: 1%;
+
+	h1 {
+		font-size: 15px;
+		margin: 10px;
+	}
+
+	h2 {
+		font-size: 40px;
+		margin: 10px;
+	}
+
+	form {
+		text-align: center;
+	}
+
+	input {
+		width: 675px;
+		height: 50px;
+		font-size: 20px;
+		padding: 10px;
+		margin: 0 auto;
+	}
+
+	button {
+		width: 100px;
+		height: 50px;
+
+		margin: 10px;
+		border-radius: 5px;
+		background: $light_blue_color;
+		border: none;
+		outline: none;
+		color: white;
+		font-size: 20px;
+		// border: 1px solid $dark_blue_color;
+
+		cursor: pointer;
+	}
+
+	p {
+		margin-left: 12px;
+	}
+}
