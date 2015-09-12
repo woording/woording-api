@@ -16,9 +16,20 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 				<h1>Sign Up</h1><br>\
 				<form ng-submit="registerUser()">\
 					<!-- Need to do style... -->\
-					Username: <input type="text" ng-model="user.username" name="username" placeholder="Username"><br>\
-					Password: <input type="password" ng-model="user.password" name="password" placeholder="Password"><br>\
-					Email:    <input type="email" ng-model="user.email" name="email" placeholder="Email"><br>\
+					<table>\
+						<tr>\
+							<td>Username: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="Username"></td>\
+						</tr>\
+						<tr>\
+							<td>Password: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="Password"></td>\
+						</tr>\
+						<tr>\
+							<td>Email: </td>\
+							<td><input type="email" ng-model="user.email" name="email" placeholder="Email"></td>\
+						</tr>\
+					</table>\
 					<input type="submit" value="Sign Up">\
 				</form>',
 			plain:true,
@@ -31,8 +42,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 				<h1>Log In</h1><br>\
 				<form ng-submit="loginUser()">\
 					<!-- Need to do style... -->\
-					Username: <input type="text" ng-model="user.username" name="username" placeholder="Username"><br>\
-					Password: <input type="password" ng-model="user.password" name="password" placeholder="Password"><br>\
+					<table>\
+						<tr>\
+							<td>Username: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="Username"></td>\
+						</tr>\
+						<tr>\
+							<td>Password: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="Password"></td>\
+						</tr>\
+					</table>\
 					<input type="submit" value="Log In"> <a ng-click="openSignUp()">Or Sign Up</a>\
 				</form>',
 			plain:true,

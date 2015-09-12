@@ -1,0 +1,59 @@
+.ngdialog-content {
+	font-family: helvetica;
+	color: #444;
+
+	h1 {
+		font-size: 1.5em;
+		font-weight: bold;
+	}
+
+	form {
+
+		input[type="text"], input[type="password"], input[type="email"] {
+			transition: border-color 0.25s ease 0s;
+			background: rgba(0,0,0,0);
+			border-style: solid;
+			border-width: 0 0 2px 0;
+			border-radius: 0px;
+			border-color: #999;
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			margin: 0 0 .25em;
+			min-height: 1.8em;
+			outline: 0px none transparent;
+
+			&:focus {
+				outline: 0px none transparent;
+				box-shadow: none;
+				border-color: #444;
+			}
+
+			&:invalid {
+				outline: 0px none transparent;
+				box-shadow: none;
+				border-color: $error_red;
+			}
+		}
+
+		table {
+			tr {
+				td {
+					padding-right: 1vw;
+					color: #444 !important;
+				}
+			}
+		}
+
+		a {
+			color: $url_blue;
+			font-size: .9em;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+}
