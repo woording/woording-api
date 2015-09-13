@@ -9,6 +9,7 @@
 
 	form {
 
+		// Text input style
 		input[type="text"], input[type="password"], input[type="email"] {
 			transition: border-color 0.25s ease 0s;
 			background: rgba(0,0,0,0);
@@ -29,6 +30,7 @@
 				border-color: #444;
 			}
 
+			// Invalid input
 			&:invalid {
 				outline: 0px none transparent;
 				box-shadow: none;
@@ -36,6 +38,7 @@
 			}
 		}
 
+		// Submit button style
 		input[type="submit"] {
 			transition: background-color 0.25s ease 0s;
 			border-radius: 5px;
@@ -52,6 +55,7 @@
 				background-color: #999;
 			}
 
+			// When mouse down on button
 			&:active {
 				background-color: #888;
 			}
