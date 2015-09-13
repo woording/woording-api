@@ -21,9 +21,15 @@
 
 				<h1>Wording</h1>
 
-				<div id="sign_or_log_in">
-					<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
-				 --><button id="log_in" ng-click="openLogIn()">Log In</button>
+				<div id="log_info">
+					<div id="sign_or_log_in" ng-hide="loggedIn">
+						<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
+					 --><button id="log_in" ng-click="openLogIn()">Log In</button>
+					</div>
+					<div id="userinfo" ng-show="loggedIn">
+						<span>Logged in as: [[ userData.username ]] </span><!--
+					 --><button id="log_out">Log Out</button>
+					</div>
 				</div>
 
 			</header>

@@ -1,6 +1,7 @@
 app.controller('MainController', function($scope, $http, $window, ngDialog) {
 	$scope.title = 'Wording';
 	
+	$scope.loggedIn = false;
 	$scope.user = {
 		token	:	"",
 
@@ -68,6 +69,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 		$http.post('http://127.0.0.1:5000/authenticate', data)
 			.success(function(data, status, headers, config) {
 				$scope.user.token = data;
+				$scope.loggedIn = true;
 				$scope.loadUser("/" + username);
 				ngDialog.closeAll()
 			}).error(function(data, status, headers, config) {
@@ -94,9 +96,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 					console.error("Failed")
 				});
 			// Reset the values
-			$scope.user.username = ''
 			$scope.user.password = ''
-			$scope.user.email = ''
 		}
 	};
 
@@ -105,7 +105,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 		if ($scope.user.username && $scope.user.password) {
 			$scope.authenticate(this.user.username, this.user.password);
 			// Reset the fields
-			$scope.user.username = '';
 			$scope.user.password = '';
 		}
 	};
