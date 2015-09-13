@@ -27,7 +27,7 @@
 					 --><button id="log_in" ng-click="openLogIn()">Log In</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
-						<span>Logged in as: [[ userData.username ]] </span><!--
+						<button id="user_profile">Hello, [[ userData.username ]] </button><!--
 					 --><button id="log_out">Log Out</button>
 					</div>
 				</div>
@@ -94,12 +94,9 @@
 							<input ng-model="searchQuery" placeholder="Search">
 
 							<table>
-								<tr ng-repeat="list in userData.lists | filter:searchQuery">
-									<td>
-										<a href="" ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])" onclick="showList()">[[ list.listname ]]</a>
-										<button id="delete_list">delete</button>
-										<button id="edit_list">edit</button>
-										<button id=practice_list ng-click="loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]])" onclick="showList()">practice</button>
+								<tr ng-repeat="list in userData.lists | filter:searchQuery" >
+									<td ng-click="(loadList('/' + [[ userData.username ]] + '/' + [[ list.listname ]]))" onclick="showList()">
+										[[ list.listname ]]
 									</td>
 								</tr>
 							</table>
@@ -109,8 +106,12 @@
 
 						<div id="right_content">
 							<div id="list_items">
+
+								<div id="list_header">
+									<h3>[[ listData.listname ]]</h3>
+								</div>
+
 								<table>
-									<h3> [[ listData.listname ]]</h3>
 									<tr>
 										<th> [[ listData.language_1_tag ]] </th>
 										<th> [[ listData.language_2_tag ]] </th>
@@ -123,6 +124,14 @@
 
 								<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">
 									Practice
+								</button>
+
+								<button id="edit_button">
+									Edit
+								</button>
+
+								<button id="delete_button">
+									Delete
 								</button>
 
 							</div> <!-- list_items -->

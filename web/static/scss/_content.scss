@@ -25,6 +25,10 @@
 
 	#middle_content {
 
+
+		// temporary
+		border-right: 1px solid $dark_color;
+
 		input {
 			width: 100%;
 			border: none;
@@ -62,12 +66,8 @@
 				background: #f1f1f1;
 			}
 
-			tr {
-				border: 1px solid #ccc;
-			}
-
 			td {
-				padding: 10px;
+				padding: 8px;
 
 				&:hover > button {
 					opacity: 1;
@@ -75,12 +75,14 @@
 			}
 
 			button {
+				height: 100%;
+
+				margin: -8px;
+
 				transition: opacity 0.3s;
 				opacity: 0;
-				margin: 0 10px;
 				float: right;
 				padding: 0 10px;
-				border-radius: 5px;
 				cursor: pointer;
 				font-size: 12px;
 				color: white;
@@ -88,18 +90,19 @@
 
 			#practice_list {
 				background: $light_blue_color;
+				border: 1px solid $light_blue_color;
+			}
+
+			#edit_list {
+				background: $dark_blue_color;
 				border: 1px solid $dark_blue_color;
 			}
 
 			#delete_list {
 				background: $dark_color;
-				border: 1px solid #960303;
+				border: 1px solid $dark_color;
 			}
 
-			#edit_list {
-				background: $dark_blue_color;
-				border: 1px solid #913D00;
-			}
 		}
 	}
 
@@ -108,21 +111,13 @@
 		width: 50%;
 		border-right: none;
 
-		text-align: center;
 
 		#list_items {
-
-			h3 {
-				font-weight: bold;
-				margin: 8.5px;
-			}
 
 			table {
 				text-align: left;
 				width: 100%;
-				border: 1px solid #ddd;
 				border-top: none;
-
 
 				th {
 					font-weight: bold;
@@ -130,7 +125,6 @@
 				}
 
 				tr {
-					border: 1px solid #ccc;
 				}
 
 				td {
@@ -147,7 +141,6 @@
 			display: none;
 			margin: 8px;
 			background: white;
-			border: 1px solid #ddd;
 			text-align: left;
 
 			h1 {
@@ -222,6 +215,9 @@
 			}
 		}
 
+
+		// TODO: Refactor this
+
 		#practice_button {
 			width: 200px;
 			height: 50px;
@@ -230,7 +226,33 @@
 			color: white;
 			border-radius: 5px;
 			margin: 10px 0 10px 10px;
-			border: 1px solid #1C1E80;
+			border: 1px solid $light_blue_color;
+			outline: none;
+			cursor: pointer;
+		}
+
+		#edit_button {
+			width: 200px;
+			height: 50px;
+			font-size: 25px;
+			background: $dark_blue_color;
+			border: 1px solid $dark_blue_color;
+			color: white;
+			border-radius: 5px;
+			margin: 10px 0 10px 10px;
+			outline: none;
+			cursor: pointer;
+		}
+
+		#delete_button {
+			width: 200px;
+			height: 50px;
+			font-size: 25px;
+			background: $dark_color;
+			color: white;
+			border-radius: 5px;
+			margin: 10px 0 10px 10px;
+			border: 1px solid $dark_color;
 			outline: none;
 			cursor: pointer;
 		}

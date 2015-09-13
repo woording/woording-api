@@ -29,7 +29,17 @@ header {
 			// right: 0;
 		}
 
-		#sign_up {
+		#user_profile {
+			height: $header-height;
+			font-size: 15px;
+			cursor: pointer;
+			border: none;
+			padding-left: 8px;
+			padding-right: 8px;
+
+		}
+
+		#sign_up, #user_profile {
 			background: $dark_blue_color;
 			// border: 1px solid $dark_blue_color;
 			color: $white_color;
