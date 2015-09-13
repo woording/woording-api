@@ -1,6 +1,6 @@
-app.controller('MainController', function($scope, $http, $window, ngDialog) {
+app.controller('MainController', function($scope, $http, $window, ngDialog, $interval) {
 	$scope.title = 'Wording';
-	
+
 	$scope.loggedIn = false;
 	$scope.user = {
 		token	:	"",
@@ -12,7 +12,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 
 	// Dialogs
 	$scope.openSignUp = function() {
-		ngDialog.open({ 
+		ngDialog.open({
 			template:'\
 				<h1>Sign Up</h1><br>\
 				<form ng-submit="registerUser()">\
@@ -38,7 +38,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 		});
 	};
 	$scope.openLogIn = function() {
-		ngDialog.open({ 
+		ngDialog.open({
 			template:'\
 				<h1>Log In</h1><br>\
 				<form ng-submit="loginUser()">\
@@ -101,7 +101,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 	};
 
 	$scope.loginUser = function() {
-		console.log('Start loggin in')
+		console.log('Start logging in')
 		if ($scope.user.username && $scope.user.password) {
 			$scope.authenticate(this.user.username, this.user.password);
 			// Reset the fields
@@ -114,6 +114,24 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
 
+	$scope.oldUrl = '';
+	$scope.currentUrl = '';
+
+	$scope.checkUrl = function(){
+		$scope.oldUrl = $scope.currentUrl;
+		$scope.currentUrl = window.location.href;
+
+		if ($scope.currentUrl < $scope.oldUrl){
+			right.style.display = 'none';
+		}
+
+		else if ($scope.oldUrl && $scope.currentUrl > $scope.oldUrl) {
+			right.style.display = 'block';
+		}
+	}
+
+	$interval($scope.checkUrl, 100);
+
 	// json loading functions
 	$scope.loadUser = function(url){
 		$http.post('http://127.0.0.1:5000' + url, { 'token':$scope.user.token })
@@ -124,6 +142,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 					//$scope.authenticate("cor", "Hunter2"); // Angular should get these values, now there is no function for it...
 				} else {
 					window.history.pushState('page2', 'Title', url);
+
 					$scope.userData = data;
 					$scope.listData = 0;
 				}
@@ -140,6 +159,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog) {
 		$http.get('http://127.0.0.1:5000' + url).
 			success(function(data, status, headers, config) {
 				window.history.pushState('page2', 'Title', url);
+
 				$scope.listData = data;
 			}).
 			error(function(data, status, headers, config) {
