@@ -68,9 +68,15 @@
 
 			td {
 				padding: 8px;
+				cursor: pointer;
+				transition: background 0.3s;
 
 				&:hover > button {
 					opacity: 1;
+				}
+
+				&:hover {
+					background: #ddd;
 				}
 			}
 
@@ -230,6 +236,11 @@
 			border: none;
 			outline: none;
 			cursor: pointer;
+			transition: background 0.3s;
+
+			&:hover {
+				background: #39D5ED;
+			}
 		}
 
 		#edit_button {
@@ -245,6 +256,11 @@
 			margin: 0;
 			outline: none;
 			cursor: pointer;
+			transition: background 0.3s;
+
+			&:hover {
+				background: #3298AB;
+			}
 		}
 
 		#delete_button {
@@ -258,6 +274,11 @@
 			border: none;
 			outline: none;
 			cursor: pointer;
+			transition: background 0.3s;
+
+			&:hover {
+				background: #25282E;
+			}
 		}
 	}
 }

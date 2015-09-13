@@ -122,7 +122,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.currentUrl = window.location.href;
 
 		if ($scope.currentUrl < $scope.oldUrl){
+			left.style.display = 'block';
+			middle.style.display = 'block';
 			right.style.display = 'none';
+			practice.style.display = 'none';
 		}
 
 		else if ($scope.oldUrl && $scope.currentUrl > $scope.oldUrl) {
