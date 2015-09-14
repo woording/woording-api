@@ -25,11 +25,11 @@
 				<div id="log_info">
 					<div id="sign_or_log_in" ng-hide="loggedIn">
 						<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
-					 --><button id="log_in" ng-click="openLogIn()">Log In</button>
+						--><button id="log_in" ng-click="openLogIn()">Log In</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
 						<button id="user_profile">Hello, [[ userData.username ]] </button><!--
-					 --><button id="log_out" ng-click="logoutUser()">Log Out</button>
+						--><button id="log_out" ng-click="logoutUser()">Log Out</button>
 					</div>
 				</div>
 
@@ -65,13 +65,13 @@
 						<div id="left_content">
 
 							<h3>Friends</h3>
-							
+
 							<a href="" ng-click="loadUser('/cor')">
 								<div class="user_list_item selected">
 									Cor
 								</div>
 							</a>
-							
+
 							<a href="" ng-click="loadUser('/leon')">
 								<div class="user_list_item">
 									Leon
@@ -128,15 +128,15 @@
 									</tr>
 								</table>
 
-								<button id="practice_button" ng-click="getRandomWord()" onclick="showPractice()">
+								<button id="practice_button" ng-click="startList()" onclick="showPractice()">
 									Practice
 								</button><!--
 
-							 --><button id="edit_button">
+								--><button id="edit_button">
 									Edit
 								</button><!--
 
-							 --><button id="delete_button">
+								--><button id="delete_button">
 									Delete
 								</button>
 

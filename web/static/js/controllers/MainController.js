@@ -187,11 +187,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
+	$scope.startList = function(){
+		$scope.getRandomWord();
+		$scope.numberOfQuestions = $scope.listData.words.length;
+	}
+
 	// Practice lists
 	$scope.getRandomWord = function(){
 		if ($scope.usedWords.length == $scope.listData.words.length){
 			showResults();
-			setResult($scope.usedWords.length, $scope.incorrectWords.length);
+			setResult($scope.numberOfQuestions, $scope.incorrectWords.length);
 			return true;
 		}
 
@@ -208,6 +213,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	};
 
+	$scope.numberOfQuestions = 0;
 	$scope.usedWords = [];
 	$scope.incorrectWords = [];
 
@@ -232,6 +238,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
 			document.getElementById('incorrect').innerHTML++;
 
+			$scope.numberOfQuestions++;
 			$scope.incorrectWords.push({
 				correctWord: wordTwo.language_2_text,
 				incorrectWord: wordOne
