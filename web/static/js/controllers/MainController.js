@@ -122,6 +122,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		// Remove the cookies
 		$cookies.remove('user');
 		$cookies.remove('loggedIn');
+
+		// Need function to go to main page
 	}
 
 	// Password list for users that are in the database
