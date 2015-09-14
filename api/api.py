@@ -139,6 +139,28 @@ def authenticate():
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
+# Save list
+@app.route('/savelist', methods=["POST", "OPTIONS"])
+@crossdomain(origin='*', headers="content-type")
+def save_list():
+	db_manager = DatabaseManager()
+
+	username = request.json.get('username')
+	list_data = request.json.get('list_data')
+	
+	print(username)
+	print(list_data)
+
+	if username is None or list_data is None:
+		abort(400)
+
+	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'))
+	words = list_data.get('words')
+
+	for i in words:
+		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
+
+	return "Saved list"
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
