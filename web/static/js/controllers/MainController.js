@@ -74,7 +74,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				// Save Cookies
 				$cookies.put('loggedIn', $scope.loggedIn);
 				$cookies.putObject('user', $scope.user);
-				
+
 				ngDialog.closeAll()
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
@@ -134,16 +134,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.checkUrl = function(){
 		$scope.oldUrl = $scope.currentUrl;
-		$scope.currentUrl = window.location.href;
+		$scope.currentUrl = window.location.href.split('/');
 
-		if ($scope.currentUrl < $scope.oldUrl){
+		if ($scope.currentUrl.length < $scope.oldUrl.length){
 			left.style.display = 'block';
 			middle.style.display = 'block';
 			right.style.display = 'none';
 			practice.style.display = 'none';
 		}
 
-		else if ($scope.oldUrl && $scope.currentUrl > $scope.oldUrl) {
+		else if ($scope.oldUrl && $scope.currentUrl.length > $scope.oldUrl.length) {
 			right.style.display = 'block';
 		}
 	}
