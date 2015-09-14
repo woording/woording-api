@@ -17,7 +17,7 @@ CREATE TABLE list (
 	listname text not null,
 	language_1_tag text not null,
 	language_2_tag text not null,
-    FOREIGN KEY(user_id) REFERENCES user(id)
+    FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX list_name_unique_for_user
@@ -29,5 +29,5 @@ CREATE TABLE translation (
 	list_id integer not null,
 	language_1_text text not null,
 	language_2_text text not null,
-    FOREIGN KEY(list_id) REFERENCES list(id)
+    FOREIGN KEY(list_id) REFERENCES list(id) ON DELETE CASCADE
 );
