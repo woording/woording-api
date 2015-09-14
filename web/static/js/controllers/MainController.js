@@ -207,6 +207,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.saveList = function() {
 		console.log($scope.editData);
+		var data = {
+			'username':$scope.userData.username,
+			'list_data':$scope.editData
+		}
+		$http.post('http://127.0.0.1:5000/savelist', data)
+			.success(function(data, status, headers, config) {
+				console.log('saved');
+			}).error(function(data, status, headers, config) {
+				console.error('error');
+			});
 	}
 
 	// Start practice
