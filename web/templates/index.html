@@ -148,7 +148,7 @@
 									<h3><input type="text" placeholder="Listname" ng-model="editData.listname"></h3>
 								</div>
 
-								<table>
+								<table id="edit_list_table">
 									<tr>
 										<th>
 											<input type="text" ng-model="editData.language_1_tag" placeholder="Language 1">
@@ -158,20 +158,20 @@
 										</th>
 									</tr>
 									<tr ng-repeat="word in editData.words">
-										<td><input type="text" placeholder="Sentence" ng-model="word.language_1_text"></td>
-										<td><input type="text" placeholder="Translation" ng-model="word.language_2_text"></td>	
+										<td><input type="text" placeholder="Sentence" ng-model="word.language_1_text" name="edit_input"></td>
+										<td><input type="text" placeholder="Translation" ng-model="word.language_2_text" name="edit_input"></td>	
 									</tr>
 									<!-- Load empty list data -->
 									<tr ng-repeat="n in [1,2,3]">
-										<td><input type="text" placeholder="Sentence" value=""></td>
-										<td><input type="text" placeholder="Translation" value=""></td>
+										<td><input type="text" placeholder="Sentence" name="edit_input"></td>
+										<td><input type="text" placeholder="Translation" name="edit_input"></td>
 									</tr>
 								</table>
 
 								<button id="save_button" ng-click="saveList()">
 									Save
 								</button><!--
-								--><button id="add_rows">
+								--><button id="add_rows" onclick="addRow()">
 									Add rows
 								</button><!--
 								--><button id="delete_button">
