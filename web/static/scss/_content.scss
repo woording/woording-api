@@ -25,9 +25,9 @@
 
 	#middle_content {
 
-
 		// temporary
 		border-right: 1px solid $dark_color;
+		height: 100%;
 
 		input {
 			width: 100%;
@@ -125,7 +125,8 @@
 		border-right: none;
 
 
-		#list_items {
+		.word_list {
+			display: none;
 
 			table {
 				text-align: left;
@@ -135,6 +136,7 @@
 				th {
 					font-weight: bold;
 					padding: 10px;
+					width: 50%;
 				}
 
 				tr {
@@ -147,6 +149,23 @@
 				tr:nth-child(even) {
 					background: #f1f1f1;
 				}
+			}
+		}
+
+		#list_items {
+			display: none;
+		}
+
+		#edit_list {
+			display: none;
+
+			input[type="text"] {
+				background-color: transparent;
+				border-width: 0;
+				border: none;
+				width: 100%;
+				font-weight: inherit;
+				font-size: inherit;
 			}
 		}
 
@@ -231,7 +250,7 @@
 
 		// TODO: Refactor this
 
-		#practice_button {
+		#practice_button, #save_button {
 			width: calc(100% / 3);
 			height: 50px;
 			font-size: 25px;
@@ -250,7 +269,7 @@
 			}
 		}
 
-		#edit_button {
+		#edit_button, #add_rows {
 			width: calc(100% / 3);
 			height: 50px;
 			font-size: 25px;

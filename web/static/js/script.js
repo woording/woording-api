@@ -23,6 +23,13 @@ function setResult(total, wrong){
 	}
 }
 
+function showEditor() {
+	right.style.display = 'block';
+	document.getElementById('edit_list').style.display = 'block';
+	document.getElementById('results').style.display = 'none';
+	document.getElementById('list_items').style.display = 'none';
+}
+
 function showResults() {
 	practice.style.display = 'none';
 	document.getElementById('correct').innerHTML = 0;
@@ -47,6 +54,7 @@ function showPractice() {
 
 function showList() {
 	right.style.display = 'block';
+	document.getElementById('edit_list').style.display = 'none';
 	document.getElementById('results').style.display = 'none';
 	document.getElementById('list_items').style.display = 'block';
 }

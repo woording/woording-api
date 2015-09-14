@@ -71,6 +71,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				$scope.user.token = data;
 				$scope.loggedIn = true;
 				$scope.loadUser("/" + username);
+
+				// First delete before saving cookies
+				$cookies.remove('user');
+				$cookies.remove('loggedIn');
 				// Save Cookies
 				$cookies.put('loggedIn', $scope.loggedIn);
 				$cookies.putObject('user', $scope.user);
@@ -187,6 +191,25 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
+	// Create list
+	$scope.createList = function() {
+		$scope.editData = {
+			listname: "",
+			language_1_tag: "",
+			language_2_tag: "",
+			words: {}
+		}
+	}
+
+	$scope.editList = function() {
+		$scope.editData = $scope.listData;
+	}
+
+	$scope.saveList = function() {
+		console.log($scope.editData);
+	}
+
+	// Start practice
 	$scope.startList = function(){
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;

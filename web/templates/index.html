@@ -101,7 +101,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td id="new_list">
+									<td id="new_list" ng-click="createList()" onclick="showEditor()">
 										New list
 									</td>
 								</tr>
@@ -111,7 +111,7 @@
 						</div> <!-- middle_content -->
 
 						<div id="right_content">
-							<div id="list_items">
+							<div id="list_items" class="word_list">
 
 								<div id="list_header">
 									<h3>[[ listData.listname ]]</h3>
@@ -132,7 +132,7 @@
 									Practice
 								</button><!--
 
-								--><button id="edit_button">
+								--><button id="edit_button" ng-click="editList()" onclick="showEditor()">
 									Edit
 								</button><!--
 
@@ -142,34 +142,37 @@
 
 							</div> <!-- list_items -->
 
-							<div id="edit_list" ng-hide>
+							<div id="edit_list" class="word_list">
 
 								<div id="list_header">
-									<h3>[[ editData.listname ]]</h3>
+									<h3><input type="text" placeholder="Listname" ng-model="editData.listname"></h3>
 								</div>
 
 								<table>
 									<tr>
-										<th> [[ editData.language_1_tag ]] </th>
-										<th> [[ editData.language_2_tag ]] </th>
+										<th>
+											<input type="text" ng-model="editData.language_1_tag" placeholder="Language 1">
+										</th>
+										<th>
+											<input type="text" ng-model="editData.language_2_tag" placeholder="Language 2">
+										</th>
 									</tr>
-									<!-- Load more list data -->
-									<tr>
-										<td> [[ word.language_1_text ]] </td>
-										<td> [[ word.language_2_text ]] </td>
+									<tr ng-repeat="word in editData.words">
+										<td><input type="text" placeholder="Sentence" ng-model="word.language_1_text"></td>
+										<td><input type="text" placeholder="Translation" ng-model="word.language_2_text"></td>	
 									</tr>
-									<tr>
-										<td> [[ word.language_1_text ]] </td>
-										<td> [[ word.language_2_text ]] </td>
-									</tr>
-									<tr>
-										<td> [[ word.language_1_text ]] </td>
-										<td> [[ word.language_2_text ]] </td>
+									<!-- Load empty list data -->
+									<tr ng-repeat="n in [1,2,3]">
+										<td><input type="text" placeholder="Sentence" value=""></td>
+										<td><input type="text" placeholder="Translation" value=""></td>
 									</tr>
 								</table>
 
-								<button id="save_button">
+								<button id="save_button" ng-click="saveList()">
 									Save
+								</button><!--
+								--><button id="add_rows">
+									Add rows
 								</button><!--
 								--><button id="delete_button">
 									Delete
