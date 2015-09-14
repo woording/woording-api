@@ -31,7 +31,7 @@ class DatabaseManager(object):
 		self.database_path = 'wording.db'
 
 	# Token
-	def generate_auth_token(self, username, expiration = 600):
+	def generate_auth_token(self, username, expiration = 3600):
 		s = Serializer(SECRET_KEY, expires_in=expiration)
 		return s.dumps({ 'username': username })
 
