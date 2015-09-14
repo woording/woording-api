@@ -6,7 +6,7 @@ echo "Deleting old env"
 rm -rf env
 
 echo "Creating virtualenv env"
-virtualenv env
+virtualenv -p python3 env
 
 echo "Activating env"
 . env/bin/activate
