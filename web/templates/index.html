@@ -11,6 +11,7 @@
 		<!-- scripts -->
 		<script src="{{ url_for('static', filename='js/frameworks/angular.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/frameworks/ngDialog.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/frameworks/angular-cookies.min.js') }}"></script>
 	</head>
 
 	<body ng-app="myApp">
@@ -28,7 +29,7 @@
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
 						<button id="user_profile">Hello, [[ userData.username ]] </button><!--
-					 --><button id="log_out">Log Out</button>
+					 --><button id="log_out" ng-click="logoutUser()">Log Out</button>
 					</div>
 				</div>
 

@@ -1,4 +1,4 @@
-var app = angular.module("myApp", ['ngDialog']);
+var app = angular.module("myApp", ['ngDialog', 'ngCookies']);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[[').endSymbol(']]');

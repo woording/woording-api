@@ -1,8 +1,8 @@
-app.controller('MainController', function($scope, $http, $window, ngDialog, $interval) {
+app.controller('MainController', function($scope, $http, $window, ngDialog, $interval, $cookies) {
 	$scope.title = 'Wording';
 
-	$scope.loggedIn = false;
-	$scope.user = {
+	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
+	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
 
 		username:	"",
@@ -71,6 +71,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				$scope.user.token = data;
 				$scope.loggedIn = true;
 				$scope.loadUser("/" + username);
+				// Save Cookies
+				$cookies.put('loggedIn', $scope.loggedIn);
+				$cookies.putObject('user', $scope.user);
+				
 				ngDialog.closeAll()
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
@@ -108,6 +112,17 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			$scope.user.password = '';
 		}
 	};
+
+	$scope.logoutUser = function() {
+		$scope.loggedIn = false;
+		$scope.user.username = '';
+		$scope.user.token = '';
+		$scope.user.email = '';
+
+		// Remove the cookies
+		$cookies.remove('user');
+		$cookies.remove('loggedIn');
+	}
 
 	// Password list for users that are in the database
 	// cor 		Hunter2
