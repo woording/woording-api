@@ -142,6 +142,41 @@
 
 							</div> <!-- list_items -->
 
+							<div id="edit_list" ng-hide>
+
+								<div id="list_header">
+									<h3>[[ editData.listname ]]</h3>
+								</div>
+
+								<table>
+									<tr>
+										<th> [[ editData.language_1_tag ]] </th>
+										<th> [[ editData.language_2_tag ]] </th>
+									</tr>
+									<!-- Load more list data -->
+									<tr>
+										<td> [[ word.language_1_text ]] </td>
+										<td> [[ word.language_2_text ]] </td>
+									</tr>
+									<tr>
+										<td> [[ word.language_1_text ]] </td>
+										<td> [[ word.language_2_text ]] </td>
+									</tr>
+									<tr>
+										<td> [[ word.language_1_text ]] </td>
+										<td> [[ word.language_2_text ]] </td>
+									</tr>
+								</table>
+
+								<button id="save_button">
+									Save
+								</button><!--
+								--><button id="delete_button">
+									Delete
+								</button>
+
+							</div> <!-- list_items -->
+
 							<div id="results">
 								<table ng-if="incorrectWords.length != 0">
 									<h3> Results: </h3>
