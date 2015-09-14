@@ -148,16 +148,26 @@ def save_list():
 	username = request.json.get('username')
 	list_data = request.json.get('list_data')
 	
-	print(username)
-	print(list_data)
-
 	if username is None or list_data is None:
 		abort(400)
 
+	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None:
+		abort(400)
+
+	if db_manager.listname_exists_for_user(username, list_data.get('listname')):
+		db_manager.delete_list(username, list_data.get('listname'))
+
 	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'))
 	words = list_data.get('words')
+	
+	print(words)
+	print(len(words))
 
-	for i in words:
+	for i in range(len(words)):
+		word = words[i]
+		print(word)
+		if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
+			continue
 		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
 	return "Saved list"

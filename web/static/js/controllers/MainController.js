@@ -1,5 +1,10 @@
 app.controller('MainController', function($scope, $http, $window, ngDialog, $interval, $cookies) {
 	$scope.title = 'Wording';
+	$scope.Object = Object;
+
+	$scope.sizeOf = function(obj) {
+	    return Object.keys(obj).length;
+	};
 
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
@@ -8,6 +13,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		username:	"",
 		password:	"",
 		email	:	""
+	};
+	$scope.editData = {
+		listname: "",
+		language_1_tag: "",
+		language_2_tag: "",
+		words: []
 	};
 
 	// Dialogs
@@ -197,16 +208,30 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			listname: "",
 			language_1_tag: "",
 			language_2_tag: "",
-			words: {}
+			words: []
+		}
+
+		for (i = 0; i < 3; i++) {
+			$scope.editData.words[i] = {
+				language_1_text: "",
+				language_2_text: ""
+			}		
 		}
 	}
 
 	$scope.editList = function() {
 		$scope.editData = $scope.listData;
+		
+		var size = $scope.sizeOf($scope.editData.words);
+		for (i = 0; i < 3; i++) {
+			$scope.editData.words[size] = {
+				language_1_text: "",
+				language_2_text: ""
+			};
+		}
 	}
 
 	$scope.saveList = function() {
-		console.log($scope.editData);
 		var data = {
 			'username':$scope.userData.username,
 			'list_data':$scope.editData
@@ -214,6 +239,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$http.post('http://127.0.0.1:5000/savelist', data)
 			.success(function(data, status, headers, config) {
 				console.log('saved');
+				$scope.loadUser('/' + $scope.userData.username);
 			}).error(function(data, status, headers, config) {
 				console.error('error');
 			});

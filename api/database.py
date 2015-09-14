@@ -115,6 +115,27 @@ class DatabaseManager(object):
 		else:
 			print('ERROR: User does not exist')
 
+	def delete_list(self, username, listname):
+		if self.username_exists(username):
+			if (self.listname_exists_for_user(username, listname)):
+
+				db_conn = DatabaseConnection(self.database_path);
+				list_id = self.get_list(username, listname).get("id")
+
+				# Delete list
+				query_text = 'DELETE FROM list WHERE id = ' + str(list_id)
+				db_conn.query(query_text)
+
+				# # Delete translations
+				# query_text = 'DELETE FROM translation WHERE list_id = ' + str(list_id)
+				# db_conn.query(query_text)
+
+			else:
+				print('ERROR: List does not exist')
+
+		else:
+			print('ERROR: User does not exist')	
+
 
 	# Get all user data from a database record by username
 	def get_user(self, username): 

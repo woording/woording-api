@@ -17,7 +17,9 @@ document.addEventListener('keypress', function(event) {
 				// Add row
 				addRow();
 				// Focus on next element
-				activeElement.parentElement.parentElement.nextElementSibling.firstElementChild.firstElementChild.focus();
+				window.setTimeout(function() {
+					activeElement.parentElement.parentElement.nextElementSibling.firstElementChild.firstElementChild.focus();
+				}, 100);
 			}
 		}
 	}
@@ -49,14 +51,14 @@ function showEditor() {
 }
 
 function addRow() {
-	var table = document.getElementById('edit_list_table');
+	var main_controller = document.getElementById('main_controller');
+	var scope = angular.element(main_controller).scope();
+	var size = scope.sizeOf(scope.editData.words);
 
-	var newRow = table.insertRow();
-	var newCell = newRow.insertCell();
-	newCell.innerHTML = '<input type="text" placeholder="Sentence" name="edit_input">';
-	newCell = newRow.insertCell();
-	newCell.innerHTML = '<input type="text" placeholder="Translation" name="edit_input">';
-
+	scope.editData.words[size] = {
+		language_1_text: "",
+		language_2_text: ""
+	};
 }
 
 function showResults() {
