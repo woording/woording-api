@@ -172,7 +172,6 @@
 		#results {
 			display: none;
 			margin: 8px;
-			background: white;
 			text-align: left;
 
 			h1 {
@@ -183,7 +182,8 @@
 
 			h3 {
 				font-weight: bold;
-				margin: 8.5px;
+				margin: 8.5px 0;
+				padding-left: 0;
 			}
 
 			table {
@@ -213,16 +213,15 @@
 
 
 			#results_bar {
-				width: 500px;
+				width: 90%;
 				height: 30px;
 				border: 1px solid #ddd;
-				margin: 10px auto;
+				margin: 15px 0;
 				text-align: left;
 
 				#correct_bar, #incorrect_bar {
 					display: inline-block;
 					height: 50%;
-					padding: 10px 0 10px 1%;
 					transition: background 0.2s;
 					cursor: pointer;
 				}
@@ -230,6 +229,7 @@
 				#correct_bar {
 					width: 80%;
 					background: #3FA157;
+					padding: 10px 0 10px 1%;
 
 					&:hover {
 						background: #3DD963;
@@ -239,6 +239,8 @@
 				#incorrect_bar {
 					width: 20%;
 					background: #B52438;
+					padding: 10px 1% 10px 0;
+					text-align: right;
 
 					&:hover {
 						background: #E62C44;
