@@ -16,15 +16,22 @@
 			line-height: $user_list_item_height;
 			vertical-align: center;
 
-			padding-left: 8px;
+			padding-left: $padding-unit;
+			&:hover {
+				padding-left: $padding-unit * 2;
+			}
+
+
 			box-sizing: border-box;
 
 			background-color: $dark_blue_color;
 
-			transition: background-color 0.2s;
+			transition: padding-left $timing-unit;
 
 			&:hover {
-				background-color: $light_blue_color;
+				// background-color: $light_blue_color;
+				padding-left: $padding-unit * 2;
+
 			}
 
 			&.selected {

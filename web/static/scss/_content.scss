@@ -9,15 +9,14 @@
 		display: inline-block;
 		width: 30%;
 		min-height: 100%;
-		// padding: 8px;
 		float: left;
 		border-top: none;
 		border-bottom: none;
 	}
 	h3 {
-		padding-left: 8px;
-		padding-bottom: 4px;
-		padding-top: 8px;
+		padding-left: $padding-unit;
+		padding-bottom: $padding-unit / 2;
+		padding-top: $padding-unit;
 
 		font-weight: bolder;
 	}
@@ -54,30 +53,31 @@
 			border-top: none;
 
 			p {
-				padding: 5px;
+				padding: $padding-unit;
 			}
 
 			th {
 				font-weight: bold;
-				padding: 8px;
+				padding: $padding-unit;
 			}
 
 			tr:nth-child(even) {
 				background: #f1f1f1;
 			}
 
-			td {
-				padding: 8px;
-				cursor: pointer;
-				transition: background 0.3s;
-
-				&:hover > button {
-					opacity: 1;
-				}
-
+			.list_list-item td {
 				&:hover {
 					background: #ddd;
+					padding-left: 16px;
 				}
+			}
+
+			td {
+				padding: $padding-unit;
+				cursor: pointer;
+				transition: background 0.3s;
+				transition: padding-left $timing-unit;
+
 			}
 
 			#new_list {
@@ -90,7 +90,7 @@
 			button {
 				height: 100%;
 
-				margin: -8px;
+				margin: -$padding-unit;
 
 				transition: opacity 0.3s;
 				opacity: 0;
@@ -99,21 +99,6 @@
 				cursor: pointer;
 				font-size: 12px;
 				color: white;
-			}
-
-			#practice_list {
-				background: $light_blue_color;
-				border: 1px solid $light_blue_color;
-			}
-
-			#edit_list {
-				background: $dark_blue_color;
-				border: 1px solid $dark_blue_color;
-			}
-
-			#delete_list {
-				background: $dark_color;
-				border: 1px solid $dark_color;
 			}
 
 		}
