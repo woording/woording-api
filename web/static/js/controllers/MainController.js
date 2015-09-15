@@ -3,7 +3,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.Object = Object;
 
 	$scope.sizeOf = function(obj) {
-	    return Object.keys(obj).length;
+		return Object.keys(obj).length;
 	};
 
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
@@ -152,6 +152,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.checkUrl = function(){
 		$scope.oldUrl = $scope.currentUrl;
 		$scope.currentUrl = window.location.href.split('/');
+		var index = $scope.currentUrl.length;
 
 		if ($scope.currentUrl.length < $scope.oldUrl.length){
 			left.style.display = 'block';
@@ -162,6 +163,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		else if ($scope.oldUrl && $scope.currentUrl.length > $scope.oldUrl.length) {
 			right.style.display = 'block';
+		}
+
+		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1]) {
+			console.log('changed');
+			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
 	}
 
@@ -190,6 +196,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.loadList = function(url){
 		$scope.usedWords = [];
 		$scope.incorrectWords = [];
+		showList();
 
 		$http.get('http://127.0.0.1:5000' + url).
 			success(function(data, status, headers, config) {
@@ -215,13 +222,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			$scope.editData.words[i] = {
 				language_1_text: "",
 				language_2_text: ""
-			}		
+			}
 		}
 	}
 
 	$scope.editList = function() {
 		$scope.editData = $scope.listData;
-		
+
 		var size = $scope.sizeOf($scope.editData.words);
 		for (i = 0; i < 3; i++) {
 			$scope.editData.words[size] = {
