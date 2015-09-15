@@ -27,6 +27,7 @@
 			background-color: $dark_blue_color;
 
 			transition: padding-left $timing-unit;
+			transition-timing-function: ease-out;
 
 			&:hover {
 				// background-color: $light_blue_color;
