@@ -163,11 +163,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		// Need function to go to main page
 	}
 
-	// Password list for users that are in the database
-	// cor 		Hunter2
-	// leon		all_i_see_is_*****
-	// philip	***hunter***
-
 	$scope.oldUrl = '';
 	$scope.currentUrl = '';
 
@@ -196,13 +191,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$interval($scope.checkUrl, 100);
 
 	// json loading functions
+	// Password list for users that are in the database
+	// cor 		Hunter2
+	// leon		all_i_see_is_*****
+	// philip	***hunter***
 	$scope.loadUser = function(url){
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
-					// Should show login screen
+					// Show login screen
 					$scope.openLogIn();
-					//$scope.authenticate("cor", "Hunter2"); // Angular should get these values, now there is no function for it...
 				} else {
 					window.history.pushState('page2', 'Title', url);
 
