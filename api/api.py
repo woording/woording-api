@@ -172,6 +172,23 @@ def save_list():
 
 	return "Saved list"
 
+@app.route('/deleteList', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers='content-type')
+def delete_list():
+	db_manager = DatabaseManager()
+
+	username = request.json.get('username')
+	listname = request.json.get('listname')
+
+	if username is None or listname is None:
+		abort(400)
+
+	if not db_manager.listname_exists_for_user(username, listname):
+		return "No list found"
+
+	db_manager.delete_list(username, listname)
+	return "Successfully deleted list"
+
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers="content-type")
