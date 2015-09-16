@@ -1,6 +1,5 @@
 # Wording
 
-
 ## How to use
 ```bash
 gulp
