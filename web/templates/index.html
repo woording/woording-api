@@ -150,10 +150,16 @@
 								<table id="edit_list_table">
 									<tr>
 										<th>
-											<input type="text" ng-model="editData.language_1_tag" placeholder="Language 1">
+											<select ng-model="editData.language_1_tag">
+												<option value="">Select language 1</option>
+												<option ng-repeat="language in languages" value="[[ language.id ]]">[[ language.name ]]</option>
+											</select>
 										</th>
 										<th>
-											<input type="text" ng-model="editData.language_2_tag" placeholder="Language 2">
+											<select ng-model="editData.language_2_tag">
+												<option value="">Select language 2</option>
+												<option ng-repeat="language in languages" value="[[ language.id ]]">[[ language.name ]]</option>
+											</select>
 										</th>
 									</tr>
 									<tr ng-repeat="word in editData.words">
