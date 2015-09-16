@@ -304,10 +304,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.submit = function(){
 		document.getElementById('wrong_word').innerHTML = '';
 
-		if ($scope.text || !$scope.text) {
-			$scope.checkWord(this.text, $scope.randomWord);
-			this.text = '';
-        }
+		$scope.checkWord(this.text, $scope.randomWord);
+		this.text = '';
 	};
 
 	$scope.checkWord = function(wordOne, wordTwo){
@@ -319,7 +317,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		else {
 			document.getElementById('wrong_word').innerHTML = wordTwo.language_2_text;
 			document.getElementById('wrong_word').style.color = 'red';
-			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+			if ($scope.usedWords.indexOf(wordTwo) > -1){
+				$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+			}
+
 			document.getElementById('incorrect').innerHTML++;
 
 			$scope.numberOfQuestions++;

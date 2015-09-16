@@ -29,13 +29,13 @@ function setResult(total, wrong){
 	var correct = document.getElementById('correct_bar');
 	var incorrect = document.getElementById('incorrect_bar');
 	if (!wrong){
-		incorrect.innerHTML = '0%';
-		incorrect.style.width = '0%';
-		correct.style.width = (100 - (wrong/total * 100) - 2) + '%';
+		incorrect.style.display = 'none';
+		correct.style.width = (100 - (wrong/total * 100)) + '%';
 		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
 
 	else {
+		incorrect.style.display = 'block';
 		incorrect.style.width = ((wrong/total * 100) - 1) + '%';
 		incorrect.innerHTML = Math.round((wrong/total * 100)) + '%';
 		correct.style.width = (100 - (wrong/total * 100) - 1) + '%';
