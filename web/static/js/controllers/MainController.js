@@ -28,7 +28,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			template:'\
 				<h1>Sign Up</h1><br>\
 				<form ng-submit="registerUser()">\
-					<!-- Need to do style... -->\
 					<table>\
 						<tr>\
 							<td>Username: </td>\
@@ -54,7 +53,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			template:'\
 				<h1>Log In</h1><br>\
 				<form ng-submit="loginUser()">\
-					<!-- Need to do style... -->\
 					<table>\
 						<tr>\
 							<td>Username: </td>\
