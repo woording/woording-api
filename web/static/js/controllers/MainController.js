@@ -1,6 +1,7 @@
 app.controller('MainController', function($scope, $http, $window, ngDialog, $interval, $cookies) {
 	$scope.title = 'Wording';
 	$scope.Object = Object;
+	$scope.apiAdress = 'http://127.0.0.1:5000';
 
 	$scope.sizeOf = function(obj) {
 		return Object.keys(obj).length;
@@ -77,7 +78,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			'username':username,
 			'password':password
 		};
-		$http.post('http://127.0.0.1:5000/authenticate', data)
+		$http.post($scope.apiAdress + '/authenticate', data)
 			.success(function(data, status, headers, config) {
 				$scope.user.token = data;
 				$scope.loggedIn = true;
@@ -105,7 +106,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				'password':this.user.password,
 				'email':this.user.email
 			};
-			$http.post('http://127.0.0.1:5000/register', data)
+			$http.post($scope.apiAdress + '/register', data)
 				.success(function(data, status, headers, config) {
 					// Give success
 					console.log("Verify email")
@@ -175,7 +176,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// json loading functions
 	$scope.loadUser = function(url){
-		$http.post('http://127.0.0.1:5000' + url, { 'token':$scope.user.token })
+		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
 					// Should show login screen
@@ -198,7 +199,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.incorrectWords = [];
 		showList();
 
-		$http.get('http://127.0.0.1:5000' + url).
+		$http.get($scope.apiAdress + url).
 			success(function(data, status, headers, config) {
 				window.history.pushState('page2', 'Title', url);
 
@@ -243,12 +244,29 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			'username':$scope.userData.username,
 			'list_data':$scope.editData
 		}
-		$http.post('http://127.0.0.1:5000/savelist', data)
+		$http.post($scope.apiAdress + '/savelist', data)
 			.success(function(data, status, headers, config) {
 				console.log('saved');
 				$scope.loadUser('/' + $scope.userData.username);
+				$scope.loadList('/' + $scope.userData.username + '/' + $scope.editData.listname);
+				$scope.editData = null;
 			}).error(function(data, status, headers, config) {
 				console.error('error');
+			});
+	}
+
+	$scope.deleteList = function(listname) {
+		var data = {
+			'username':$scope.userData.username,
+			'listname':listname
+		}
+		$http.post($scope.apiAdress + '/deleteList', data)
+			.success(function(data, status, headers, config) {
+				$scope.loadUser('/' + $scope.userData.username);
+				listData = null;
+				editData = null;
+			}).error(function(data, status, headers, config){
+				console.error('Error while deleting list')
 			});
 	}
 
