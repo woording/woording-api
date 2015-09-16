@@ -24,6 +24,10 @@
 			min-height: 1.8em;
 			outline: 0px none transparent;
 
+			&:-webkit-autofill, &:-webkit-autofill:focus {
+				-webkit-box-shadow: 0 0 0px 100vw #f0f0f0 inset;
+			}
+
 			&:focus {
 				outline: 0px none transparent;
 				box-shadow: none;
