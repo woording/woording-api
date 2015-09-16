@@ -5,7 +5,7 @@ var middle = document.getElementById('middle_content');
 
 var content = [left, middle, right];
 
-document.addEventListener('keypress', function(event) {
+document.addEventListener('keydown', function(event) {
 	var activeElement;
 	if (event.keyCode == 9) {
 		activeElement = document.activeElement;
