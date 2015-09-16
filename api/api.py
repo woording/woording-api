@@ -154,6 +154,9 @@ def save_list():
 	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None:
 		abort(400)
 
+	if list_data.get('listname') is "" or list_data.get('language_1_tag') is "" or list_data.get('language_2_tag') is "":
+		abort(400)
+
 	if db_manager.listname_exists_for_user(username, list_data.get('listname')):
 		db_manager.delete_list(username, list_data.get('listname'))
 
