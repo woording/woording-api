@@ -35,10 +35,10 @@ function setResult(total, wrong){
 	}
 
 	else {
-		incorrect.style.display = 'block';
-		incorrect.style.width = Math.round((wrong/total * 100) - 2) + '%';
+		incorrect.style.display = 'inline-block';
+		incorrect.style.width = Math.round((wrong/total * 100) - 1) + '%';
 		incorrect.innerHTML = Math.round((wrong/total * 100)) + '%';
-		correct.style.width = Math.round(100 - (wrong/total * 100) - 2) + '%';
+		correct.style.width = Math.round(100 - (wrong/total * 100) - 1) + '%';
 		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
 }
