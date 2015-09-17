@@ -1,0 +1,59 @@
+{
+	"eng" : {
+		"languages" : [
+			{
+				"iso" : "eng",
+				"displayText" : "English" 
+			},
+			{
+				"iso" : "nld",
+				"displayText" : "Dutch"
+			},
+			{
+				"iso" : "ger",
+				"displayText" : "German" 
+			},
+			{
+				"iso" : "fre",
+				"displayText" : "French" 
+			},
+			{
+				"iso" : "lat",
+				"displayText" : "Latin" 
+			},
+			{
+				"iso" : "gre",
+				"displayText" : "Greek" 
+			}
+		]
+	},
+
+	"nld" : {
+		"languages" : [
+			{
+				"iso" : "eng",
+				"displayText" : "Engels" 
+			},
+			{
+				"iso" : "nld",
+				"displayText" : "Nederlands"
+			},
+			{
+				"iso" : "ger",
+				"displayText" : "Duits" 
+			},
+			{
+				"iso" : "fre",
+				"displayText" : "Frans" 
+			},
+			{
+				"iso" : "lat",
+				"displayText" : "Latijn" 
+			},
+			{
+				"iso" : "gre",
+				"displayText" : "Grieks" 
+			}
+		]
+	}
+}
