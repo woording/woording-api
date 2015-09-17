@@ -1,6 +1,6 @@
 # Wording
 
-## How to use
+## Setup
 ```bash
 gulp
 ```
@@ -17,6 +17,8 @@ npm install gulp-shell
 ```bash
 npm install ng-dialog
 ```
+
+## How to use
 
 #### How to only use api
 ```bash
@@ -57,3 +59,7 @@ python3 api.py
 curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
 ```
 Then in the main controller change the username and password on line 28 to succesfully login into the system
+
+#### How to contribute to translations
+You can add translations to the translation file which is located at 'web/templates/translations.json'.
+The iso codes are in the following format: ISO 639-2B, more information on [this wikipedia link](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
