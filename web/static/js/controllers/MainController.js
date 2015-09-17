@@ -22,30 +22,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		words: []
 	};
 
-	// ID's are ISO 639-2/B
-	// When you add languages, please add them in alphabetical order
-	// TODO need to add more languages
-	$scope.languages = [
-		{ id:'ara', name:'Arabic' },
-		{ id:'chi', name:'Chinese' },
-		{ id:'dut', name:'Dutch' },
-		{ id:'eng', name:'English' },
-		{ id:'fin', name:'Finnish' },
-		{ id:'fre', name:'French' },
-		{ id:'ger', name:'German' },
-		{ id:'gre', name:'Greek' },
-		{ id:'ita', name:'Italian' },
-		{ id:'lat', name:'Latin' },
-		{ id:'nor', name:'Norwegian' },
-		{ id:'pol', name:'Polish' },
-		{ id:'rus', name:'Russian' },
-		{ id:'spa', name:'Spannish' },
-		{ id:'swe', name:'Swedish' },
-		{ id:'ukr', name:'Ukranian' },
-		{ id:'fry', name:'Western Frisian'}
-	];
+	// load translations from translations.json 
+	$http.get('translations.json').then(function(result) {
+		// this doesn't work for some reason
+		console.log(result.data);
+		$scope.translations = result.data;
+	});
 
-	// Dialogs
 	$scope.openSignUp = function() {
 		ngDialog.open({
 			template:'\
