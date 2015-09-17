@@ -293,6 +293,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.startList = function(){
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
+		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	}
 
 	// Practice lists
@@ -329,11 +330,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.checkWord = function(wordOne, wordTwo){
 		if(wordOne == wordTwo.language_2_text){
+			document.getElementById('words_left').innerHTML--;
 			document.getElementById('correct').innerHTML++;
 			$scope.getRandomWord();
 		}
 
 		else {
+			document.getElementById('words_left').innerHTML++;
 			document.getElementById('wrong_word').innerHTML = wordTwo.language_2_text;
 			document.getElementById('wrong_word').style.color = 'red';
 			if ($scope.usedWords.indexOf(wordTwo) > -1){
