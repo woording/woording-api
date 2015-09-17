@@ -6,7 +6,7 @@
 				"displayText" : "English" 
 			},
 			{
-				"iso" : "nld",
+				"iso" : "dut",
 				"displayText" : "Dutch"
 			},
 			{
@@ -28,14 +28,14 @@
 		]
 	},
 
-	"nld" : {
+	"dut" : {
 		"languages" : [
 			{
 				"iso" : "eng",
 				"displayText" : "Engels" 
 			},
 			{
-				"iso" : "nld",
+				"iso" : "dut",
 				"displayText" : "Nederlands"
 			},
 			{
@@ -53,6 +53,35 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Grieks" 
+			}
+		]
+	},
+
+	"ger" : {
+		"languages" : [
+			{
+				"iso" : "eng",
+				"displayText" : "Englisch"
+			},
+			{
+				"iso" : "dut",
+				"displayText" : "Niederländisch"
+			},
+			{
+				"iso" : "ger",
+				"displayText" : "Deutsch"
+			},
+			{
+				"iso" : "fre",
+				"displayText" : "Französisch"
+			},
+			{
+				"iso" : "lat",
+				"displayText" : "Latein"
+			},
+			{
+				"iso" : "gre",
+				"displayText" : "Griechisch"
 			}
 		]
 	}
