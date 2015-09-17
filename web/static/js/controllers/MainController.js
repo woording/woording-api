@@ -7,6 +7,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return Object.keys(obj).length;
 	};
 
+	$scope.prefferedLanguage = "eng"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
@@ -24,7 +25,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// load translations from translations.json 
 	$http.get('/translations.json').then(function(result) {
-		$scope.translations = result.data;
+		console.log(result.data[$scope.prefferedLanguage])
+		$scope.translations = result.data[$scope.prefferedLanguage];
 	});
 
 	// Dialogs
