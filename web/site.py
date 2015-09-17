@@ -16,6 +16,10 @@ app.config.from_object(__name__)
 def render():
     return render_template("index.html")
 
+@app.route('/translations.json')
+def translations():
+	return render_template("translations.json")
+
 @app.route('/<username>')
 def show_user(username):
     return render_template("index.html", username=username)
