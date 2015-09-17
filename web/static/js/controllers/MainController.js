@@ -24,8 +24,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// load translations from translations.json 
 	$http.get('/translations.json').then(function(result) {
-		// this doesn't work for some reason
-		console.log(result.data);
 		$scope.translations = result.data;
 	});
 
