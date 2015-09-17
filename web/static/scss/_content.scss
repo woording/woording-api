@@ -1,13 +1,13 @@
 #content {
 	background: $whiteish_color;
 	width: 100%;
-	min-height: 500px;
+	min-height: calc(100vh - 60px);
 	overflow: hidden;
-
+	display: flex;
+	display: -webkit-flex; // For Safari
 
 	#left_content, #right_content, #middle_content {
 		display: inline-block;
-		width: 30%;
 		min-height: 100%;
 		float: left;
 		border-top: none;
@@ -27,7 +27,8 @@
 
 		// temporary
 		border-right: 1px solid $dark_color;
-		height: 100%;
+		// height: 100%;
+		width: 30%;
 
 		input {
 			width: 100%;

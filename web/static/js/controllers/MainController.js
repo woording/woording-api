@@ -156,14 +156,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		var index = $scope.currentUrl.length;
 
 		if ($scope.currentUrl.length < $scope.oldUrl.length){
-			left.style.display = 'block';
-			middle.style.display = 'block';
+			left.style.display = 'inline-block';
+			middle.style.display = 'inline-block';
 			right.style.display = 'none';
 			practice.style.display = 'none';
 		}
 
 		else if ($scope.oldUrl && $scope.currentUrl.length > $scope.oldUrl.length) {
-			right.style.display = 'block';
+			right.style.display = 'inline-block';
 		}
 
 		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1]) {

@@ -44,7 +44,7 @@ function setResult(total, wrong){
 }
 
 function showEditor() {
-	right.style.display = 'block';
+	right.style.display = 'inline-block';
 	document.getElementById('edit_list').style.display = 'block';
 	document.getElementById('results').style.display = 'none';
 	document.getElementById('list_items').style.display = 'none';
@@ -67,7 +67,7 @@ function showResults() {
 	document.getElementById('incorrect').innerHTML = 0;
 
 	for (item of content){
-		item.style.display = 'block';
+		item.style.display = 'inline-block';
 	}
 
 	document.getElementById('list_items').style.display = 'none';
@@ -84,7 +84,7 @@ function showPractice() {
 }
 
 function showList() {
-	right.style.display = 'block';
+	right.style.display = 'inline-block';
 	document.getElementById('edit_list').style.display = 'none';
 	document.getElementById('results').style.display = 'none';
 	document.getElementById('list_items').style.display = 'block';

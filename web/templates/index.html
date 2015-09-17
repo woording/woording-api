@@ -35,13 +35,13 @@
 
 			</header>
 
-			<div id="content">
+			<!-- <div id="content"> -->
 
 				<!-- load data -->
 				{% if listname %}
-					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')">
+					<div ng-init="loadUser('/{{username}}'); loadList('/{{username}}/{{listname}}')" id="content">
 				{% else %}
-					<div ng-init="loadUser('/{{username}}')">
+					<div ng-init="loadUser('/{{username}}')" id="content">
 				{% endif %}
 						<div id="practice_div">
 
@@ -203,7 +203,7 @@
 						</div> <!-- right_content -->
 					</div> <!-- ng-init -->
 
-			</div> <!-- content -->
+			<!--</div> --><!-- content -->
 
 			<hr>
 
