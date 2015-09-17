@@ -120,8 +120,8 @@
 
 								<table>
 									<tr>
-										<th ng-repeat="language in languages | filter:listData.language_1_tag"> [[ language.name ]] </th>
-										<th ng-repeat="language in languages | filter:listData.language_2_tag"> [[ language.name ]] </th>
+										<th ng-repeat="language in translations.eng.languages | filter:listData.language_1_tag"> [[ language.displayText ]] </th>
+										<th ng-repeat="language in translations.eng.languages | filter:listData.language_2_tag"> [[ language.displayText ]] </th>
 									</tr>
 									<tr ng-repeat="word in listData.words">
 										<td> [[ word.language_1_text ]] </td>
