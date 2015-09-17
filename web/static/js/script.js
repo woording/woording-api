@@ -30,15 +30,15 @@ function setResult(total, wrong){
 	var incorrect = document.getElementById('incorrect_bar');
 	if (!wrong){
 		incorrect.style.display = 'none';
-		correct.style.width = (100 - (wrong/total * 100)) + '%';
+		correct.style.width = Math.round(100 - (wrong/total * 100)) + '%';
 		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
 
 	else {
 		incorrect.style.display = 'block';
-		incorrect.style.width = ((wrong/total * 100) - 1) + '%';
+		incorrect.style.width = Math.round((wrong/total * 100) - 2) + '%';
 		incorrect.innerHTML = Math.round((wrong/total * 100)) + '%';
-		correct.style.width = (100 - (wrong/total * 100) - 1) + '%';
+		correct.style.width = Math.round(100 - (wrong/total * 100) - 2) + '%';
 		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
 	}
 }
