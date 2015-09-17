@@ -58,7 +58,6 @@ python3 api.py
 # For registering users, do:
 curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
 ```
-Then in the main controller change the username and password on line 28 to succesfully login into the system
 
 #### How to contribute to translations
 You can add translations to the translation file which is located at 'web/templates/translations.json'.
