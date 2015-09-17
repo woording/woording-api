@@ -152,15 +152,15 @@
 								<table id="edit_list_table">
 									<tr>
 										<th>
-											<select ng-model="editData.language_1_tag">
+											<select ng-model="editData.language_1_tag" value="">
 												<option value="">Select language 1</option>
-												<option ng-repeat="language in languages" value="[[ language.id ]]">[[ language.name ]]</option>
+												<option ng-repeat="language in translations.eng.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>
 											</select>
 										</th>
 										<th>
-											<select ng-model="editData.language_2_tag">
+											<select ng-model="editData.language_2_tag" value="">
 												<option value="">Select language 2</option>
-												<option ng-repeat="language in languages" value="[[ language.id ]]">[[ language.name ]]</option>
+												<option ng-repeat="language in translations.eng.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>
 											</select>
 										</th>
 									</tr>
