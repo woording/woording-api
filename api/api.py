@@ -98,9 +98,9 @@ def register():
 	email = request.json.get('email')
 
 	if username is None or password is None or email is None:
-		return abort(400) # missing arguments
+		return "ERROR, not everything filled in" # missing arguments
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
-		return abort(400) # username and/or email do already exist
+		return "ERROR, username and/or email do already exist" # username and/or email do already exist
 	else:
 		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 

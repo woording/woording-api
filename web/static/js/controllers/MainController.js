@@ -7,7 +7,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return Object.keys(obj).length;
 	};
 
-	$scope.prefferedLanguage = "eng"; // Need a way to set this
+	$scope.error = null;
+	$scope.prefferedLanguage = "dut"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
@@ -34,6 +35,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		ngDialog.open({
 			template:'\
 				<h1>[[ translations.dialog.signup ]]</h1><br>\
+				<p ng-if="error" class="error">[[ error ]]</p>\
 				<form ng-submit="registerUser()">\
 					<table>\
 						<tr>\
@@ -59,6 +61,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		ngDialog.open({
 			template:'\
 				<h1>[[ translations.dialog.login ]]</h1><br>\
+				<p ng-if="error" class="error">[[ error ]]</p>\
 				<form ng-submit="loginUser()">\
 					<table>\
 						<tr>\
@@ -97,10 +100,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				$cookies.putObject('user', $scope.user);
 
 				ngDialog.closeAll()
+				$scope.error = null;
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
 				// If error is 401 display it...
-				// Function to go to home page
+				if (status == 401) $scope.error = $scope.translations.errors.validation;
+				else $scope.error = $scope.translations.errors.unknown;
 			});
 	};
 
@@ -113,16 +118,28 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			};
 			$http.post($scope.apiAdress + '/register', data)
 				.success(function(data, status, headers, config) {
-					// Give success
-					console.log("Verify email")
-					ngDialog.close('registerDialog')
+					if (data.indexOf("ERROR") > - 1) {
+						// An error...
+						if (data == "ERROR, not everything filled in") {
+							$scope.error = $scope.translations.errors.notEverythingFilledIn;
+						} else if (data == "ERROR, username and/or email do already exist") {
+							$scope.error = $scope.translations.errors.alreadyExist;
+						}
+					} else {
+						// Give success
+						console.log("Verify email")
+						ngDialog.close('registerDialog')
+						$scope.error = null;
+					}
+					console.log(error);
 				}).error(function(data, status, headers, config) {
 					// Give registration error
 					console.error("Failed")
+					$scope.error = $scope.translations.errors.unknown;
 				});
 			// Reset the values
 			$scope.user.password = ''
-		}
+		} else $scope.error = $scope.translations.errors.notEverythingFilledIn;
 	};
 
 	$scope.loginUser = function() {
@@ -131,7 +148,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			$scope.authenticate(this.user.username, this.user.password);
 			// Reset the fields
 			$scope.user.password = '';
-		}
+		} else $scope.error = $scope.translations.errors.notEverythingFilledIn;
 	};
 
 	$scope.logoutUser = function() {

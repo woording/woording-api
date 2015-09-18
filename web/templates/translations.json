@@ -63,6 +63,12 @@
 			"login" : "Log in",
 			"logout" : "Log out",
 			"option" : "Or sign up"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Not everything is filled in",
+			"alreadyExist" : "Username and/or email do already exist",
+			"validation" : "Username and/or password is incorrect",
+			"unknown" : "An unknown error has occurred"
 		}
 	},
 
@@ -130,6 +136,12 @@
 			"login" : "Inloggen",
 			"logout" : "Uitloggen",
 			"option" : "Of registreer"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Niet alle velden zijn ingevuld",
+			"alreadyExist" : "Gebruikersnaam en/of email bestaan al",
+			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
+			"unknown" : "Er is een onbekende fout opgetreden"
 		}
 	},
 
@@ -197,6 +209,12 @@
 			"login" : "Einloggen",
 			"logout" : "Abmelden",
 			"option" : "Oder registrieren"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
+			"alreadyExist" : "Username und/oder Email gibt es bereits",
+			"validation" : "Username und/oder Password sind nicht korrekt",
+			"unknown" : "Ein unbekannter Fehler ist augetreten"
 		}
 	}
 }
