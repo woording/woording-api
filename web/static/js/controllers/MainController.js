@@ -30,6 +30,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.translations = result.data[$scope.prefferedLanguage];
 	});
 
+	// Switch language on page
+	$scope.switchLanguage = function(newLanguage) {
+		$scope.prefferedLanguage = newLanguage;
+		$http.get('/translations.json').then(function(result) {
+			$scope.translations = result.data[$scope.prefferedLanguage];
+		});
+	}
+
 	// Dialogs
 	$scope.openSignUp = function() {
 		ngDialog.open({
