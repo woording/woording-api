@@ -28,8 +28,8 @@
 						--><button id="log_in" ng-click="openLogIn()">[[ translations.dialog.login ]]</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
-						<button id="user_profile">[[ translations.welcome ]], [[ userData.username ]] </button><!--
-						--><button id="log_out" ng-click="logoutUser()">[[ translations.dialog.logout ]]</button>
+						<div id="user_profile">[[ translations.welcome ]], [[ userData.username ]] </div><!--
+						--><button id="log_out" ng-click="userLogOut()">[[ translations.dialog.logout ]]</button>
 					</div>
 				</div>
 

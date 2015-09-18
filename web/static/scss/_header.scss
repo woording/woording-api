@@ -39,7 +39,7 @@ header {
 			padding-left: $padding-unit;
 			padding-right: $padding-unit;
 			transition: background $timing-unit;
-
+			display: inline-block;
 		}
 
 		#sign_up, #user_profile {

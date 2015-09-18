@@ -131,7 +131,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						ngDialog.close('registerDialog')
 						$scope.error = null;
 					}
-					console.log(error);
+					console.log($scope.error);
 				}).error(function(data, status, headers, config) {
 					// Give registration error
 					console.error("Failed")
