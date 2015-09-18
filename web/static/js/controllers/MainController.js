@@ -7,7 +7,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return Object.keys(obj).length;
 	};
 
-	$scope.prefferedLanguage = "eng"; // Need a way to set this
+	$scope.prefferedLanguage = "ger"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
@@ -33,23 +33,23 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openSignUp = function() {
 		ngDialog.open({
 			template:'\
-				<h1>Sign Up</h1><br>\
+				<h1>[[ translations.dialog.signup ]]</h1><br>\
 				<form ng-submit="registerUser()">\
 					<table>\
 						<tr>\
-							<td>Username: </td>\
-							<td><input type="text" ng-model="user.username" name="username" placeholder="Username"></td>\
+							<td>[[ translations.dialog.username ]]: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.dialog.username ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>Password: </td>\
-							<td><input type="password" ng-model="user.password" name="password" placeholder="Password"></td>\
+							<td>[[ translations.dialog.password ]]: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.dialog.password ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>Email: </td>\
-							<td><input type="email" ng-model="user.email" name="email" placeholder="Email"></td>\
+							<td>[[ translations.dialog.email ]]: </td>\
+							<td><input type="email" ng-model="user.email" name="email" placeholder="[[ translations.dialog.email ]]"></td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="Sign Up">\
+					<input type="submit" value="[[ translations.dialog.signup ]]">\
 				</form>',
 			plain:true,
 			scope:$scope
@@ -58,19 +58,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openLogIn = function() {
 		ngDialog.open({
 			template:'\
-				<h1>Log In</h1><br>\
+				<h1>[[ translations.dialog.login ]]</h1><br>\
 				<form ng-submit="loginUser()">\
 					<table>\
 						<tr>\
-							<td>Username: </td>\
-							<td><input type="text" ng-model="user.username" name="username" placeholder="Username"></td>\
+							<td>[[ translations.dialog.username ]]: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.dialog.username ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>Password: </td>\
-							<td><input type="password" ng-model="user.password" name="password" placeholder="Password"></td>\
+							<td>[[ translations.dialog.password ]]: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.dialog.password ]]"></td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="Log In"> <a ng-click="openSignUp()">Or Sign Up</a>\
+					<input type="submit" value="[[ translations.dialog.login ]]"> <a ng-click="openSignUp()">[[ translations.dialog.option ]]</a>\
 				</form>',
 			plain:true,
 			scope:$scope

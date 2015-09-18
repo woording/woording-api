@@ -30,6 +30,7 @@
 		"search" : "Search",
 		"newList" : "New list",
 		"friends" : "Friends",
+		"welcome" : "Hello",
 		"listControls" : {
 			"practice" : "Practice",
 			"edit" : "Edit",
@@ -53,6 +54,15 @@
 			"incorrectWords" : "Incorrect words",
 			"correct" : "Correct",
 			"typed" : "Typed"
+		},
+		"dialog" : {
+			"username" : "Username",
+			"password" : "Password",
+			"email" : "Email",
+			"signup" : "Sign up",
+			"login" : "Log in",
+			"logout" : "Log out",
+			"option" : "Or sign up"
 		}
 	},
 
@@ -87,6 +97,7 @@
 		"search" : "Zoeken",
 		"newList" : "Nieuwe lijst",
 		"friends" : "Vrienden",
+		"welcome" : "Hallo",
 		"listControls" : {
 			"practice" : "Oefenen",
 			"edit" : "Bewerken",
@@ -110,6 +121,15 @@
 			"incorrectWords" : "Foute woorden",
 			"correct" : "Goed",
 			"typed" : "Geantwoord"
+		},
+		"dialog" : {
+			"username" : "Gebruikersnaam",
+			"password" : "Wachtwoord",
+			"email" : "Email",
+			"signup" : "Registreren",
+			"login" : "Inloggen",
+			"logout" : "Uitloggen",
+			"option" : "Of registreer"
 		}
 	},
 
@@ -144,6 +164,7 @@
 		"search" : "Suchen",
 		"newList" : "Neue Leiste",
 		"friends" : "Freunde",
+		"welcome" : "Hallo",
 		"listControls" : {	
 			"practice" : "Üben",
 			"edit" : "Bearbeiten",
@@ -167,6 +188,15 @@
 			"incorrectWords" : "Falschen Wörter",
 			"correct" : "Richtig",
 			"typed" : "Typisierte"
+		},
+		"dialog" : {
+			"username" : "Username",
+			"password" : "Passwort",
+			"email" : "Email",
+			"signup" : "Registrieren",
+			"login" : "Einloggen",
+			"logout" : "Abmelden",
+			"option" : "Oder registrieren"
 		}
 	}
 }
