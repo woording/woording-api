@@ -45,7 +45,8 @@
 
 					<h1><b> [[listData.listname]] </b></h1>
 
-					<h2 id="current_word"> [[ randomWord.language_1_text ]] </h2>
+					<h2 id="current_word" ng-show="questionedLanguage"> [[ randomWord.language_1_text ]] </h2>
+					<h2 id="current_word" ng-show="!questionedLanguage"> [[ randomWord.language_2_text ]] </h2>
 					<h2 id="wrong_word"></h2>
 
 					<form ng-submit="submit()" id="word_input">

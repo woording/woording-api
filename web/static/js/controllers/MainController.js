@@ -23,7 +23,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		words: []
 	};
 
-	// load translations from translations.json 
+	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
 		console.log(result.data[$scope.prefferedLanguage])
 		$scope.translations = result.data[$scope.prefferedLanguage];
@@ -275,6 +275,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Start practice
 	$scope.startList = function(){
+		$scope.questionedLanguage = confirm("Want language 1 first?");
+
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
@@ -313,7 +315,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.checkWord = function(wordOne, wordTwo){
-		if(wordOne == wordTwo.language_2_text){
+		if(wordOne == $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text){
 			document.getElementById('words_left').innerHTML--;
 			document.getElementById('correct').innerHTML++;
 			$scope.getRandomWord();
@@ -321,7 +323,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		else {
 			document.getElementById('words_left').innerHTML++;
-			document.getElementById('wrong_word').innerHTML = wordTwo.language_2_text;
+			document.getElementById('wrong_word').innerHTML = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text;
 			document.getElementById('wrong_word').style.color = 'red';
 			if ($scope.usedWords.indexOf(wordTwo) > -1){
 				$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
@@ -331,7 +333,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			$scope.numberOfQuestions++;
 			$scope.incorrectWords.push({
-				correctWord: wordTwo.language_2_text,
+				correctWord: $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text,
 				incorrectWord: wordOne
 			});
 		}
