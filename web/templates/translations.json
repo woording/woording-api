@@ -25,7 +25,35 @@
 				"iso" : "gre",
 				"displayText" : "Greek" 
 			}
-		]
+		],
+		"lists" : "Lists",
+		"search" : "Search",
+		"newList" : "New list",
+		"friends" : "Friends",
+		"listControls" : {
+			"practice" : "Practice",
+			"edit" : "Edit",
+			"delete" : "Delete",
+			"save" : "Save",
+			"addRow" : "Add row",
+			"listName" : "Listname",
+			"language1" : "Select language 1",
+			"language2" : "Select language 2",
+			"sentence" : "Sentence",
+			"translation" : "Translation"
+		},
+		"practice" : {
+			"next" : "Next",
+			"right" : "Right",
+			"wrong" : "Wrong",
+			"wordsLeft" : "Words left"
+		},
+		"results" : {
+			"results" : "Results",
+			"incorrectWords" : "Incorrect words",
+			"correct" : "Correct",
+			"typed" : "Typed"
+		}
 	},
 
 	"dut" : {
@@ -54,7 +82,35 @@
 				"iso" : "gre",
 				"displayText" : "Grieks" 
 			}
-		]
+		],
+		"lists" : "Lijsten",
+		"search" : "Zoeken",
+		"newList" : "Nieuwe lijst",
+		"friends" : "Vrienden",
+		"listControls" : {
+			"practice" : "Oefenen",
+			"edit" : "Bewerken",
+			"delete" : "Verwijderen",
+			"save" : "Opslaan",
+			"addRow" : "Rij toevoegen",
+			"listName" : "Lijstnaam",
+			"language1" : "Selecteer taal 1",
+			"language2" : "Selecteer taal 2",
+			"sentence" : "Zin",
+			"translation" : "Vertaling"
+		},
+		"practice" : {
+			"next" : "Volgende",
+			"right" : "Goed",
+			"wrong" : "Fout",
+			"wordsLeft" : "Woorden over"
+		},
+		"results" : {
+			"results" : "Resultaten",
+			"incorrectWords" : "Foute woorden",
+			"correct" : "Goed",
+			"typed" : "Geantwoord"
+		}
 	},
 
 	"ger" : {
@@ -83,6 +139,34 @@
 				"iso" : "gre",
 				"displayText" : "Griechisch"
 			}
-		]
+		],
+		"lists" : "Leisten",
+		"search" : "Suchen",
+		"newList" : "Neue Leiste",
+		"friends" : "Freunde",
+		"listControls" : {	
+			"practice" : "Üben",
+			"edit" : "Bearbeiten",
+			"delete" : "Löschen",
+			"save" : "Speichern",
+			"addRow" : "Zeile hinzufügen",
+			"listName" : "Leistename",
+			"language1" : "Sprache 1 auswählen",
+			"language2" : "Sprache 2 auswählen",
+			"sentence" : "Satz",
+			"translation" : "Übersetzung"
+		},
+		"practice" : {
+			"next" : "Nächste",
+			"right" : "Richtig",
+			"wrong" : "Falsch",
+			"wordsLeft" : "Wörter übrig"
+		},
+		"results" : {
+			"results" : "Resultate",
+			"incorrectWords" : "Falschen Wörter",
+			"correct" : "Richtig",
+			"typed" : "Typisierte"
+		}
 	}
 }
