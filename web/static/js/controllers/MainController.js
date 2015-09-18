@@ -7,7 +7,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return Object.keys(obj).length;
 	};
 
-	$scope.prefferedLanguage = "ger"; // Need a way to set this
+	$scope.prefferedLanguage = "eng"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
