@@ -30,6 +30,7 @@
 		"search" : "Search",
 		"newList" : "New list",
 		"friends" : "Friends",
+		"welcome" : "Hello",
 		"listControls" : {
 			"practice" : "Practice",
 			"edit" : "Edit",
@@ -53,6 +54,21 @@
 			"incorrectWords" : "Incorrect words",
 			"correct" : "Correct",
 			"typed" : "Typed"
+		},
+		"dialog" : {
+			"username" : "Username",
+			"password" : "Password",
+			"email" : "Email",
+			"signup" : "Sign up",
+			"login" : "Log in",
+			"logout" : "Log out",
+			"option" : "Or sign up"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Not everything is filled in",
+			"alreadyExist" : "Username and/or email do already exist",
+			"validation" : "Username and/or password is incorrect",
+			"unknown" : "An unknown error has occurred"
 		}
 	},
 
@@ -87,6 +103,7 @@
 		"search" : "Zoeken",
 		"newList" : "Nieuwe lijst",
 		"friends" : "Vrienden",
+		"welcome" : "Hallo",
 		"listControls" : {
 			"practice" : "Oefenen",
 			"edit" : "Bewerken",
@@ -110,6 +127,21 @@
 			"incorrectWords" : "Foute woorden",
 			"correct" : "Goed",
 			"typed" : "Geantwoord"
+		},
+		"dialog" : {
+			"username" : "Gebruikersnaam",
+			"password" : "Wachtwoord",
+			"email" : "Email",
+			"signup" : "Registreren",
+			"login" : "Inloggen",
+			"logout" : "Uitloggen",
+			"option" : "Of registreer"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Niet alle velden zijn ingevuld",
+			"alreadyExist" : "Gebruikersnaam en/of email bestaan al",
+			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
+			"unknown" : "Er is een onbekende fout opgetreden"
 		}
 	},
 
@@ -144,6 +176,7 @@
 		"search" : "Suchen",
 		"newList" : "Neue Leiste",
 		"friends" : "Freunde",
+		"welcome" : "Hallo",
 		"listControls" : {	
 			"practice" : "Üben",
 			"edit" : "Bearbeiten",
@@ -167,6 +200,21 @@
 			"incorrectWords" : "Falschen Wörter",
 			"correct" : "Richtig",
 			"typed" : "Typisierte"
+		},
+		"dialog" : {
+			"username" : "Username",
+			"password" : "Passwort",
+			"email" : "Email",
+			"signup" : "Registrieren",
+			"login" : "Einloggen",
+			"logout" : "Abmelden",
+			"option" : "Oder registrieren"
+		},
+		"errors" : {
+			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
+			"alreadyExist" : "Username und/oder Email gibt es bereits",
+			"validation" : "Username und/oder Password sind nicht korrekt",
+			"unknown" : "Ein unbekannter Fehler ist augetreten"
 		}
 	}
 }

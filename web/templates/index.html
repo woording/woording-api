@@ -24,12 +24,12 @@
 
 				<div id="log_info">
 					<div id="sign_or_log_in" ng-hide="loggedIn">
-						<button id="sign_up" ng-click="openSignUp()">Sign up</button><!-- This comment is for removing the space between the sign up and login in button
-						--><button id="log_in" ng-click="openLogIn()">Log In</button>
+						<button id="sign_up" ng-click="openSignUp()">[[ translations.dialog.signup ]]</button><!-- This comment is for removing the space between the sign up and login in button
+						--><button id="log_in" ng-click="openLogIn()">[[ translations.dialog.login ]]</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
-						<button id="user_profile">Hello, [[ userData.username ]] </button><!--
-						--><button id="log_out" ng-click="logoutUser()">Log Out</button>
+						<button id="user_profile">[[ translations.welcome ]], [[ userData.username ]] </button><!--
+						--><button id="log_out" ng-click="logoutUser()">[[ translations.dialog.logout ]]</button>
 					</div>
 				</div>
 
