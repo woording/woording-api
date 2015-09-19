@@ -64,13 +64,19 @@
 
 				<div id="left_content">
 
+					<a href="" ng-click="loadUser('/' + [[ user.username ]])">
+						<div class="user_list_item selected">
+							[[ user.username ]]
+						</div>
+					</a>
+
 					<h3>[[ translations.friends ]]</h3>
 
-					<a href="" ng-click="loadUser('/cor')">
+					{# <a href="" ng-click="loadUser('/cor')">
 						<div class="user_list_item selected">
 							Cor
 						</div>
-					</a>
+					</a> #}
 
 					<a href="" ng-click="loadUser('/leon')">
 						<div class="user_list_item">
