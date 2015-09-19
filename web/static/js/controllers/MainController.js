@@ -97,7 +97,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$http.post($scope.apiAdress + '/authenticate', data)
 			.success(function(data, status, headers, config) {
 				if (data.indexOf('ERROR') > -1) {
-					if (data == 'ERROR, Email not verified') $scope.error = translations.error.emailNotVerified;
+					if (data == 'ERROR, Email not verified') $scope.error = $scope.translations.errors.emailNotVerified;
 				} else {
 					$scope.user.token = data;
 					$scope.loggedIn = true;
