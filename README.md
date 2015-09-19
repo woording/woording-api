@@ -18,8 +18,6 @@ npm install gulp-shell
 npm install ng-dialog
 ```
 
-## How to use
-
 #### How to only use api
 ```bash
 cd api

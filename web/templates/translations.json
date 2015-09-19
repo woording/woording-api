@@ -68,7 +68,8 @@
 			"notEverythingFilledIn" : "Not everything is filled in",
 			"alreadyExist" : "Username and/or email do already exist",
 			"validation" : "Username and/or password is incorrect",
-			"unknown" : "An unknown error has occurred"
+			"unknown" : "An unknown error has occurred",
+			"emailNotVerified" : "Email is not verified"
 		}
 	},
 
@@ -141,7 +142,8 @@
 			"notEverythingFilledIn" : "Niet alle velden zijn ingevuld",
 			"alreadyExist" : "Gebruikersnaam en/of email bestaan al",
 			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
-			"unknown" : "Er is een onbekende fout opgetreden"
+			"unknown" : "Er is een onbekende fout opgetreden",
+			"emailNotVerified" : "Email is niet geverifieerd"
 		}
 	},
 
@@ -214,7 +216,8 @@
 			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
 			"alreadyExist" : "Username und/oder Email gibt es bereits",
 			"validation" : "Username und/oder Password sind nicht korrekt",
-			"unknown" : "Ein unbekannter Fehler ist augetreten"
+			"unknown" : "Ein unbekannter Fehler ist augetreten",
+			"emailNotVerified" : "Email nicht verifiziert"
 		}
 	}
 }

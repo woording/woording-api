@@ -30,6 +30,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.translations = result.data[$scope.prefferedLanguage];
 	});
 
+	// Switch language on page
+	$scope.switchLanguage = function(newLanguage) {
+		$scope.prefferedLanguage = newLanguage;
+		$http.get('/translations.json').then(function(result) {
+			$scope.translations = result.data[$scope.prefferedLanguage];
+		});
+	}
+
 	// Dialogs
 	$scope.openSignUp = function() {
 		ngDialog.open({
@@ -88,19 +96,23 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		};
 		$http.post($scope.apiAdress + '/authenticate', data)
 			.success(function(data, status, headers, config) {
-				$scope.user.token = data;
-				$scope.loggedIn = true;
-				$scope.loadUser("/" + username);
+				if (data.indexOf('ERROR') > -1) {
+					if (data == 'ERROR, Email not verified') $scope.error = $scope.translations.errors.emailNotVerified;
+				} else {
+					$scope.user.token = data;
+					$scope.loggedIn = true;
+					$scope.loadUser("/" + username);
 
-				// First delete before saving cookies
-				$cookies.remove('user');
-				$cookies.remove('loggedIn');
-				// Save Cookies
-				$cookies.put('loggedIn', $scope.loggedIn);
-				$cookies.putObject('user', $scope.user);
+					// First delete before saving cookies
+					$cookies.remove('user');
+					$cookies.remove('loggedIn');
+					// Save Cookies
+					$cookies.put('loggedIn', $scope.loggedIn);
+					$cookies.putObject('user', $scope.user);
 
-				ngDialog.closeAll()
-				$scope.error = null;
+					ngDialog.closeAll()
+					$scope.error = null;
+				}
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
 				// If error is 401 display it...
@@ -131,7 +143,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						ngDialog.close('registerDialog')
 						$scope.error = null;
 					}
-					console.log(error);
+					console.log($scope.error);
 				}).error(function(data, status, headers, config) {
 					// Give registration error
 					console.error("Failed")
