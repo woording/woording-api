@@ -46,6 +46,7 @@ header {
 			background: $dark_blue_color;
 			// border: 1px solid $dark_blue_color;
 			color: $white_color;
+			outline: none;
 
 			&:hover {
 				background: #3298AB;
@@ -57,6 +58,7 @@ header {
 			background: $light_blue_color;
 			// border: 1px solid $dark_blue_color;
 			color: $white_color;
+			outline: none;
 
 			&:hover {
 				background: #39D5ED;
