@@ -304,7 +304,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Start practice
 	$scope.startList = function(){
-		$scope.questionedLanguage = confirm("Want language 1 first?");
+		$scope.questionedLanguage = confirm("Want " + $scope.listData.language_1_tag + " first?");
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
