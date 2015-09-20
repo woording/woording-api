@@ -1,7 +1,7 @@
 #content {
 	background: $whiteish_color;
 	width: 100%;
-	min-height: calc(100vh - 60px);
+	height: calc(100vh - 60px); // $header-height is not supported here
 	overflow: hidden;
 	display: flex;
 	display: -webkit-flex; // For Safari

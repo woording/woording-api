@@ -27,7 +27,7 @@ header {
 			font-size: 15px;
 			cursor: pointer;
 			border: none;
-			// right: 0;
+			right: 0;
 			transition: background $timing-unit;
 		}
 
@@ -44,7 +44,6 @@ header {
 
 		#sign_up, #user_profile {
 			background: $dark_blue_color;
-			// border: 1px solid $dark_blue_color;
 			color: $white_color;
 			outline: none;
 
