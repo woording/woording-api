@@ -344,7 +344,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.checkWord = function(wordOne, wordTwo){
-		if(wordOne == $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text){
+		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
+		if(wordOne == wordTwo){
 			document.getElementById('words_left').innerHTML--;
 			document.getElementById('correct').innerHTML++;
 			$scope.getRandomWord();
@@ -352,7 +353,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		else {
 			document.getElementById('words_left').innerHTML++;
-			document.getElementById('wrong_word').innerHTML = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text;
+			document.getElementById('wrong_word').innerHTML = wordTwo;
 			document.getElementById('wrong_word').style.color = 'red';
 			if ($scope.usedWords.indexOf(wordTwo) > -1){
 				$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
@@ -362,7 +363,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			$scope.numberOfQuestions++;
 			$scope.incorrectWords.push({
-				correctWord: $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text,
+				correctWord: wordTwo,
 				incorrectWord: wordOne
 			});
 		}
