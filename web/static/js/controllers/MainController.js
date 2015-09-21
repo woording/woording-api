@@ -317,7 +317,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 				ngDialog.open({
 				template:'\
-					<h1>Options:</h1>\
+					<h1>[[ translations.dialog.options ]]</h1>\
 					<br>\
 					Language first?\
 					<h1>[[ translations.dialog.options ]]</h1><br>\
