@@ -317,9 +317,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 				ngDialog.open({
 				template:'\
+<<<<<<< HEAD
 					<h1>Options:</h1>\
 					<br>\
 					Language first?\
+=======
+					<h1>[[ translations.dialog.options ]]</h1><br>\
+>>>>>>> ad574fc13bea547a4bcc2047313dbdf43b4adeca
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
@@ -327,11 +331,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						<br>\
 						<input type="radio" name="language" value="both" id="bothLanguages"> Both\
 						<br>\
-						<input type="submit" ng-click="chooseLanguage()">\
+						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
 					</form>\
 					',
 				plain:true,
-				scope:$scope
+				scope:$scope,
+				closeByEscape: false,
+				closeByDocument: false,
+				showClose: false
 			});
 		});
 
