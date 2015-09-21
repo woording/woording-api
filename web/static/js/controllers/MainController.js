@@ -317,7 +317,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 				ngDialog.open({
 				template:'\
-					<h1>Opties:</h1>\
+					<h1>[[  translations.dialog.options ]]:</h1>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
@@ -327,7 +327,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					</form>\
 					',
 				plain:true,
-				scope:$scope
+				scope:$scope,
+				closeByEscape: false,
+				closeByDocument: false,
+				showClose: false
 			});
 		});
 
