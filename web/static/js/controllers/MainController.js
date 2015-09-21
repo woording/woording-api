@@ -304,11 +304,47 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Start practice
 	$scope.startList = function(){
-		$scope.questionedLanguage = confirm("Want " + $scope.listData.language_1_tag + " first?");
+		$http.get('/translations.json').then(function(result) {
+			$scope.translations = result.data[$scope.prefferedLanguage];
+			for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
+				if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
+					$scope.firstLanguage = $scope.translations.languages[i].displayText;
+				}
+
+				else if ($scope.translations.languages[i].iso == $scope.listData.language_2_tag){
+					$scope.secondLanguage = $scope.translations.languages[i].displayText;
+				}
+			}
+				ngDialog.open({
+				template:'\
+					<h1>Opties:</h1>\
+					<form>\
+						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
+						<br>\
+						<input type="radio" name="language" value="second"> ' + $scope.secondLanguage + '\
+						<br>\
+						<input type="submit" ng-click="chooseLanguage()">\
+					</form>\
+					',
+				plain:true,
+				scope:$scope
+			});
+		});
+
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
+	}
+
+	$scope.chooseLanguage = function(){
+		if (document.getElementById('firstLanguage').checked) {
+			$scope.questionedLanguage = true;
+		}
+
+		else { $scope.questionedLanguage = false; }
+
+		ngDialog.close();
 	}
 
 	// Practice lists
