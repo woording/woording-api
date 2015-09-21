@@ -7,8 +7,8 @@ db_manager = DatabaseManager()
 
 # Create users
 db_manager.create_user('cor', 'cor@pruijs.nl', True, sha512_crypt.encrypt('Hunter2', salt=SECURITY_PASSWORD_SALT, rounds=5000))
-db_manager.create_user('leon', 'leon@grasmeijer.nl', False, sha512_crypt.encrypt('all_i_see_is_*****', salt=SECURITY_PASSWORD_SALT, rounds=5000))
-db_manager.create_user('philip', 'philip@debruijn.nl', False, sha512_crypt.encrypt('***hunter***', salt=SECURITY_PASSWORD_SALT, rounds=5000))
+db_manager.create_user('leon', 'leon@grasmeijer.nl', True, sha512_crypt.encrypt('all_i_see_is_*****', salt=SECURITY_PASSWORD_SALT, rounds=5000))
+db_manager.create_user('philip', 'philip@debruijn.nl', True, sha512_crypt.encrypt('***hunter***', salt=SECURITY_PASSWORD_SALT, rounds=5000))
 
 # Create lists
 db_manager.create_list('cor', 'duitse_woorden', 'dut', 'ger')
