@@ -3,7 +3,7 @@
 		"languages" : [
 			{
 				"iso" : "eng",
-				"displayText" : "English" 
+				"displayText" : "English"
 			},
 			{
 				"iso" : "dut",
@@ -11,19 +11,19 @@
 			},
 			{
 				"iso" : "ger",
-				"displayText" : "German" 
+				"displayText" : "German"
 			},
 			{
 				"iso" : "fre",
-				"displayText" : "French" 
+				"displayText" : "French"
 			},
 			{
 				"iso" : "lat",
-				"displayText" : "Latin" 
+				"displayText" : "Latin"
 			},
 			{
 				"iso" : "gre",
-				"displayText" : "Greek" 
+				"displayText" : "Greek"
 			}
 		],
 		"lists" : "Lists",
@@ -77,7 +77,7 @@
 		"languages" : [
 			{
 				"iso" : "eng",
-				"displayText" : "Engels" 
+				"displayText" : "Engels"
 			},
 			{
 				"iso" : "dut",
@@ -85,19 +85,19 @@
 			},
 			{
 				"iso" : "ger",
-				"displayText" : "Duits" 
+				"displayText" : "Duits"
 			},
 			{
 				"iso" : "fre",
-				"displayText" : "Frans" 
+				"displayText" : "Frans"
 			},
 			{
 				"iso" : "lat",
-				"displayText" : "Latijn" 
+				"displayText" : "Latijn"
 			},
 			{
 				"iso" : "gre",
-				"displayText" : "Grieks" 
+				"displayText" : "Grieks"
 			}
 		],
 		"lists" : "Lijsten",
@@ -179,7 +179,7 @@
 		"newList" : "Neue Leiste",
 		"friends" : "Freunde",
 		"welcome" : "Hallo",
-		"listControls" : {	
+		"listControls" : {
 			"practice" : "Üben",
 			"edit" : "Bearbeiten",
 			"delete" : "Löschen",

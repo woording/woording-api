@@ -317,11 +317,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 				ngDialog.open({
 				template:'\
-					<h1>Opties:</h1>\
+					<h1>Options:</h1>\
+					<br>\
+					Language first?\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
-						<input type="radio" name="language" value="second"> ' + $scope.secondLanguage + '\
+						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
+						<br>\
+						<input type="radio" name="language" value="both" id="bothLanguages"> Both\
 						<br>\
 						<input type="submit" ng-click="chooseLanguage()">\
 					</form>\
@@ -342,7 +346,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			$scope.questionedLanguage = true;
 		}
 
-		else { $scope.questionedLanguage = false; }
+		else if (document.getElementById('secondLanguage').checked){
+			$scope.questionedLanguage = false;
+		}
+
+		else if (document.getElementById('bothLanguages').checked){
+			document.getElementById('words_left').innerHTML *= 2;
+			for (var i = 0, x = $scope.listData.words.length; i < x; i++){
+				$scope.listData.words.push({
+					language_1_text: $scope.listData.words[i].language_2_text,
+					language_2_text: $scope.listData.words[i].language_1_text
+				});
+			}
+		}
 
 		ngDialog.close();
 	}
