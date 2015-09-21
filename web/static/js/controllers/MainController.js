@@ -317,13 +317,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 				ngDialog.open({
 				template:'\
-					<h1>[[  translations.dialog.options ]]:</h1>\
+					<h1>[[ translations.dialog.options ]]</h1><br>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="second"> ' + $scope.secondLanguage + '\
 						<br>\
-						<input type="submit" ng-click="chooseLanguage()">\
+						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
 					</form>\
 					',
 				plain:true,

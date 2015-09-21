@@ -63,7 +63,8 @@
 			"login" : "Log in",
 			"logout" : "Log out",
 			"option" : "Or sign up",
-			"options" : "Options"
+			"options" : "Options",
+			"start" : "Start practice"
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Not everything is filled in",
@@ -138,7 +139,8 @@
 			"login" : "Inloggen",
 			"logout" : "Uitloggen",
 			"option" : "Of registreer",
-			"options" : "Opties"
+			"options" : "Opties",
+			"start" : "Start oefenen"
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Niet alle velden zijn ingevuld",
@@ -213,7 +215,8 @@
 			"login" : "Einloggen",
 			"logout" : "Abmelden",
 			"option" : "Oder registrieren",
-			"options" : "Optionen"
+			"options" : "Optionen",
+			"start": "Start üben"
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
