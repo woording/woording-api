@@ -1,25 +1,3 @@
-*.swo
-*.swp
-*.swm
-*.swn
-*.map
-.sass-cache
-*.pyc
-.DS_Store
-api/env
-web/Philip/env
-api/__pycache__
-*.sublime-workspace
-*.sublime-project
-web.pid
-api.pid
-web/static/css/
-web/static/css/*
-node_modules/
-node_modules/*
-api/wording.db
-
-
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
