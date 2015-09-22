@@ -36,7 +36,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$http.get('/translations.json').then(function(result) {
 			$scope.translations = result.data[$scope.prefferedLanguage];
 		});
-	}
+	};
 
 	// Dialogs
 	$scope.openSignUp = function() {
@@ -110,7 +110,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$cookies.put('loggedIn', $scope.loggedIn);
 					$cookies.putObject('user', $scope.user);
 
-					ngDialog.closeAll()
+					ngDialog.closeAll();
 					$scope.error = null;
 				}
 			}).error(function(data, status, headers, config) {
@@ -139,14 +139,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						}
 					} else {
 						// Give success
-						console.log("Verify email")
-						ngDialog.close('registerDialog')
+						console.log("Verify email");
+						ngDialog.close('registerDialog');
 						$scope.error = null;
 					}
 					console.log($scope.error);
 				}).error(function(data, status, headers, config) {
 					// Give registration error
-					console.error("Failed")
+					console.error("Failed");
 					$scope.error = $scope.translations.errors.unknown;
 				});
 			// Reset the values
@@ -155,7 +155,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.loginUser = function() {
-		console.log('Start logging in')
+		console.log('Start logging in');
 		if ($scope.user.username && $scope.user.password) {
 			$scope.authenticate(this.user.username, this.user.password);
 			// Reset the fields
@@ -174,7 +174,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$cookies.remove('loggedIn');
 
 		// Need function to go to main page
-	}
+	};
 
 	$scope.oldUrl = '';
 	$scope.currentUrl = '';
@@ -199,7 +199,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			console.log('changed');
 			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
-	}
+	};
 
 	$interval($scope.checkUrl, 100);
 
@@ -249,7 +249,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			language_1_tag: "",
 			language_2_tag: "",
 			words: []
-		}
+		};
 
 		for (i = 0; i < 3; i++) {
 			$scope.editData.words[i] = {
@@ -257,7 +257,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				language_2_text: ""
 			}
 		}
-	}
+	};
 
 	$scope.editList = function() {
 		$scope.editData = $scope.listData;
@@ -269,13 +269,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				language_2_text: ""
 			};
 		}
-	}
+	};
 
 	$scope.saveList = function() {
 		var data = {
 			'username':$scope.userData.username,
 			'list_data':$scope.editData
-		}
+		};
 		$http.post($scope.apiAdress + '/savelist', data)
 			.success(function(data, status, headers, config) {
 				console.log('saved');
@@ -285,13 +285,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}).error(function(data, status, headers, config) {
 				console.error('error');
 			});
-	}
+	};
 
 	$scope.deleteList = function(listname) {
 		var data = {
 			'username':$scope.userData.username,
 			'listname':listname
-		}
+		};
 		$http.post($scope.apiAdress + '/deleteList', data)
 			.success(function(data, status, headers, config) {
 				$scope.loadUser('/' + $scope.userData.username);
@@ -300,7 +300,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}).error(function(data, status, headers, config){
 				console.error('Error while deleting list')
 			});
-	}
+	};
 
 	// Start practice
 	$scope.startList = function(){
@@ -319,8 +319,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				template:'\
 					<h1>[[ translations.dialog.options ]]</h1>\
 					<br>\
-					Language first?\
-					<h1>[[ translations.dialog.options ]]</h1><br>\
+					Language first?<br>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
@@ -343,7 +342,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
-	}
+	};
 
 	$scope.chooseLanguage = function(){
 		if (document.getElementById('firstLanguage').checked) {
@@ -365,7 +364,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 
 		ngDialog.close();
-	}
+	};
 
 	// Practice lists
 	$scope.getRandomWord = function(){
