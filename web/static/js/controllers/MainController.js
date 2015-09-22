@@ -23,6 +23,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		language_2_tag: "",
 		words: []
 	};
+	$scope.importData = {
+		name: "",
+		language1: "",
+		language2: ""
+	}
 
 	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
@@ -264,11 +269,30 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		ngDialog.open({
 			template: '\
 				<h2>Insert words here separated by = or ,</h2>\
-				name: <input type="text">\
-				<br>\
-				language 1: <input type="text">\
-				<br>\
-				language 2: <input type="text">\
+				<table>\
+					<tr>\
+						<td>Name: </td>\
+						<td><input type="text" ng-model="importData.name"></td>\
+					</tr>\
+					<tr>\
+						<td>Language 1: </td>\
+						<td>\
+							<select ng-model="importData.language1" value="">\
+								<option value="">[[ translations.listControls.language1 ]]</option>\
+								<option ng-repeat="language in translations.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>\
+							</select>\
+						</td>\
+					</tr>\
+					<tr>\
+						<td>Language 2: </td>\
+						<td>\
+							<select ng-model="importData.language2" value="">\
+								<option value="">[[ translations.listControls.language2 ]]</option>\
+								<option ng-repeat="language in translations.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>\
+							</select>\
+						<td>\
+					</tr>\
+				</table>\
 				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
 				<button ng-click="submitImportedList()">Submit</button>\
 			',
@@ -289,16 +313,17 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 
 		console.log(words);
-		$scope.editData = {
-			listname: "lijst",
-			language_1_tag: "engels",
-			language_2_tag: "nederlands",
+		$scope.editData = { // Hard coded
+			listname: $scope.importData.name,
+			language_1_tag: $scope.importData.language1,
+			language_2_tag: $scope.importData.language2,
 			words: wordObjectArray
 		}
 
 		console.log($scope.editData);
 
 		$scope.saveList();
+		ngDialog.close();
 	}
 
 	$scope.editList = function() {
