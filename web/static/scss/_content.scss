@@ -29,6 +29,7 @@
 		border-right: 1px solid $dark_color;
 		// height: 100%;
 		width: 30%;
+		overflow: auto;
 
 		input {
 			width: 100%;
@@ -111,6 +112,7 @@
 		display: none;
 		width: calc(100% - 151px - 30%);
 		border-right: none;
+		overflow: auto;
 
 
 		.word_list {

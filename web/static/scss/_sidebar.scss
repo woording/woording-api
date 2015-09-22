@@ -3,8 +3,9 @@
 	background: $dark_blue_color repeat-y;
 	margin: 0;
 	width: 150px;
-	// height: 100%;
 	color: $whiteish_color;
+
+	overflow: auto;
 
 	a {
 		.user_list_item {
