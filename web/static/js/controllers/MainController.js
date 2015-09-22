@@ -315,7 +315,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.secondLanguage = $scope.translations.languages[i].displayText;
 				}
 			}
-				ngDialog.open({
+			
+			ngDialog.open({
 				template:'\
 					<h1>[[ translations.dialog.options ]]</h1>\
 					<br>\
