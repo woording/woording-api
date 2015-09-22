@@ -185,6 +185,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		var index = $scope.currentUrl.length;
 
 		if ($scope.currentUrl.length < $scope.oldUrl.length){
+			ngDialog.close();
 			left.style.display = 'inline-block';
 			middle.style.display = 'inline-block';
 			right.style.display = 'none';
@@ -259,6 +260,47 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	};
 
+	$scope.importList = function() {
+		ngDialog.open({
+			template: '\
+				<h2>Insert words here separated by = or ,</h2>\
+				name: <input type="text">\
+				<br>\
+				language 1: <input type="text">\
+				<br>\
+				language 2: <input type="text">\
+				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
+				<button ng-click="submitImportedList()">Submit</button>\
+			',
+			plain:true,
+			scope:$scope
+		});
+	}
+
+	$scope.submitImportedList = function() {
+		var words = document.getElementById('import_area').value.split(/=|\n/g);
+		var wordObjectArray = [];
+		console.log(wordObjectArray)
+		for (var i = 0, x = words.length; i < x; i+=2){
+			wordObjectArray.push({
+				language_1_text: words[i],
+				language_2_text: words[i+1]
+			});
+		}
+
+		console.log(words);
+		$scope.editData = {
+			listname: "lijst",
+			language_1_tag: "engels",
+			language_2_tag: "nederlands",
+			words: wordObjectArray
+		}
+
+		console.log($scope.editData);
+
+		$scope.saveList();
+	}
+
 	$scope.editList = function() {
 		$scope.editData = $scope.listData;
 
@@ -276,6 +318,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			'username':$scope.userData.username,
 			'list_data':$scope.editData
 		};
+		console.log(data);
 		$http.post($scope.apiAdress + '/savelist', data)
 			.success(function(data, status, headers, config) {
 				console.log('saved');
@@ -328,6 +371,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						<input type="radio" name="language" value="both" id="bothLanguages"> Both\
 						<br>\
 						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
+						<br>\
 					</form>\
 					',
 				plain:true,
