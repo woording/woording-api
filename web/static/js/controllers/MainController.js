@@ -23,6 +23,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		language_2_tag: "",
 		words: []
 	};
+	$scope.importData = {
+		name: "",
+		language1: "",
+		language2: ""
+	}
 
 	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
@@ -185,6 +190,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		var index = $scope.currentUrl.length;
 
 		if ($scope.currentUrl.length < $scope.oldUrl.length){
+			ngDialog.close();
 			left.style.display = 'inline-block';
 			middle.style.display = 'inline-block';
 			right.style.display = 'none';
@@ -259,6 +265,67 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	};
 
+	$scope.importList = function() {
+		ngDialog.open({
+			template: '\
+				<h2>Insert words here separated by = or ,</h2>\
+				<table>\
+					<tr>\
+						<td>Name: </td>\
+						<td><input type="text" ng-model="importData.name"></td>\
+					</tr>\
+					<tr>\
+						<td>Language 1: </td>\
+						<td>\
+							<select ng-model="importData.language1" value="">\
+								<option value="">[[ translations.listControls.language1 ]]</option>\
+								<option ng-repeat="language in translations.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>\
+							</select>\
+						</td>\
+					</tr>\
+					<tr>\
+						<td>Language 2: </td>\
+						<td>\
+							<select ng-model="importData.language2" value="">\
+								<option value="">[[ translations.listControls.language2 ]]</option>\
+								<option ng-repeat="language in translations.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>\
+							</select>\
+						<td>\
+					</tr>\
+				</table>\
+				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
+				<button ng-click="submitImportedList()">Submit</button>\
+			',
+			plain:true,
+			scope:$scope
+		});
+	}
+
+	$scope.submitImportedList = function() {
+		var words = document.getElementById('import_area').value.split(/=|\n/g);
+		var wordObjectArray = [];
+		console.log(wordObjectArray)
+		for (var i = 0, x = words.length; i < x; i+=2){
+			wordObjectArray.push({
+				language_1_text: words[i],
+				language_2_text: words[i+1]
+			});
+		}
+
+		console.log(words);
+		$scope.editData = { // Hard coded
+			listname: $scope.importData.name,
+			language_1_tag: $scope.importData.language1,
+			language_2_tag: $scope.importData.language2,
+			words: wordObjectArray
+		}
+
+		console.log($scope.editData);
+
+		$scope.saveList();
+		ngDialog.close();
+	}
+
 	$scope.editList = function() {
 		$scope.editData = $scope.listData;
 
@@ -276,6 +343,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			'username':$scope.userData.username,
 			'list_data':$scope.editData
 		};
+		console.log(data);
 		$http.post($scope.apiAdress + '/savelist', data)
 			.success(function(data, status, headers, config) {
 				console.log('saved');
@@ -315,19 +383,21 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.secondLanguage = $scope.translations.languages[i].displayText;
 				}
 			}
-				ngDialog.open({
+			
+			ngDialog.open({
 				template:'\
 					<h1>[[ translations.dialog.options ]]</h1>\
 					<br>\
-					Language first?<br>\
+					[[ translations.dialog.questionedLanguage ]]?<br>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
 						<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> Both\
+						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.dialog.both ]]\
 						<br>\
 						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
+						<br>\
 					</form>\
 					',
 				plain:true,

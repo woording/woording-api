@@ -1,3 +1,9 @@
+#import_area {
+	padding: 8px;
+	width: 100%;
+	margin-top: 20px;
+}
+
 #content {
 	background: $whiteish_color;
 	width: 100%;
@@ -84,7 +90,7 @@
 
 			}
 
-			#new_list {
+			#new_list,#import_list {
 				text-align: center;
 				background-color: $light_blue_color;
 				color: $whiteish_color;
