@@ -358,17 +358,18 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.secondLanguage = $scope.translations.languages[i].displayText;
 				}
 			}
-				ngDialog.open({
+			
+			ngDialog.open({
 				template:'\
 					<h1>[[ translations.dialog.options ]]</h1>\
 					<br>\
-					Language first?<br>\
+					[[ translations.dialog.questionedLanguage ]]?<br>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
 						<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> Both\
+						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.dialog.both ]]\
 						<br>\
 						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
 						<br>\
