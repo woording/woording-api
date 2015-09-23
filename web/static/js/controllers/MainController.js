@@ -331,7 +331,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 
 		console.log(words);
-		$scope.editData = { // Hard coded
+		$scope.editData = {
 			listname: $scope.importData.name,
 			language_1_tag: $scope.importData.language1,
 			language_2_tag: $scope.importData.language2,
@@ -379,6 +379,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.deleteList = function(listname) {
+		document.getElementById('undo_delete').style.display = 'block';
+		$scope.editData = $scope.listData;
 		var data = {
 			'username':$scope.userData.username,
 			'listname':listname,
@@ -394,6 +396,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
+	$scope.undoDelete = function() {
+		document.getElementById('undo_delete').style.display = 'none';
+		$scope.saveList();
+	}
+
 	// Start practice
 	$scope.startList = function(){
 		$http.get('/translations.json').then(function(result) {
@@ -407,14 +414,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.secondLanguage = $scope.translations.languages[i].displayText;
 				}
 			}
-			
+
 			ngDialog.open({
 				template:'\
 					<h1>[[ translations.practice.options ]]</h1>\
 					<br>\
 					[[ translations.practice.questionedLanguage ]]?<br>\
 					<form>\
-						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
+						<input type="radio" name="language" value="first" id="firstLanguage" checked> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
 						<br>\
@@ -430,6 +437,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				closeByDocument: false,
 				showClose: false
 			});
+
 		});
 
 
@@ -494,29 +502,58 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.checkWord = function(wordOne, wordTwo){
 		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
-		if(wordOne == wordTwo){
-			document.getElementById('words_left').innerHTML--;
-			document.getElementById('correct').innerHTML++;
-			$scope.getRandomWord();
+
+		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
+			$scope.wordIsRight();
+		}
+
+		else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2){
+			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/);
+			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/);
+			wordOneArray = wordOneArray.sort();
+			wordTwoArray = wordTwoArray.sort();
+			console.log(wordOneArray);
+			console.log(wordTwoArray);
+
+			for(var i = 0; i < wordOneArray.length; i++){
+				if (wordOneArray[i] != wordTwoArray[i]){
+					$scope.wordIsWrong(wordOne, wordTwo);
+					return false;
+				}
+			}
+
+			$scope.wordIsRight();
 		}
 
 		else {
-			document.getElementById('words_left').innerHTML++;
-			document.getElementById('wrong_word').innerHTML = wordTwo;
-			document.getElementById('wrong_word').style.color = 'red';
-			if ($scope.usedWords.indexOf(wordTwo) > -1){
-				$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
-			}
+			$scope.wordIsWrong(wordOne, wordTwo);
+		}
+	};
 
-			document.getElementById('incorrect').innerHTML++;
+	$scope.wordIsRight = function(){
+		document.getElementById('words_left').innerHTML--;
+		document.getElementById('correct').innerHTML++;
+		$scope.getRandomWord();
 
-			$scope.numberOfQuestions++;
-			$scope.incorrectWords.push({
-				correctWord: wordTwo,
-				incorrectWord: wordOne
-			});
+		return true;
+	};
+
+	$scope.wordIsWrong = function(wordOne, wordTwo){
+		document.getElementById('words_left').innerHTML++;
+		document.getElementById('wrong_word').innerHTML = wordTwo;
+		document.getElementById('wrong_word').style.color = 'red';
+		if ($scope.usedWords.indexOf(wordTwo) > -1){
+			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
 		}
 
-		console.log($scope.usedWords);
+		document.getElementById('incorrect').innerHTML++;
+
+		$scope.numberOfQuestions++;
+		$scope.incorrectWords.push({
+			correctWord: wordTwo,
+			incorrectWord: wordOne
+		});
+
+		return false;
 	};
 });
