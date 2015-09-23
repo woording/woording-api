@@ -47,7 +47,11 @@
 			"next" : "Next",
 			"right" : "Right",
 			"wrong" : "Wrong",
-			"wordsLeft" : "Words left"
+			"wordsLeft" : "Words left",
+			"options" : "Options",
+			"start" : "Start practice",
+			"questionedLanguage" : "Questioned language",
+			"both" : "Both"
 		},
 		"results" : {
 			"results" : "Results",
@@ -55,18 +59,15 @@
 			"correct" : "Correct",
 			"typed" : "Typed"
 		},
-		"dialog" : {
+		"login" : {
 			"username" : "Username",
 			"password" : "Password",
 			"email" : "Email",
 			"signup" : "Sign up",
 			"login" : "Log in",
 			"logout" : "Log out",
-			"option" : "Or sign up",
-			"options" : "Options",
-			"start" : "Start practice",
-			"questionedLanguage" : "Questioned language",
-			"both" : "Both"
+			"option" : "Or sign up"
+			
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Not everything is filled in",
@@ -74,6 +75,18 @@
 			"validation" : "Username and/or password is incorrect",
 			"unknown" : "An unknown error has occurred",
 			"emailNotVerified" : "Email is not verified"
+		},
+		"sharing": {
+			"sharedWith" : "Shared with",
+			"nobody" : "Nobody",
+			"everybody" : "Everybody"
+		},
+		"import": {
+			"title" : "Import list",
+			"desc" : "Insert words here separated by = or ,",
+			"language1" : "Language 1",
+			"language2" : "Language 2",
+			"name" : "Name"
 		}
 	},
 
@@ -125,7 +138,11 @@
 			"next" : "Volgende",
 			"right" : "Goed",
 			"wrong" : "Fout",
-			"wordsLeft" : "Woorden over"
+			"wordsLeft" : "Woorden over",
+			"options" : "Opties",
+			"start" : "Start oefenen",
+			"questionedLanguage" : "Gevraagde taal",
+			"both" : "Beide"
 		},
 		"results" : {
 			"results" : "Resultaten",
@@ -133,18 +150,15 @@
 			"correct" : "Goed",
 			"typed" : "Geantwoord"
 		},
-		"dialog" : {
+		"login" : {
 			"username" : "Gebruikersnaam",
 			"password" : "Wachtwoord",
 			"email" : "Email",
 			"signup" : "Registreren",
 			"login" : "Inloggen",
 			"logout" : "Uitloggen",
-			"option" : "Of registreer",
-			"options" : "Opties",
-			"start" : "Start oefenen",
-			"questionedLanguage" : "Gevraagde taal",
-			"both" : "Beide"
+			"option" : "Of registreer"
+			
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Niet alle velden zijn ingevuld",
@@ -152,6 +166,18 @@
 			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
 			"unknown" : "Er is een onbekende fout opgetreden",
 			"emailNotVerified" : "Email is niet geverifieerd"
+		},
+		"sharing": {
+			"sharedWith" : "Gedeeld met",
+			"nobody" : "Niemand",
+			"everybody" : "Iedereen"
+		},
+		"import": {
+			"title" : "Importeer lijst",
+			"desc" : "Voer hier woorden in gescheiden door = of ,",
+			"language1" : "Taal 1",
+			"language2" : "Taal 2",
+			"name" : "Naam"
 		}
 	},
 
@@ -203,7 +229,11 @@
 			"next" : "Nächste",
 			"right" : "Richtig",
 			"wrong" : "Falsch",
-			"wordsLeft" : "Wörter übrig"
+			"wordsLeft" : "Wörter übrig",
+			"options" : "Optionen",
+			"start": "Start üben",
+			"questionedLanguage" : "Frage Sprache",
+			"both" : "Beide"
 		},
 		"results" : {
 			"results" : "Resultate",
@@ -211,18 +241,15 @@
 			"correct" : "Richtig",
 			"typed" : "Typisierte"
 		},
-		"dialog" : {
+		"login" : {
 			"username" : "Username",
 			"password" : "Passwort",
 			"email" : "Email",
 			"signup" : "Registrieren",
 			"login" : "Einloggen",
 			"logout" : "Abmelden",
-			"option" : "Oder registrieren",
-			"options" : "Optionen",
-			"start": "Start üben",
-			"questionedLanguage" : "Frage Sprache",
-			"both" : "Beide"
+			"option" : "Oder registrieren"
+			
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
@@ -230,6 +257,18 @@
 			"validation" : "Username und/oder Password sind nicht korrekt",
 			"unknown" : "Ein unbekannter Fehler ist augetreten",
 			"emailNotVerified" : "Email nicht verifiziert"
+		},
+		"sharing": {
+			"sharedWith" : "Gemeinschafts mit",
+			"nobody" : "Niemand",
+			"everybody" : "Jeder"
+		},
+		"import": {
+			"title" : "Importier Leiste",
+			"desc" : "Legen Sie hier Worte getrennt durch = oder ,",
+			"language1" : "Sprache 1",
+			"language2" : "Sprache 2",
+			"name" : "Name"
 		}
 	}
 }

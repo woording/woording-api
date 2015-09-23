@@ -8,7 +8,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.error = null;
-	$scope.isOwner = false;
+	$scope.isOwner = true;
 	$scope.prefferedLanguage = "eng"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
@@ -49,24 +49,24 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openSignUp = function() {
 		ngDialog.open({
 			template:'\
-				<h1>[[ translations.dialog.signup ]]</h1><br>\
+				<h1>[[ translations.login.signup ]]</h1><br>\
 				<p ng-if="error" class="error">[[ error ]]</p>\
 				<form ng-submit="registerUser()">\
 					<table>\
 						<tr>\
-							<td>[[ translations.dialog.username ]]: </td>\
-							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.dialog.username ]]"></td>\
+							<td>[[ translations.login.username ]]: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.login.username ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>[[ translations.dialog.password ]]: </td>\
-							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.dialog.password ]]"></td>\
+							<td>[[ translations.login.password ]]: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.login.password ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>[[ translations.dialog.email ]]: </td>\
-							<td><input type="email" ng-model="user.email" name="email" placeholder="[[ translations.dialog.email ]]"></td>\
+							<td>[[ translations.login.email ]]: </td>\
+							<td><input type="email" ng-model="user.email" name="email" placeholder="[[ translations.login.email ]]"></td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="[[ translations.dialog.signup ]]">\
+					<input type="submit" value="[[ translations.login.signup ]]">\
 				</form>',
 			plain:true,
 			scope:$scope
@@ -75,20 +75,20 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openLogIn = function() {
 		ngDialog.open({
 			template:'\
-				<h1>[[ translations.dialog.login ]]</h1><br>\
+				<h1>[[ translations.login.login ]]</h1><br>\
 				<p ng-if="error" class="error">[[ error ]]</p>\
 				<form ng-submit="loginUser()">\
 					<table>\
 						<tr>\
-							<td>[[ translations.dialog.username ]]: </td>\
-							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.dialog.username ]]"></td>\
+							<td>[[ translations.login.username ]]: </td>\
+							<td><input type="text" ng-model="user.username" name="username" placeholder="[[ translations.login.username ]]"></td>\
 						</tr>\
 						<tr>\
-							<td>[[ translations.dialog.password ]]: </td>\
-							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.dialog.password ]]"></td>\
+							<td>[[ translations.login.password ]]: </td>\
+							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.login.password ]]"></td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="[[ translations.dialog.login ]]"> <a ng-click="openSignUp()">[[ translations.dialog.option ]]</a>\
+					<input type="submit" value="[[ translations.login.login ]]"> <a ng-click="openSignUp()">[[ translations.login.option ]]</a>\
 				</form>',
 			plain:true,
 			scope:$scope
@@ -274,14 +274,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.importList = function() {
 		ngDialog.open({
 			template: '\
-				<h2>Insert words here separated by = or ,</h2>\
+				<h1>[[ translations.import.title ]]</h1><br>\
+				<p>[[ translations.import.desc ]]</p>\
 				<table>\
 					<tr>\
-						<td>Name: </td>\
+						<td>[[ translations.import.name ]]: </td>\
 						<td><input type="text" ng-model="importData.name"></td>\
 					</tr>\
 					<tr>\
-						<td>Language 1: </td>\
+						<td>[[ translations.import.language1 ]]: </td>\
 						<td>\
 							<select ng-model="importData.language1" value="">\
 								<option value="">[[ translations.listControls.language1 ]]</option>\
@@ -290,7 +291,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						</td>\
 					</tr>\
 					<tr>\
-						<td>Language 2: </td>\
+						<td>[[ translations.import.language2 ]]: </td>\
 						<td>\
 							<select ng-model="importData.language2" value="">\
 								<option value="">[[ translations.listControls.language2 ]]</option>\
@@ -299,19 +300,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						<td>\
 					</tr>\
 					<tr>\
-						<td>Shared with? </td>\
+						<td>[[ translations.sharing.sharedWith ]]? </td>\
 						<td>\
 							<select ng-model="importData.shared_with" value="">\
-								<option value="">Shared with?</option>\
-								<option value="0">Nobody</option>\
-								<option value="1">Friends</option>\
-								<option value="2">Everybody</option>\
+								<option value="">[[ translations.sharing.sharedWith ]]?</option>\
+								<option value="0">[[ translations.sharing.nobody ]]</option>\
+								<option value="1">[[ translations.friends ]]</option>\
+								<option value="2">[[ translations.sharing.everybody ]]</option>\
 							</select>\
 						</td>\
 					</tr>\
 				</table>\
 				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
-				<button ng-click="submitImportedList()">Submit</button>\
+				<button ng-click="submitImportedList()">[[ translations.import.title ]]</button>\
 			',
 			plain:true,
 			scope:$scope
@@ -409,17 +410,17 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			
 			ngDialog.open({
 				template:'\
-					<h1>[[ translations.dialog.options ]]</h1>\
+					<h1>[[ translations.practice.options ]]</h1>\
 					<br>\
-					[[ translations.dialog.questionedLanguage ]]?<br>\
+					[[ translations.practice.questionedLanguage ]]?<br>\
 					<form>\
 						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
 						<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.dialog.both ]]\
+						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]\
 						<br>\
-						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.dialog.start ]]">\
+						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.practice.start ]]">\
 						<br>\
 					</form>\
 					',

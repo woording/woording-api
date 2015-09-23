@@ -24,12 +24,12 @@
 
 				<div id="log_info">
 					<div id="sign_or_log_in" ng-hide="loggedIn">
-						<button id="sign_up" ng-click="openSignUp()">[[ translations.dialog.signup ]]</button><!-- This comment is for removing the space between the sign up and login in button
-						--><button id="log_in" ng-click="openLogIn()">[[ translations.dialog.login ]]</button>
+						<button id="sign_up" ng-click="openSignUp()">[[ translations.login.signup ]]</button><!-- This comment is for removing the space between the sign up and login in button
+						--><button id="log_in" ng-click="openLogIn()">[[ translations.login.login ]]</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
 						<div id="user_profile">[[ translations.welcome ]], [[ user.username ]] </div><!--
-						--><button id="log_out" ng-click="logoutUser()">[[ translations.dialog.logout ]]</button>
+						--><button id="log_out" ng-click="logoutUser()">[[ translations.login.logout ]]</button>
 					</div>
 				</div>
 
@@ -173,10 +173,10 @@
 							<tr>
 								<td colspan="2">
 									<select ng-model="editData.shared_with" value="">
-										<option value="">Shared with?</option>
-										<option value="0">Nobody</option>
-										<option value="1">Friends</option>
-										<option value="2">Everybody</option>
+										<option value="">[[ translations.sharing.sharedWith ]]?</option>
+										<option value="0">[[ translations.sharing.nobody ]]</option>
+										<option value="1">[[ translations.friends ]]</option>
+										<option value="2">[[ translations.sharing.everybody ]]</option>
 									</select>
 								</td>
 							</tr>
