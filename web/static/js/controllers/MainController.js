@@ -320,6 +320,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	}
 
 	$scope.submitImportedList = function() {
+		document.getElementById('undo_delete').style.display = 'none';
 		var words = document.getElementById('import_area').value.split(/ = |=|\n/g);
 		var wordObjectArray = [];
 		console.log(wordObjectArray)
@@ -345,6 +346,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	}
 
 	$scope.editList = function() {
+		document.getElementById('undo_delete').style.display = 'none';
 		$scope.editData = $scope.listData;
 
 		var size = $scope.sizeOf($scope.editData.words);
