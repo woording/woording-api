@@ -100,18 +100,18 @@
 								[[ list.listname ]]
 							</td>
 						</tr>
-						<tr>
-							<td id="new_list" ng-click="createList()" onclick="showEditor()">
-								[[ translations.newList ]]
-							</td>
-						</tr>
-						<tr>
-							<td id="import_list" ng-click="importList()" onclick="">
-								[ import translation here ]
-							</td>
-						</tr>
+
 					</table>
 
+					<div id="new_list" ng-click="createList()" onclick="showEditor()">
+						[[ translations.newList ]]
+					</div>
+					<div id="import_list" ng-click="importList()" onclick="">
+						[ import translation here ]
+					</div>
+					<div id="undo_delete" ng-click="undoDelete()">
+						[ undo delete translation here ]
+					</div>
 
 				</div> <!-- middle_content -->
 
