@@ -17,6 +17,7 @@ CREATE TABLE list (
 	listname text not null,
 	language_1_tag text not null,
 	language_2_tag text not null,
+	shared integer not null,
     FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 

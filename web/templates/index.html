@@ -136,12 +136,10 @@
 						<button id="practice_button" ng-click="startList()" onclick="showPractice()">
 							[[ translations.listControls.practice ]]
 						</button><!--
-
 						--><button id="edit_button" ng-click="editList()" onclick="showEditor()">
 							[[ translations.listControls.edit ]]
 						</button><!--
-
-						--><button id="delete_button" ng-click="deleteList(listData.listname)">
+						--><button id="delete_button" ng-click="deleteList(listData.listname)" ng-show="isOwner">
 							[[ translations.listControls.delete ]]
 						</button>
 
@@ -172,6 +170,16 @@
 								<td><input type="text" placeholder="[[ translations.listControls.sentence ]]" ng-model="word.language_1_text" name="edit_input"></td>
 								<td><input type="text" placeholder="[[ translations.listControls.translation ]]" ng-model="word.language_2_text" name="edit_input"></td>
 							</tr>
+							<tr>
+								<td colspan="2">
+									<select ng-model="editData.shared_with" value="">
+										<option value="">Shared with?</option>
+										<option value="0">Nobody</option>
+										<option value="1">Friends</option>
+										<option value="2">Everybody</option>
+									</select>
+								</td>
+							</tr>
 						</table>
 
 						<button id="save_button" ng-click="saveList()">
@@ -180,11 +188,11 @@
 						--><button id="add_rows" onclick="addRow()">
 							[[ translations.listControls.addRow ]]
 						</button><!--
-						--><button id="delete_button" ng-click="deleteList(editData.listname)">
+						--><button id="delete_button" ng-click="deleteList(editData.listname)" ng-show="isOwner">
 							[[ translations.listControls.delete ]]
 						</button>
 
-					</div> <!-- list_items -->
+					</div> <!-- edit_list -->
 
 					<div id="results">
 						<table ng-if="incorrectWords.length != 0">

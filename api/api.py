@@ -153,20 +153,25 @@ def save_list():
 
 	username = request.json.get('username')
 	list_data = request.json.get('list_data')
-	
-	if username is None or list_data is None:
+	token = request.json.get('token')
+
+	if username == None or list_data == None or token == None:
 		abort(400)
 
-	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None:
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username == None or token_username != username:
+		abort(401)
+
+	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None or list_data.get('shared_with') is None:
 		abort(400)
 
-	if list_data.get('listname') is "" or list_data.get('language_1_tag') is "" or list_data.get('language_2_tag') is "":
+	if list_data.get('listname') is "" or list_data.get('language_1_tag') is "" or list_data.get('language_2_tag') is "" or list_data.get('shared_with') is "":
 		abort(400)
 
 	if db_manager.listname_exists_for_user(username, list_data.get('listname')):
 		db_manager.delete_list(username, list_data.get('listname'))
 
-	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'))
+	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
 	words = list_data.get('words')
 	
 	print(words)
@@ -188,15 +193,24 @@ def delete_list():
 
 	username = request.json.get('username')
 	listname = request.json.get('listname')
+	token = request.json.get('token')
+	
 
-	if username is None or listname is None:
+	if username == None or listname == None or token == None:
 		abort(400)
+
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username == None or token_username != username:
+		abort(401)
 
 	if not db_manager.listname_exists_for_user(username, listname):
 		return "No list found"
 
-	db_manager.delete_list(username, listname)
-	return "Successfully deleted list"
+	if db_manager.listname_exists_for_user(username, listname):
+		db_manager.delete_list(username, listname)
+		return "Successfully deleted list"
+
+	return abort(401)
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
@@ -212,16 +226,46 @@ def get(username):
 	if token_username is None:
 		return json.dumps({ 'username':'ERROR, No user' })
 	
-	if db_manager.username_exists(username) and token_username == username: # Need to do something with shared lists...
-		user_info = db_manager.get_user(username)
-		list_lists = db_manager.get_lists_for_user(username)
-		for l in list_lists: del l['user_id']; del l['id']
+	if db_manager.username_exists(username):
+		if token_username == username: # Need to do something with shared lists...
+			user_info = db_manager.get_user(username)
+			list_lists = db_manager.get_lists_for_user(username)
+			for l in list_lists: del l['user_id']; del l['id']
 
-		return json.dumps({
-			'username': user_info.get("username"),
-			'email' : user_info.get("email"),
-			'lists' : list_lists
-			})
+			return json.dumps({
+				'username': user_info.get("username"),
+				'email' : user_info.get("email"),
+				'lists' : list_lists
+				})
+		# elif check if is friend
+			# user_info = db_manager.get_user(username)
+			# list_lists = db_manager.get_lists_for_user(username)
+			# for l in list_lists:
+			# 	if l['shared_with'] == "0":
+			#		list_lists.remove(l)
+			# 	del l['user_id']
+			#	del l['id']
+
+			# return json.dumps({
+			# 	'username': user_info.get("username"),
+			# 	'email' : user_info.get("email"),
+			# 	'lists' : list_lists
+			# 	})
+		else:
+			user_info = db_manager.get_user(username)
+			list_lists = db_manager.get_lists_for_user(username)
+			for l in list_lists:
+				if l['shared_with'] != "2":
+					list_lists.remove(l)
+				del l['user_id']
+				del l['id']
+
+			return json.dumps({
+				'username': user_info.get("username"),
+				'email' : user_info.get("email"),
+				'lists' : list_lists
+				})
+
 	else:
 		return json.dumps({
 			'username': 'ERROR: This shouldn\'t happen'
@@ -235,13 +279,26 @@ def show_user_list(username, listname):
 	if db_manager.username_exists(username):
 		if db_manager.listname_exists_for_user(username, listname):
 			list_data = db_manager.get_list(username, listname)
+			shared_with = list_data.get("shared_with")
 			translations = db_manager.get_translations_for_list(username, listname)
 			for translation in translations: del translation['id']; del translation['list_id']
+			
+			# Should now check if is friend
+			if shared_with == '1': # and isFriend()
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+					'words' : translations,
+					'shared_with' : shared_with
+				})
+
 			return json.dumps({
 				'listname' : listname,
 				'language_1_tag' : list_data.get("language_1_tag"),
 				'language_2_tag' : list_data.get("language_2_tag"),
-				'words' : translations
+				'words' : translations,
+				'shared_with' : shared_with
 				})
 		else:
 			return json.dumps({

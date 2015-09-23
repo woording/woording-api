@@ -11,10 +11,10 @@ db_manager.create_user('leon', 'leon@grasmeijer.nl', True, sha512_crypt.encrypt(
 db_manager.create_user('philip', 'philip@debruijn.nl', True, sha512_crypt.encrypt('***hunter***', salt=SECURITY_PASSWORD_SALT, rounds=5000))
 
 # Create lists
-db_manager.create_list('cor', 'duitse_woorden', 'dut', 'ger')
-db_manager.create_list('cor', 'engelse_woorden', 'dut', 'eng')
+db_manager.create_list('cor', 'duitse_woorden', 'dut', 'ger', '2')
+db_manager.create_list('cor', 'engelse_woorden', 'dut', 'eng', '1')
 
-db_manager.create_list('leon', 'latijn_woorden', 'dut', 'lat')
+db_manager.create_list('leon', 'latijn_woorden', 'dut', 'lat', '0')
 
 # Create translations
 db_manager.create_translation('cor', 'engelse_woorden', 'auto', 'car')
