@@ -66,7 +66,7 @@ class DatabaseManager(object):
 
 	# Create a list database record
 	# A list is tied to a user, so the username must exist
-	def create_list(self, username, listname, language_1_tag, language_2_tag):
+	def create_list(self, username, listname, language_1_tag, language_2_tag, shared_with):
 
 		# Check if user exists
 		if self.username_exists(username):
@@ -77,7 +77,7 @@ class DatabaseManager(object):
 				user_id = self.get_user(username).get("id")
 
 				# Generate the query
-				query_text = 'INSERT INTO list (user_id, listname, language_1_tag, language_2_tag) VALUES (' + str(user_id) + ', "' + listname + '", "' + language_1_tag + '", "' + language_2_tag + '")'
+				query_text = 'INSERT INTO list (user_id, listname, language_1_tag, language_2_tag, shared) VALUES (' + str(user_id) + ', "' + listname + '", "' + language_1_tag + '", "' + language_2_tag + '", "' + shared_with + '")'
 
 				# Use the query to create a new list
 
@@ -318,6 +318,7 @@ class DatabaseManager(object):
 			"listname": list_record[2],
 			"language_1_tag": list_record[3],
 			"language_2_tag": list_record[4],
+			"shared_with": str(list_record[5])
 		}
 
 	# Generate a Python dictionary from a translation record

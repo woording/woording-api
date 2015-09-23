@@ -8,6 +8,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.error = null;
+	$scope.isOwner = false;
 	$scope.prefferedLanguage = "eng"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
@@ -21,6 +22,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		listname: "",
 		language_1_tag: "",
 		language_2_tag: "",
+		shared_with: "",
 		words: []
 	};
 	$scope.importData = {
@@ -237,6 +239,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.incorrectWords = [];
 		showList();
 
+		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
+		else $scope.isOwner = true;
+
 		$http.get($scope.apiAdress + url).
 			success(function(data, status, headers, config) {
 				window.history.pushState('page2', 'Title', url);
@@ -254,7 +259,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			listname: "",
 			language_1_tag: "",
 			language_2_tag: "",
-			words: []
+			words: [],
+			shared_with: "",
 		};
 
 		for (i = 0; i < 3; i++) {
@@ -291,6 +297,17 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 								<option ng-repeat="language in translations.languages" value="[[ language.iso ]]">[[ language.displayText ]]</option>\
 							</select>\
 						<td>\
+					</tr>\
+					<tr>\
+						<td>Shared with? </td>\
+						<td>\
+							<select ng-model="importData.shared_with" value="">\
+								<option value="">Shared with?</option>\
+								<option value="0">Nobody</option>\
+								<option value="1">Friends</option>\
+								<option value="2">Everybody</option>\
+							</select>\
+						</td>\
 					</tr>\
 				</table>\
 				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
@@ -340,8 +357,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.saveList = function() {
 		var data = {
-			'username':$scope.userData.username,
-			'list_data':$scope.editData
+			'username':$scope.user.username,
+			'list_data':$scope.editData,
+			'token':$scope.user.token
 		};
 		console.log(data);
 		$http.post($scope.apiAdress + '/savelist', data)
@@ -350,6 +368,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				$scope.loadUser('/' + $scope.userData.username);
 				$scope.loadList('/' + $scope.userData.username + '/' + $scope.editData.listname);
 				$scope.editData = null;
+
+				if (!$scope.isOwner) {
+					alert("Edited list saved on own account.")
+				}
 			}).error(function(data, status, headers, config) {
 				console.error('error');
 			});
@@ -358,7 +380,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.deleteList = function(listname) {
 		var data = {
 			'username':$scope.userData.username,
-			'listname':listname
+			'listname':listname,
+			'token':$scope.user.token
 		};
 		$http.post($scope.apiAdress + '/deleteList', data)
 			.success(function(data, status, headers, config) {
