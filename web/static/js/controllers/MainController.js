@@ -302,7 +302,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	}
 
 	$scope.submitImportedList = function() {
-		var words = document.getElementById('import_area').value.split(/=|\n/g);
+		var words = document.getElementById('import_area').value.split(/ = |=|\n/g);
 		var wordObjectArray = [];
 		console.log(wordObjectArray)
 		for (var i = 0, x = words.length; i < x; i+=2){
