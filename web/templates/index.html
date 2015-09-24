@@ -169,7 +169,9 @@
 							<tr ng-repeat="word in editData.words">
 								<td><input type="text" placeholder="[[ translations.listControls.sentence ]]" ng-model="word.language_1_text" name="edit_input"></td>
 								<td><input type="text" placeholder="[[ translations.listControls.translation ]]" ng-model="word.language_2_text" name="edit_input"></td>
-							</tr>
+							</tr>						
+						</table>
+						<table>
 							<tr>
 								<td colspan="2">
 									<select ng-model="editData.shared_with" value="">
