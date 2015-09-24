@@ -55,7 +55,6 @@ def register():
 		html = render_template('email.html', confirm_url=confirm_url)
 		subject = "Please confirm your email"
 		send_email(email, subject, html)
-		print("Email send")
 
 		return "Successfully created user, please verify email.\n"
 
@@ -215,20 +214,20 @@ def get(username):
 				'email' : user_info.get("email"),
 				'lists' : list_lists
 				})
-		# elif check if is friend
-			# user_info = db_manager.get_user(username)
-			# list_lists = db_manager.get_lists_for_user(username)
-			# for l in list_lists:
-			# 	if l['shared_with'] == "0":
-			#		list_lists.remove(l)
-			# 	del l['user_id']
-			#	del l['id']
+		elif db_manager.are_friends(username, token_username):
+			user_info = db_manager.get_user(username)
+			list_lists = db_manager.get_lists_for_user(username)
+			for l in list_lists:
+				if l['shared_with'] == "0":
+					list_lists.remove(l)
+				del l['user_id']
+				del l['id']
 
-			# return json.dumps({
-			# 	'username': user_info.get("username"),
-			# 	'email' : user_info.get("email"),
-			# 	'lists' : list_lists
-			# 	})
+			return json.dumps({
+				'username': user_info.get("username"),
+				'email' : user_info.get("email"),
+				'lists' : list_lists
+				})
 		else:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
@@ -249,10 +248,18 @@ def get(username):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
-@app.route('/<username>/<listname>')
-@crossdomain(origin='*')
+@app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers="content-type")
 def show_user_list(username, listname):
 	db_manager = DatabaseManager()
+
+	token = request.json.get("token")
+	if token is None or token is "":
+		return json.dumps({ 'username':'ERROR, No token' })
+	
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username is None:
+		return json.dumps({ 'username':'ERROR, No user' })
 
 	if db_manager.username_exists(username):
 		if db_manager.listname_exists_for_user(username, listname):
@@ -261,8 +268,8 @@ def show_user_list(username, listname):
 			translations = db_manager.get_translations_for_list(username, listname)
 			for translation in translations: del translation['id']; del translation['list_id']
 			
-			# Should now check if is friend
-			if shared_with == '1': # and isFriend()
+			# Check if is owner
+			if username == token_username:
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
@@ -270,14 +277,25 @@ def show_user_list(username, listname):
 					'words' : translations,
 					'shared_with' : shared_with
 				})
-
-			return json.dumps({
-				'listname' : listname,
-				'language_1_tag' : list_data.get("language_1_tag"),
-				'language_2_tag' : list_data.get("language_2_tag"),
-				'words' : translations,
-				'shared_with' : shared_with
+			elif shared_with == '1' and db_manager.are_friends(username, token_username): # and isFriend()
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+					'words' : translations,
+					'shared_with' : shared_with
 				})
+			elif shared_with == '2':
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+					'words' : translations,
+					'shared_with' : shared_with
+				})
+			else:
+				abort(401)
+
 		else:
 			return json.dumps({
 				'username': 'ERROR: This shouldn\'t happen'

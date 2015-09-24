@@ -278,10 +278,7 @@ class DatabaseManager(object):
 			db_conn.query('UPDATE user SET friends = "' + newFriends + '" WHERE username = "' + username + '"')
 
 	def are_friends(self, username, friendname):
-		userID = self.get_user(username).get("id")
-		friendID = self.get_user(friendname).get("id")
-
-		return friendID in self.get_friends(username) and userID in self.get_friends(friendname)
+		return friendname in self.get_friends(username) and username in self.get_friends(friendname)
 
 	def get_username_list(self):
 

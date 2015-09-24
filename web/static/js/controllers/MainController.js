@@ -113,7 +113,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.user.token = data.token;
 					$scope.user.friends = data.friends;
 					$scope.loggedIn = true;
-					$scope.loadUser("/" + username);
+					$scope.loadUser("/" + $scope.user.username);
 
 					// First delete before saving cookies
 					$cookies.remove('user');
@@ -248,13 +248,17 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
 		else $scope.isOwner = true;
 
-		$http.get($scope.apiAdress + url).
-			success(function(data, status, headers, config) {
+		var data = {
+			"token" : $scope.user.token
+		}
+
+		$http.post($scope.apiAdress + url, data)
+			.success(function(data, status, headers, config) {
 				window.history.pushState('page2', 'Title', url);
 
 				$scope.listData = data;
-			}).
-			error(function(data, status, headers, config) {
+			})
+			.error(function(data, status, headers, config) {
 				console.log("error");
 			});
 	};
