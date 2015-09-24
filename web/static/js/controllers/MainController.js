@@ -113,7 +113,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.user.token = data.token;
 					$scope.user.friends = data.friends;
 					$scope.loggedIn = true;
-					$scope.loadUser("/" + username);
+					$scope.loadUser("/" + $scope.user.username);
 
 					// First delete before saving cookies
 					$cookies.remove('user');
@@ -208,7 +208,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			right.style.display = 'inline-block';
 		}
 
-		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 5) {
+		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1]) {
+			console.log('changed');
 			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
 	};
@@ -220,7 +221,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// cor 		Hunter2
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
-
 	$scope.loadUser = function(url){
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
@@ -248,32 +248,20 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
 		else $scope.isOwner = true;
 
-		$http.get($scope.apiAdress + url).
-			success(function(data, status, headers, config) {
-				window.history.pushState(null, null, url);
+		var data = {
+			"token" : $scope.user.token
+		}
+
+		$http.post($scope.apiAdress + url, data)
+			.success(function(data, status, headers, config) {
+				window.history.pushState('page2', 'Title', url);
 
 				$scope.listData = data;
-			}).
-			error(function(data, status, headers, config) {
+			})
+			.error(function(data, status, headers, config) {
 				console.log("error");
 			});
 	};
-
-	$scope.addClicker = function(link){
-		link.addEventListener('click', function(e){
-			var url = link.href.split('/').pop();
-			console.log(url);
-			e.preventDefault();
-			$scope.loadUser('/' + url);
-		}, false);
-
-	};
-
-	var links = document.getElementsByTagName('a')
-
-	for(var i = 0, x = links.length; i < x; i++){
-		$scope.addClicker(links[i]);
-	}
 
 	// Create list
 	$scope.createList = function() {
