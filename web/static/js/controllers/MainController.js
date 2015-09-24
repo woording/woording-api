@@ -1,4 +1,4 @@
-app.controller('MainController', function($scope, $http, $window, ngDialog, $interval, $cookies) {
+app.controller('MainController', function($scope, $http, $window, ngDialog, $interval, $cookies, $timeout) {
 	$scope.title = 'Wording';
 	$scope.Object = Object;
 	$scope.apiAdress = 'http://127.0.0.1:5000';
@@ -208,7 +208,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			right.style.display = 'inline-block';
 		}
 
-		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 5) {
+		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 4) {
 			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
 	};
@@ -220,6 +220,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// cor 		Hunter2
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
+
 	$scope.loadUser = function(url){
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
@@ -227,7 +228,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
-					window.history.pushState('page2', 'Title', url);
+					window.history.pushState(null, null, url);
 
 					$scope.userData = data;
 					console.log(data);
@@ -253,7 +254,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		$http.post($scope.apiAdress + url, data)
 			.success(function(data, status, headers, config) {
-				window.history.pushState('page2', 'Title', url);
+				window.history.pushState(null, null, url);
 
 				$scope.listData = data;
 			})
@@ -262,22 +263,37 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
-	$scope.addClicker = function(link){
+	$scope.addUserUrl = function(link){
 		link.addEventListener('click', function(e){
-			console.log('test');
 			var url = link.href.split('/').pop();
 			console.log(url);
 			e.preventDefault();
 			$scope.loadUser('/' + url);
 		}, false);
-
 	};
 
-	var links = document.getElementsByTagName('a');
+	var userLinks = document.getElementsByClassName('user_link');
 
-	for(var i = 0, x = links.length; i < x; i++){
-		$scope.addClicker(links[i]);
+	for(var i = 0, x = userLinks.length; i < x; i++){
+		$scope.addUserUrl(userLinks[i]);
 	}
+
+	$scope.addListUrl = function(link){
+		link.addEventListener('click', function(e){
+			var url = link.href.split('/').slice(-2);
+			e.preventDefault();
+			$scope.loadList('/' + url[0] + '/' + url[1]);
+		}, false);
+	};
+
+	$timeout(function(){
+		var listLinks = document.getElementsByClassName('list_link');
+
+		for(var i = 0, x = listLinks.length; i < x; i++){
+			$scope.addListUrl(listLinks[i]);
+		}
+	}, 0);
+
 
 	// Create list
 	$scope.createList = function() {
