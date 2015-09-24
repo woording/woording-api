@@ -32,61 +32,6 @@ api = Api(app)
 # Setup email
 mail = Mail(app)
 
-# REST Resources
-class User(Resource):
-
-	def get(self, username):
-
-		db_manager = DatabaseManager()
-
-		if db_manager.username_exists(username):
-
-			user_info = db_manager.get_user(username)
-			list_lists = db_manager.get_lists_for_user(username)
-			for l in list_lists: del l['user_id']; del l['id']
-
-			return json.dumps({
-				'username': user_info.get("username"),
-				'email' : user_info.get("email"),
-				'lists' : list_lists
-				})
-
-		else:
-			print ('ERROR: User does not exists')
-
-
-class List(Resource):
-	def get(self, username, listname):
-
-		db_manager = DatabaseManager()
-
-		if db_manager.username_exists(username):
-
-			if db_manager.listname_exists_for_user(username, listname):
-
-				list_data = db_manager.get_list(username, listname)
-				translations = db_manager.get_translations_for_list(username, listname)
-
-				for translation in translations: del translation['id']; del translation['list_id']
-
-				return json.dumps({
-					'listname' : listname,
-					'language_1_tag' : list_data.get("language_1_tag"),
-					'language_2_tag' : list_data.get("language_2_tag"),
-
-					'words' : translations
-					})
-
-			else:
-				print("ERROR, List doesn't exist")
-
-		else:
-			print("ERROR, User doesn't exists")
-
-
-# api.add_resource(User, '/<username>')
-# api.add_resource(List, '/<username>/<listname>')
-
 # Register
 @app.route('/register', methods = ['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers='content-type')
@@ -110,7 +55,6 @@ def register():
 		html = render_template('email.html', confirm_url=confirm_url)
 		subject = "Please confirm your email"
 		send_email(email, subject, html)
-		print("Email send")
 
 		return "Successfully created user, please verify email.\n"
 
@@ -135,12 +79,13 @@ def authenticate():
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	if username and password:
-		print(db_manager.get_user(username))
 		if db_manager.get_user(username).get('email_verified'):
 			if db_manager.check_password(username, password):
-				return db_manager.generate_auth_token(username)
+				return json.dumps({
+					"token": db_manager.generate_auth_token(username).decode("utf-8"),
+					"friends": db_manager.get_user(username).get("friends")
+					})
 		else:
-			print('error')
 			return "ERROR, Email not verified"
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
@@ -174,12 +119,8 @@ def save_list():
 	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
 	words = list_data.get('words')
 	
-	print(words)
-	print(len(words))
-
 	for i in range(len(words)):
 		word = words[i]
-		print(word)
 		if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
 			continue
 		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
@@ -195,7 +136,6 @@ def delete_list():
 	listname = request.json.get('listname')
 	token = request.json.get('token')
 	
-
 	if username == None or listname == None or token == None:
 		abort(400)
 
@@ -211,6 +151,43 @@ def delete_list():
 		return "Successfully deleted list"
 
 	return abort(401)
+
+# Friends
+@app.route('/friendRequest', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers='content-type')
+def friend_request():
+	db_manager = DatabaseManager()
+
+	username = request.json.get('username')
+	friendname = request.json.get('friendname')
+
+	if username == None or friendname == None:
+		abort(400)
+
+	if db_manager.username_exists(username) and db_manager.username_exists(friendname):
+		email = db_manager.get_user(friendname).get("email")
+
+		# Email request
+		token = generate_confirmation_token([ username, friendname])
+		confirm_url = url_for('accept_friend', token=token, _external=True)
+		html = render_template('friend.html', confirm_url=confirm_url, name=username)
+		subject = "New friend request"
+		send_email(email, subject, html)
+
+		return "Email sent"
+
+@app.route('/acceptFriend/<token>')
+def accept_friend(token):
+	db_manager = DatabaseManager()
+	names = confirm_token(token)
+
+	if db_manager.are_friends(names[0], names[1]):
+		return "Already friends"
+	else:
+		db_manager.add_friend(names[0], names[1])
+		db_manager.add_friend(names[1], names[0])
+		return "Now friends"
+
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
@@ -237,20 +214,20 @@ def get(username):
 				'email' : user_info.get("email"),
 				'lists' : list_lists
 				})
-		# elif check if is friend
-			# user_info = db_manager.get_user(username)
-			# list_lists = db_manager.get_lists_for_user(username)
-			# for l in list_lists:
-			# 	if l['shared_with'] == "0":
-			#		list_lists.remove(l)
-			# 	del l['user_id']
-			#	del l['id']
+		elif db_manager.are_friends(username, token_username):
+			user_info = db_manager.get_user(username)
+			list_lists = db_manager.get_lists_for_user(username)
+			for l in list_lists:
+				if l['shared_with'] == "0":
+					list_lists.remove(l)
+				del l['user_id']
+				del l['id']
 
-			# return json.dumps({
-			# 	'username': user_info.get("username"),
-			# 	'email' : user_info.get("email"),
-			# 	'lists' : list_lists
-			# 	})
+			return json.dumps({
+				'username': user_info.get("username"),
+				'email' : user_info.get("email"),
+				'lists' : list_lists
+				})
 		else:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
@@ -271,10 +248,18 @@ def get(username):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
-@app.route('/<username>/<listname>')
-@crossdomain(origin='*')
+@app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers="content-type")
 def show_user_list(username, listname):
 	db_manager = DatabaseManager()
+
+	token = request.json.get("token")
+	if token is None or token is "":
+		return json.dumps({ 'username':'ERROR, No token' })
+	
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username is None:
+		return json.dumps({ 'username':'ERROR, No user' })
 
 	if db_manager.username_exists(username):
 		if db_manager.listname_exists_for_user(username, listname):
@@ -283,8 +268,8 @@ def show_user_list(username, listname):
 			translations = db_manager.get_translations_for_list(username, listname)
 			for translation in translations: del translation['id']; del translation['list_id']
 			
-			# Should now check if is friend
-			if shared_with == '1': # and isFriend()
+			# Check if is owner
+			if username == token_username:
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
@@ -292,14 +277,25 @@ def show_user_list(username, listname):
 					'words' : translations,
 					'shared_with' : shared_with
 				})
-
-			return json.dumps({
-				'listname' : listname,
-				'language_1_tag' : list_data.get("language_1_tag"),
-				'language_2_tag' : list_data.get("language_2_tag"),
-				'words' : translations,
-				'shared_with' : shared_with
+			elif shared_with == '1' and db_manager.are_friends(username, token_username): # and isFriend()
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+					'words' : translations,
+					'shared_with' : shared_with
 				})
+			elif shared_with == '2':
+				return json.dumps({
+					'listname' : listname,
+					'language_1_tag' : list_data.get("language_1_tag"),
+					'language_2_tag' : list_data.get("language_2_tag"),
+					'words' : translations,
+					'shared_with' : shared_with
+				})
+			else:
+				abort(401)
+
 		else:
 			return json.dumps({
 				'username': 'ERROR: This shouldn\'t happen'

@@ -4,7 +4,8 @@ CREATE TABLE user (
 	username text not null,
 	email text not null,
 	email_verified boolean not null,
-	password_hash text not null
+	password_hash text not null,
+	friends text null
 );
 
 CREATE UNIQUE INDEX user_username_unique

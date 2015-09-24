@@ -16,7 +16,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		username:	"",
 		password:	"",
-		email	:	""
+		email	:	"",
+		friends	: 	""
 	};
 	$scope.editData = {
 		listname: "",
@@ -29,7 +30,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		name: "",
 		language1: "",
 		language2: ""
-	}
+	};
+	$scope.request = {
+		friend: ""
+	};
 
 	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
@@ -103,10 +107,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		};
 		$http.post($scope.apiAdress + '/authenticate', data)
 			.success(function(data, status, headers, config) {
-				if (data.indexOf('ERROR') > -1) {
+				if (typeof data == "string") {
 					if (data == 'ERROR, Email not verified') $scope.error = $scope.translations.errors.emailNotVerified;
 				} else {
-					$scope.user.token = data;
+					$scope.user.token = data.token;
+					$scope.user.friends = data.friends;
 					$scope.loggedIn = true;
 					$scope.loadUser("/" + username);
 
@@ -223,9 +228,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
-					window.history.pushState(null, null, url);
+					window.history.pushState('page2', 'Title', url);
 
 					$scope.userData = data;
+					console.log(data);
 					$scope.listData = 0;
 				}
 			})
@@ -238,14 +244,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.usedWords = [];
 		$scope.incorrectWords = [];
 		showList();
-		//document.getElementById('right_content').style.display = 'none';
 
 		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
 		else $scope.isOwner = true;
 
 		$http.get($scope.apiAdress + url).
 			success(function(data, status, headers, config) {
-				window.history.pushState('page2', 'Title', url);
+				window.history.pushState(null, null, url);
 
 				$scope.listData = data;
 			}).
@@ -264,14 +269,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	};
 
-
 	var links = document.getElementsByTagName('a')
 
 	for(var i = 0, x = links.length; i < x; i++){
 		$scope.addClicker(links[i]);
 	}
-
-	//$scope.addClicker(document.getElementById('user_link'));
 
 	// Create list
 	$scope.createList = function() {
@@ -578,4 +580,43 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		return false;
 	};
+
+	// Friends
+	$scope.openFriendRequest = function(name) {
+		ngDialog.open({
+			template: '\
+				<h1>Friend request</h1>\
+				<form ng-submit="addFriend()">\
+					<table>\
+						<tr>\
+							<td>\
+								Friend name:\
+							</td>\
+							<td>\
+								<input type="text" ng-model="request.friend" placeholder="name">\
+							</td>\
+						</tr>\
+					</table>\
+					<input type="submit" value="Request">\
+				</form>\
+			',
+			plain: true,
+			scope: $scope
+		});
+	}
+
+	$scope.addFriend = function() {
+		// Send friend request
+		var data = {
+			"username": $scope.user.username,
+			"friendname": $scope.request.friend
+		}
+		$http.post($scope.apiAdress + "/friendRequest", data)
+			.success(function(data, status, headers, config) {
+				ngDialog.close();
+			})
+			.error(function(data, status, headers, config) {
+				console.error("error");
+			});
+	}
 });

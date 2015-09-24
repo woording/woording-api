@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, json
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 SECRET_KEY = "SECRET"
@@ -55,7 +55,7 @@ class DatabaseManager(object):
 			db_conn = DatabaseConnection(self.database_path)
 
 			# Genereate the query
-			query_text = 'INSERT INTO user (username, email, email_verified, password_hash) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '")'
+			query_text = 'INSERT INTO user (username, email, email_verified, password_hash, friends) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '", "[]")'
 
 			# Use the query to create a new user
 			db_conn.query(query_text)
@@ -158,6 +158,32 @@ class DatabaseManager(object):
 		else:
 			print ('ERROR: User does not exist')
 
+	def get_username(self, user_id):
+
+		if self.user_id_exists(user_id):
+			db_conn = DatabaseConnection(self.database_path)
+
+			query_text = 'SELECT username FROM user WHERE id = "' + str(user_id) + '"'
+
+			username = db_conn.query(query_text).fetchone()
+			
+			return username[0]
+
+	def user_id_exists(self, user_id):
+		return user_id in self.get_user_id_list()
+
+	def get_user_id_list(self):
+		# Create a DatabaseConnection
+ 		db_conn = DatabaseConnection(self.database_path)
+ 
+ 		# Get all the username rows
+ 		user_id_rows = db_conn.query('SELECT id FROM user').fetchall()
+ 
+ 		# Extract the first item
+ 		user_ids = tuple(user_id[0] for user_id in user_id_rows)
+ 		
+ 		return user_ids
+
 	def check_password(self, username, password):
 
 		if self.username_exists(username):
@@ -211,6 +237,48 @@ class DatabaseManager(object):
 
 		# If the listname is in the user's list of lists, it exiss
 		return listname in self.get_listnames_for_user(username)
+
+	def get_friends(self, username):
+		if self.username_exists(username):
+			user_info = self.get_user(username)
+			friends = user_info.get("friends")
+
+			return friends
+
+	def get_friend_ids(self, username):
+		if self.username_exists(username):
+			db_conn = DatabaseConnection(self.database_path)
+
+			cursor = db_conn.query('SELECT friends FROM user WHERE username = "' + username + '"').fetchone()
+
+			if json.loads(cursor[0]) == None:
+				friends = []
+			else:
+				friends = json.loads(cursor[0])
+			
+			return friends
+
+	def add_friend(self, username, friendname):
+		if self.username_exists(username) and self.username_exists(friendname):
+			db_conn = DatabaseConnection(self.database_path)
+
+			currentFriends = self.get_friend_ids(username)
+			friendID = self.get_user(friendname).get("id")
+
+			print(currentFriends)
+
+			if currentFriends == None:
+				newFriends = json.dumps([friendID])
+			else:
+				currentFriends.append(friendID)
+				newFriends = json.dumps(currentFriends)
+
+			print(newFriends)
+
+			db_conn.query('UPDATE user SET friends = "' + newFriends + '" WHERE username = "' + username + '"')
+
+	def are_friends(self, username, friendname):
+		return friendname in self.get_friends(username) and username in self.get_friends(friendname)
 
 	def get_username_list(self):
 
@@ -302,12 +370,23 @@ class DatabaseManager(object):
 
 	# Generate a Python dictionary from a user record
 	def get_dictionary_from_user_record(self, user_record):
+		if json.loads(user_record[5]) == None:
+			friends = []
+		else:
+			friendIDs = json.loads(user_record[5])
+
+			friends = []
+			for friendID in friendIDs:
+				username = self.get_username(friendID)
+				friends.append(username)
+
 		return {
 			"id": user_record[0],
 			"username": user_record[1],
 			"email": user_record[2],
 			"email_verified": user_record[3],
-			"password_hash": user_record[4]
+			"password_hash": user_record[4],
+			"friends": friends
 		}
 
 	# Generate a Python dictionary from a list record
