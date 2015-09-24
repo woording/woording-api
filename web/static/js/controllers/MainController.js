@@ -208,8 +208,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			right.style.display = 'inline-block';
 		}
 
-		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1]) {
-			console.log('changed');
+		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 5) {
 			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
 	};
@@ -262,6 +261,23 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				console.log("error");
 			});
 	};
+
+	$scope.addClicker = function(link){
+		link.addEventListener('click', function(e){
+			console.log('test');
+			var url = link.href.split('/').pop();
+			console.log(url);
+			e.preventDefault();
+			$scope.loadUser('/' + url);
+		}, false);
+
+	};
+
+	var links = document.getElementsByTagName('a');
+
+	for(var i = 0, x = links.length; i < x; i++){
+		$scope.addClicker(links[i]);
+	}
 
 	// Create list
 	$scope.createList = function() {

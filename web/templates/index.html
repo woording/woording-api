@@ -64,7 +64,7 @@
 
 				<div id="left_content">
 
-					<a href="" ng-click="loadUser('/' + [[ user.username ]])">
+					<a href="/[[user.username]]"> <!--  ng-click="loadUser('/' + [[ user.username ]])"> -->
 						<div class="user_list_item selected">
 							[[ user.username ]]
 						</div>
@@ -72,8 +72,8 @@
 
 					<h3>[[ translations.friends ]]</h3>
 
-					<a ng-repeat="friend in user.friends" href="" ng-click="loadUser('/' + [[ friend ]])">
-						<div class="user_list_item">
+					<a ng-repeat="friend in user.friends" href="/[[friend]]"> <!-- ng-click="loadUser('/' + [[ friend ]])>" -->
+						<div class="user_list_item"> 
 							[[ friend ]]
 						</div>
 					</a>
