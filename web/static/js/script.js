@@ -89,4 +89,3 @@ function showList() {
 	document.getElementById('results').style.display = 'none';
 	document.getElementById('list_items').style.display = 'block';
 }
-

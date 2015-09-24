@@ -64,7 +64,7 @@
 
 				<div id="left_content">
 
-					<a href="" ng-click="loadUser('/' + [[ user.username ]])">
+					<a href="/[[ user.username ]]"  id="user_link">
 						<div class="user_list_item selected">
 							[[ user.username ]]
 						</div>
@@ -72,13 +72,13 @@
 
 					<h3>[[ translations.friends ]]</h3>
 
-					<a href="" ng-click="loadUser('/leon')">
+					<a href="/leon">
 						<div class="user_list_item">
 							Leon
 						</div>
 					</a>
 
-					<a href="" ng-click="loadUser('/philip')">
+					<a href="/philip">
 						<div class="user_list_item">
 							Philip
 						</div>
@@ -169,7 +169,7 @@
 							<tr ng-repeat="word in editData.words">
 								<td><input type="text" placeholder="[[ translations.listControls.sentence ]]" ng-model="word.language_1_text" name="edit_input"></td>
 								<td><input type="text" placeholder="[[ translations.listControls.translation ]]" ng-model="word.language_2_text" name="edit_input"></td>
-							</tr>						
+							</tr>
 						</table>
 						<table>
 							<tr>

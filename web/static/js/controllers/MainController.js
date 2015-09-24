@@ -203,8 +203,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			right.style.display = 'inline-block';
 		}
 
-		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1]) {
-			console.log('changed');
+		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 5) {
 			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
 		}
 	};
@@ -216,6 +215,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// cor 		Hunter2
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
+
 	$scope.loadUser = function(url){
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
@@ -223,7 +223,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
-					window.history.pushState('page2', 'Title', url);
+					window.history.pushState(null, null, url);
 
 					$scope.userData = data;
 					$scope.listData = 0;
@@ -238,6 +238,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.usedWords = [];
 		$scope.incorrectWords = [];
 		showList();
+		//document.getElementById('right_content').style.display = 'none';
 
 		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
 		else $scope.isOwner = true;
@@ -252,6 +253,25 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				console.log("error");
 			});
 	};
+
+	$scope.addClicker = function(link){
+		link.addEventListener('click', function(e){
+			var url = link.href.split('/').pop();
+			console.log(url);
+			e.preventDefault();
+			$scope.loadUser('/' + url);
+		}, false);
+
+	};
+
+
+	var links = document.getElementsByTagName('a')
+
+	for(var i = 0, x = links.length; i < x; i++){
+		$scope.addClicker(links[i]);
+	}
+
+	//$scope.addClicker(document.getElementById('user_link'));
 
 	// Create list
 	$scope.createList = function() {
