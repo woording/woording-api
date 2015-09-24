@@ -72,15 +72,15 @@
 
 					<h3>[[ translations.friends ]]</h3>
 
-					<a href="" ng-click="loadUser('/leon')">
+					<a ng-repeat="friend in user.friends" href="" ng-click="loadUser('/' + [[ friend ]])">
 						<div class="user_list_item">
-							Leon
+							[[ friend ]]
 						</div>
 					</a>
 
-					<a href="" ng-click="loadUser('/philip')">
+					<a href="" ng-click="openFriendRequest()">
 						<div class="user_list_item">
-							Philip
+							+ Add friend
 						</div>
 					</a>
 
