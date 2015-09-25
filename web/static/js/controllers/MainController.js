@@ -7,9 +7,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return Object.keys(obj).length;
 	};
 
+	// Profile info state
+	$scope.showProfileInfo = false;
+
 	$scope.error = null;
 	$scope.isOwner = true;
-	$scope.prefferedLanguage = "eng"; // Need a way to set this
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
@@ -19,6 +21,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		email	:	"",
 		friends	: 	""
 	};
+	$scope.userData = {
+		username: "",
+		email: "",
+		lists: []
+	}
 	$scope.editData = {
 		listname: "",
 		language_1_tag: "",
@@ -35,19 +42,45 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		friend: ""
 	};
 
+	// Language variable
+	$scope.languages = {
+		prefferedLanguage : $cookies.get('language') ? $cookies.get('language') : "eng",
+		availableLanguages : ["eng", "dut", "ger"]
+	}
+
 	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
-		console.log(result.data[$scope.prefferedLanguage])
-		$scope.translations = result.data[$scope.prefferedLanguage];
+		console.log(result.data[$scope.languages.prefferedLanguage])
+		$scope.translations = result.data[$scope.languages.prefferedLanguage];
 	});
 
 	// Switch language on page
 	$scope.switchLanguage = function(newLanguage) {
-		$scope.prefferedLanguage = newLanguage;
+		if (newLanguage != undefined)
+			$scope.languages.prefferedLanguage = newLanguage;
 		$http.get('/translations.json').then(function(result) {
-			$scope.translations = result.data[$scope.prefferedLanguage];
+			$scope.translations = result.data[$scope.languages.prefferedLanguage];
 		});
+
+		var now = new Date();
+    	// this will set the expiration to 12 months
+    	var exp = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+    	// Remove older cookie
+    	$cookies.remove('language');
+    	// Set new cookie
+    	$cookies.put('language', $scope.languages.prefferedLanguage, { expires : exp });
 	};
+
+	// Check if language is available
+	$scope.languageAvailable = function(value, index, array) {
+		return ($scope.languages.availableLanguages.indexOf(value.iso) != -1)
+	}
+
+	// Toggle show profile
+	$scope.toggleShowProfile = function() {
+		$scope.showProfileInfo = !$scope.showProfileInfo
+	}
 
 	// Dialogs
 	$scope.openSignUp = function() {
@@ -177,6 +210,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.logoutUser = function() {
 		$scope.loggedIn = false;
+		$scope.showProfileInfo = false;
 		$scope.user.username = '';
 		$scope.user.token = '';
 		$scope.user.email = '';
@@ -434,7 +468,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// Start practice
 	$scope.startList = function(){
 		$http.get('/translations.json').then(function(result) {
-			$scope.translations = result.data[$scope.prefferedLanguage];
+			$scope.translations = result.data[$scope.languages.prefferedLanguage];
 			for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
 				if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
 					$scope.firstLanguage = $scope.translations.languages[i].displayText;

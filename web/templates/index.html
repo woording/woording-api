@@ -30,13 +30,22 @@
 						--><button id="log_in" ng-click="openLogIn()">[[ translations.login.login ]]</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
-						<i class="material-icons">perm_identity</i>
-						<div id="user_profile">[[ translations.welcome ]], [[ user.username ]] </div><!--
-						--><button id="log_out" ng-click="logoutUser()">[[ translations.login.logout ]]</button>
+						<i class="material-icons" id="profile" ng-click="toggleShowProfile()">account_circle</i>
 					</div>
 				</div>
 
 			</header>
+
+			<!-- Profile dialog -->
+			<div id="profile_dialog" ng-show="showProfileInfo">
+				<h1>[[ user.username ]]</h1><br>
+				<div id="options_bar">
+					<select ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"
+						ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">
+					</select>
+					<button ng-click="logoutUser()">[[ translations.login.logout ]]</button>
+				</div>
+			</div><!-- Profile dialog -->
 
 			<!-- load data -->
 			{% if listname %}
