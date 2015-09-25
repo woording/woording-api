@@ -188,33 +188,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		// Need function to go to main page
 	};
 
-	$scope.oldUrl = '';
-	$scope.currentUrl = '';
-
-	$scope.checkUrl = function(){
-		$scope.oldUrl = $scope.currentUrl;
-		$scope.currentUrl = window.location.href.split('/');
-		var index = $scope.currentUrl.length;
-
-		if ($scope.currentUrl.length < $scope.oldUrl.length){
-			ngDialog.close();
-			left.style.display = 'inline-block';
-			middle.style.display = 'inline-block';
-			right.style.display = 'none';
-			practice.style.display = 'none';
-		}
-
-		else if ($scope.oldUrl && $scope.currentUrl.length > $scope.oldUrl.length) {
-			right.style.display = 'inline-block';
-		}
-
-		else if ($scope.oldUrl && $scope.currentUrl.length == $scope.oldUrl.length && $scope.currentUrl[index - 1] != $scope.oldUrl[index - 1] && $scope.currentUrl.length > 4) {
-			$scope.loadList('/' + $scope.currentUrl[index - 2] + '/' + $scope.currentUrl[index - 1]);
-		}
-	};
-
-	$interval($scope.checkUrl, 100);
-
 	// json loading functions
 	// Password list for users that are in the database
 	// cor 		Hunter2
@@ -227,10 +200,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
-					window.history.pushState(null, null, url);
-
+					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
-					console.log(data);
 					$scope.listData = 0;
 				}
 			})
@@ -242,10 +213,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.loadList = function(url){
 		$scope.usedWords = [];
 		$scope.incorrectWords = [];
-		showList();
 
-		if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
-		else $scope.isOwner = true;
+		$timeout(function(){
+			showList();
+			if ($scope.userData.username != $scope.user.username) $scope.isOwner = false;
+			else $scope.isOwner = true;
+		}, 0);
 
 		var data = {
 			"token" : $scope.user.token
@@ -253,8 +226,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		$http.post($scope.apiAdress + url, data)
 			.success(function(data, status, headers, config) {
-				window.history.pushState(null, null, url);
-
 				$scope.listData = data;
 			})
 			.error(function(data, status, headers, config) {
@@ -262,11 +233,21 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
+	window.onpopstate = function(){
+		if (location.pathname.split('/').length == 2){
+			$scope.loadUser(location.pathname);
+		}
+
+		else if (location.pathname.split('/').length == 3){
+			$scope.loadList(location.pathname);
+		}
+	}
+
 	$scope.addUserUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').pop();
-			console.log(url);
 			e.preventDefault();
+			console.log(url);
 			$scope.loadUser('/' + url);
 		}, false);
 	};
@@ -281,10 +262,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').slice(-2);
 			e.preventDefault();
+			history.pushState(null, null, '/' + url[0] + '/' + url[1]);
 			$scope.loadList('/' + url[0] + '/' + url[1]);
-		}, false);
+		});
 	};
 
+	// Somehow these classes are only found if the code is executed after all other code which is not like the other links
 	$timeout(function(){
 		var listLinks = document.getElementsByClassName('list_link');
 

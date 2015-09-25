@@ -98,8 +98,8 @@
 
 					<table>
 						<tr class="list_list-item" ng-repeat="list in userData.lists | filter:searchQuery">
-							<td onclick="showList()">
-								<a href="/[[userData.username]]/[[list.listname]]" class="list_link">
+							<td>
+								<a href="/[[userData.username]]/[[list.listname]]" class="list_link" onclick="showList()">
 									[[ list.listname ]]
 								</a>
 							</td>
