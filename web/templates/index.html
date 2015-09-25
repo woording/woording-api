@@ -4,6 +4,7 @@
 
 		<!-- stylesheets -->
 		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/icon-font.css') }}">
 
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog-theme-default.min.css') }}">
@@ -28,6 +29,7 @@
 						--><button id="log_in" ng-click="openLogIn()">[[ translations.login.login ]]</button>
 					</div>
 					<div id="userinfo" ng-show="loggedIn">
+						<i class="material-icons">perm_identity</i>
 						<div id="user_profile">[[ translations.welcome ]], [[ user.username ]] </div><!--
 						--><button id="log_out" ng-click="logoutUser()">[[ translations.login.logout ]]</button>
 					</div>

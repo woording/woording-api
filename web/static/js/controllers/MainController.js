@@ -220,7 +220,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// cor 		Hunter2
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
-
 	$scope.loadUser = function(url){
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {

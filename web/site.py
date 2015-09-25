@@ -20,6 +20,10 @@ def render():
 def translations():
 	return render_template("translations.json")
 
+@app.route('/<path:resource>')
+def serveStaticResource(resource):
+    return send_from_directory('static/', resource)
+
 @app.route('/<username>')
 def show_user(username):
     return render_template("index.html", username=username)
