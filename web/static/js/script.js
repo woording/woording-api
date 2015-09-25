@@ -62,9 +62,25 @@ function addRow() {
 }
 
 function showResults() {
-	practice.style.display = 'none';
+	var top = 4;
+
+	function slideDown(){
+		if (top == 100){
+			practice.style.display = 'none';
+			return true;
+		}
+
+		practice.style.top = top + '%';
+		top += 2;
+		requestAnimationFrame(slideDown);
+	}
+
+	slideDown();
+
 	document.getElementById('correct').innerHTML = 0;
 	document.getElementById('incorrect').innerHTML = 0;
+
+	document.getElementById('overlay').style.display = 'none';
 
 	for (item of content){
 		item.style.display = 'inline-block';
@@ -77,10 +93,20 @@ function showResults() {
 
 function showPractice() {
 	practice.style.display = 'block';
+	document.getElementById('overlay').style.display = 'block';
+	var top = 100;
 
-	for (item of content){
-		item.style.display = 'none';
+	function slideUp(){
+		if (top == 4){
+			return true;
+		}
+
+		practice.style.top = top + '%';
+		top -= 2;
+		requestAnimationFrame(slideUp);
 	}
+
+	slideUp();
 }
 
 function showList() {

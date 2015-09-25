@@ -18,6 +18,7 @@
 	<body ng-app="myApp">
 
 		<div ng-controller="MainController" id="main_controller">
+		<div id="overlay"></div>
 
 			<header>
 
@@ -136,7 +137,7 @@
 							</tr>
 						</table>
 
-						<button id="practice_button" ng-click="startList()" onclick="showPractice()">
+						<button id="practice_button" ng-click="startList()" onclick="">
 							[[ translations.listControls.practice ]]
 						</button><!--
 						--><button id="edit_button" ng-click="editList()" onclick="showEditor()">

@@ -234,6 +234,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	window.onpopstate = function(){
+		document.getElementById('practice_div').style.display = 'none';
+		document.getElementById('left_content').style.display = 'block';
+		document.getElementById('middle_content').style.display = 'block';
+
 		if (location.pathname.split('/').length == 2){
 			$scope.loadUser(location.pathname);
 		}
@@ -447,9 +451,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					<br>\
 					[[ translations.practice.questionedLanguage ]]?<br>\
 					<form>\
-						<input type="radio" name="language" value="first" id="firstLanguage" checked> ' + $scope.firstLanguage + '\
+						<input type="radio" name="language" value="second" id="secondLanguage" checked> ' + $scope.secondLanguage + '\
 						<br>\
-						<input type="radio" name="language" value="second" id="secondLanguage"> ' + $scope.secondLanguage + '\
+						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
 						<br>\
 						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]\
 						<br>\
@@ -464,6 +468,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				showClose: false
 			});
 
+			showPractice();
 		});
 
 
