@@ -42,6 +42,21 @@ header {
 			display: inline-block;
 		}
 
+		#profile {
+			display: block;
+			cursor: pointer;
+			height: $header-height;
+			padding-left: 2 * $padding-unit;
+			padding-right: 2 * $padding-unit;
+			line-height: unset;
+			font-size: 36px;
+
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
 		#sign_up, #user_profile {
 			background: $dark_blue_color;
 			color: $white_color;
