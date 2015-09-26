@@ -234,6 +234,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
+					window.history.pushState(null, null, url);
 					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
 					$scope.listData = 0;
