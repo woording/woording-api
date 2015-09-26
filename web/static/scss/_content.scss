@@ -90,6 +90,10 @@
 				transition: padding-left $timing-unit;
 				transition-timing-function: ease-out;
 
+				.list_link {
+					text-decoration: none;
+					color: black;
+				}
 			}
 
 			button {

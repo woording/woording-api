@@ -309,9 +309,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$timeout(function(){
 		var listLinks = document.getElementsByClassName('list_link');
 
-		for(var i = 0, x = listLinks.length; i < x; i++){
-			$scope.addListUrl(listLinks[i]);
-		}
+		$timeout(function() { // Fixing it by doing this doesn't feel good, but now it works ¯\_(ツ)_/¯
+			for(var i = 0, x = listLinks.length; i < x; i++) {
+				$scope.addListUrl(listLinks[i]);
+			}
+		}, 0);
 	}, 0);
 
 
