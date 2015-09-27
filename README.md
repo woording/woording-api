@@ -22,7 +22,7 @@ npm install ng-dialog
 ```bash
 cd api
 ./initialize.sh
-python3 api.py 
+python3 api.py
 
 # In another terminal window
 curl http://127.0.0.1:5000/cor
