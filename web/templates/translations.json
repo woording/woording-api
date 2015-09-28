@@ -29,6 +29,8 @@
 		"lists" : "Lists",
 		"search" : "Search",
 		"newList" : "New list",
+		"importList" : "Import new list",
+		"undoDelete" : "Undo delete list",
 		"friends" : "Friends",
 		"welcome" : "Hello",
 		"listControls" : {
@@ -120,6 +122,8 @@
 		"lists" : "Lijsten",
 		"search" : "Zoeken",
 		"newList" : "Nieuwe lijst",
+		"importList" : "Importeer nieuwe lijst",
+		"undoDelete" : "Lijst verwijderen ongedaan maken",
 		"friends" : "Vrienden",
 		"welcome" : "Hallo",
 		"listControls" : {
@@ -211,6 +215,8 @@
 		"lists" : "Leisten",
 		"search" : "Suchen",
 		"newList" : "Neue Leiste",
+		"importList" : "Importier neue Leiste",
+		"undoDelete" : "Zurücksetzen Leiste löschen",
 		"friends" : "Freunde",
 		"welcome" : "Hallo",
 		"listControls" : {
