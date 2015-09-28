@@ -3,6 +3,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.Object = Object;
 	$scope.apiAdress = 'http://127.0.0.1:5000';
 
+	window.onload = function() {
+		$scope.addUserUrls();
+		$scope.addListUrls();
+	};
+
 	$scope.sizeOf = function(obj) {
 		return Object.keys(obj).length;
 	};
@@ -238,6 +243,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
 					$scope.listData = 0;
+					$scope.addListUrls();
 				}
 			})
 			.error(function(data, status, headers, config) {
@@ -282,6 +288,24 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	}
 
+	$scope.addUserUrls = function() {
+		var userLinks = document.getElementsByClassName('user_link');
+
+		for(var i = 0, x = userLinks.length; i < x; i++){
+			$scope.addUserUrl(userLinks[i]);
+		}		
+	}
+
+	$scope.addListUrls = function() {
+		var listLinks = document.getElementsByClassName('list_link');
+
+		$timeout(function() { // Fixing it by doing this doesn't feel good, but now it works ¯\_(ツ)_/¯
+			for(var i = 0, x = listLinks.length; i < x; i++) {
+				$scope.addListUrl(listLinks[i]);
+			}
+		}, 0);
+	}
+
 	$scope.addUserUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').pop();
@@ -291,32 +315,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}, false);
 	};
 
-	var userLinks = document.getElementsByClassName('user_link');
-
-	for(var i = 0, x = userLinks.length; i < x; i++){
-		$scope.addUserUrl(userLinks[i]);
-	}
-
 	$scope.addListUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').slice(-2);
 			e.preventDefault();
 			history.pushState(null, null, '/' + url[0] + '/' + url[1]);
 			$scope.loadList('/' + url[0] + '/' + url[1]);
-		});
+		}, false);
 	};
-
-	// Somehow these classes are only found if the code is executed after all other code which is not like the other links
-	$timeout(function(){
-		var listLinks = document.getElementsByClassName('list_link');
-
-		$timeout(function() { // Fixing it by doing this doesn't feel good, but now it works ¯\_(ツ)_/¯
-			for(var i = 0, x = listLinks.length; i < x; i++) {
-				$scope.addListUrl(listLinks[i]);
-			}
-		}, 0);
-	}, 0);
-
 
 	// Create list
 	$scope.createList = function() {
