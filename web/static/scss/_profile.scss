@@ -27,6 +27,7 @@
 			display: inline-block;
 			transition: background-color $timing-unit;
 			width: 150px;
+			height: 37px;
 			padding: 8px;
 			margin: -8px;
 			border: none;
@@ -36,21 +37,30 @@
 			&:hover {
 				background-color: #ddd;
 			}
+
+			&:focus {
+				outline: none;
+			}
 		}
 
 		button {
+			background-color: transparent;
 			display: inline-block;
 			transition: background-color $timing-unit;
 			width: 150px;
+			height: 37px;
 			padding: 8px;
-			margin: -8px;
+			margin: -8px -8px -8px 3px;
 			border: none;
 			right: 8px;
-			position: absolute;
 			border-radius: 0;
 
 			&:hover {
 				background-color: #ddd;
+			}
+
+			&:focus {
+				outline: none;
 			}
 		}
 	}
