@@ -64,6 +64,7 @@
 		"login" : {
 			"username" : "Username",
 			"password" : "Password",
+			"confirmPassword" : "Confirm your password",
 			"email" : "Email",
 			"signup" : "Sign up",
 			"login" : "Log in",
@@ -76,7 +77,8 @@
 			"alreadyExist" : "Username and/or email do already exist",
 			"validation" : "Username and/or password is incorrect",
 			"unknown" : "An unknown error has occurred",
-			"emailNotVerified" : "Email is not verified"
+			"emailNotVerified" : "Email is not verified",
+			"noMatch" : "Passwords didn't match"
 		},
 		"sharing": {
 			"sharedWith" : "Shared with",
@@ -157,6 +159,7 @@
 		"login" : {
 			"username" : "Gebruikersnaam",
 			"password" : "Wachtwoord",
+			"confirmPassword" : "Bevestig je wachtwoord",
 			"email" : "Email",
 			"signup" : "Registreren",
 			"login" : "Inloggen",
@@ -169,7 +172,8 @@
 			"alreadyExist" : "Gebruikersnaam en/of email bestaan al",
 			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
 			"unknown" : "Er is een onbekende fout opgetreden",
-			"emailNotVerified" : "Email is niet geverifieerd"
+			"emailNotVerified" : "Email is niet geverifieerd",
+			"noMatch" : "Wachtwoorden komen niet overeen"
 		},
 		"sharing": {
 			"sharedWith" : "Gedeeld met",
@@ -250,6 +254,7 @@
 		"login" : {
 			"username" : "Username",
 			"password" : "Passwort",
+			"confirmPassword" : "Bestätige dein Passwort",
 			"email" : "Email",
 			"signup" : "Registrieren",
 			"login" : "Einloggen",
@@ -262,7 +267,8 @@
 			"alreadyExist" : "Username und/oder Email gibt es bereits",
 			"validation" : "Username und/oder Password sind nicht korrekt",
 			"unknown" : "Ein unbekannter Fehler ist augetreten",
-			"emailNotVerified" : "Email nicht verifiziert"
+			"emailNotVerified" : "Email nicht verifiziert",
+			"noMatch" : "Passwörter stimmen nicht überein"
 		},
 		"sharing": {
 			"sharedWith" : "Gemeinschafts mit",
