@@ -3,13 +3,16 @@ header {
 	background-color: $dark_color;
 	line-height: $header-height;
 
+	a {
+		text-decoration: none;
+	}
+
 	h1 {
 		font-size: 30;
 		font-weight: 120;
 		width: 300px;
 		padding-left: 16px;
 		color: $white_color;
-
 	}
 
 	#log_info {
