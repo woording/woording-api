@@ -164,6 +164,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.user.token = data.token;
 					$scope.user.friends = data.friends;
 					$scope.loggedIn = true;
+					$scope.loadUser("/" + $scope.user.username);
 
 					// First delete before saving cookies
 					$cookies.remove('user');
@@ -174,8 +175,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 					ngDialog.closeAll();
 					$scope.error = null;
-
-					$location.path('/' + $scope.user.username);
 				}
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");

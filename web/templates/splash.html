@@ -32,39 +32,58 @@
 					<div id="register_div">
 						<h1>Register</h1>
 						<form ng-submit="registerUser()">
-							Username: <br>
-							<input type="text" ng-model='user.username'>
-							<br>
-							E-mail: <br>
-							<input type="email" ng-model='user.email'>
-							<br>
-							Password: <br>
-							<input type="password" ng-model='user.password'>
-							<br>
-							Repeat password: <br>
-							<input type="password" ng-model='user.repeatPassword'>
-							<br>
-							<br>
-							<input type="submit" value="Register"></input>
-							<p>
-								Have an account already? <a href="javascript:void(0)" onclick="flip_button()">Log in</a>
-							</p>
+							<table>
+								<tr>
+									<td>Username: </td>
+									<td><input type="text" ng-model='user.username'></td>
+								</tr>
+								<tr>
+									<td>E-mail: </td>
+									<td><input type="email" ng-model='user.email'></td>
+								</tr>
+								<tr>
+									<td>Password: </td>
+									<td><input type="password" ng-model='user.password'></td>
+								</tr>
+								<tr>
+									<td>Repeat password: </td>
+									<td><input type="password" ng-model='user.repeatPassword'></td>
+								</tr>
+								<tr><td><br></td></tr>
+								<tr>
+									<td colspan="2"><input type="submit" value="Register"></td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										Have an account already? <a href="javascript:void(0)" onclick="flip_button()">Log in</a>
+									</td>
+								</tr>
+							</table>
 						</form>
 					</div>
 
 					<div id="login_div">
 						<h1>Login</h1>
 						<form ng-submit="loginUser()">
-							Username: <br>
-							<input type="text" ng-model="user.username">
-							<br>
-							Password: <br>
-							<input type="password" ng-model="user.password">
-							<br>
-							<input type="submit" value="Login"></input>
-							<p>
-								Don't have an account? <a href="javascript:void(0)" onclick="flip_button()">Register</a>
-							</p>
+							<table>
+								<tr>
+									<td>Username: </td>
+									<td><input type="text" ng-model="user.username"></td>
+								</tr>
+								<tr>
+									<td>Password: </td>
+									<td><input type="password" ng-model="user.password"></td>
+								</tr>
+								<tr><td><br></td></tr>
+								<tr>
+									<td colspan="2"><input type="submit" value="Login"></td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										Don't have an account? <a href="javascript:void(0)" onclick="flip_button()">Register</a>
+									</td>
+								</tr>
+							</table>
 						</form>
 					</div>
 				</div>
