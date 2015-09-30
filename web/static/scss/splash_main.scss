@@ -1,18 +1,33 @@
+body {
+	background: url('https://images.unsplash.com/photo-1438216983993-cdcd7dea84ce?q=80&fm=jpg&s=4141165d8e8eed56b8d9012740c4b503.jpeg');
+	background-size: cover;
+}
+
 #content {
 	width: 100%;
 	height: calc(100% - 60px);
-	background: url('https://images.unsplash.com/photo-1438216983993-cdcd7dea84ce?q=80&fm=jpg&s=4141165d8e8eed56b8d9012740c4b503.jpeg');
-	background-size: cover;
+	background-color: transparent;
+	position: absolute;
+	bottom: 0;
+	top: 60px;
+	overflow: auto;
 
+	.error {
+		color: #f44336;
+	}
+
+	
 	#slogan {
-		width: 100%;
 		position: absolute;
-		top: 300px;
+		top: 50%;
 		font-size: 30px;
 		height: 30px;
 		padding: 10px 0 10px 0;
 		background: rgba(0,0,0,0.4);
 		color: white;
+		padding-left: 500px;
+		left: 0;
+		right: 0;
 
 		p {
 			margin-left: 30px;
@@ -42,14 +57,14 @@
 			padding: 5%;
 			margin: 5%;
 
-			input {
+			input[type='text'], input[type='password'], input[type='email'] {
 				width: 100%;
 				font-size: 18px;
 				padding: 5px;
 				margin: 5px;
 			}
 
-			button {
+			input[type='submit'] {
 				text-align: center;
 				width: 100%;
 				padding: 8px;
@@ -60,24 +75,22 @@
 				cursor: pointer;
 			}
 
-			p {
-				margin: 10px;
-
-				a {
-					color: #3B96FF;
-				}
+			a {
+				color: #3B96FF;
 			}
 		}
 	}
 
 	/* entire container, keeps perspective */
 	.flip-container {
-		perspective: 1000;
+		perspective: 1200;
+		-webkit-perspective: 1200; // Safari
+
 	}
 
 	.flip-container, #register_div, #login_div {
 		width: 400px;
-		height: 430px;
+		height: 500px;
 	}
 
 	/* flip speed goes here */
@@ -97,7 +110,7 @@
 
 	/*#register_div pane, placed above back */
 	#register_div {
-		left: calc(200% - 40px);
+		//left: calc(200% - 40px);
 		z-index: 2;
 		/* for firefox 31 */
 		transform: rotateY(0deg);
@@ -105,7 +118,8 @@
 
 	/* back, initially hidden pane */
 	#login_div {
-		left: calc(-200% - 40px - 80px);
+		//left: calc(-200% - 40px - 80px);
 		transform: rotateY(180deg);
+		margin-left: -40px;
 	}
 }
