@@ -6,6 +6,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	window.onload = function() {
 		$scope.addUserUrls();
 		$scope.addListUrls();
+
+		var content = document.getElementById('content');
+		content.addEventListener('click', function(event) {
+			if ($scope.showProfileInfo == true) {
+				event.preventDefault();
+				$scope.showProfileInfo = false;
+			}
+		});
 	};
 
 	$scope.sizeOf = function(obj) {
@@ -23,6 +31,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		username:	"",
 		password:	"",
+		confirmPassword: "",
 		email	:	"",
 		friends	: 	""
 	};
@@ -104,6 +113,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 							<td><input type="password" ng-model="user.password" name="password" placeholder="[[ translations.login.password ]]"></td>\
 						</tr>\
 						<tr>\
+							<td></td>\
+							<td><input type="password" ng-model="user.confirmPassword" name="confirm_password" placeholder="[[ translations.login.confirmPassword ]]"></td>\
+						</tr>\
+						<tr>\
 							<td>[[ translations.login.email ]]: </td>\
 							<td><input type="email" ng-model="user.email" name="email" placeholder="[[ translations.login.email ]]"></td>\
 						</tr>\
@@ -173,34 +186,37 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.registerUser = function() {
 		if ($scope.user.username && $scope.user.password && $scope.user.email) {
-			data = {
-				'username':this.user.username,
-				'password':this.user.password,
-				'email':this.user.email
-			};
-			$http.post($scope.apiAdress + '/register', data)
-				.success(function(data, status, headers, config) {
-					if (data.indexOf("ERROR") > - 1) {
-						// An error...
-						if (data == "ERROR, not everything filled in") {
-							$scope.error = $scope.translations.errors.notEverythingFilledIn;
-						} else if (data == "ERROR, username and/or email do already exist") {
-							$scope.error = $scope.translations.errors.alreadyExist;
+			if ($scope.user.password == $scope.user.confirmPassword) {
+				data = {
+					'username':this.user.username,
+					'password':this.user.password,
+					'email':this.user.email
+				};
+				$http.post($scope.apiAdress + '/register', data)
+					.success(function(data, status, headers, config) {
+						if (data.indexOf("ERROR") > - 1) {
+							// An error...
+							if (data == "ERROR, not everything filled in") {
+								$scope.error = $scope.translations.errors.notEverythingFilledIn;
+							} else if (data == "ERROR, username and/or email do already exist") {
+								$scope.error = $scope.translations.errors.alreadyExist;
+							}
+						} else {
+							// Give success
+							console.log("Verify email");
+							ngDialog.close('registerDialog');
+							$scope.error = null;
 						}
-					} else {
-						// Give success
-						console.log("Verify email");
-						ngDialog.close('registerDialog');
-						$scope.error = null;
-					}
-					console.log($scope.error);
-				}).error(function(data, status, headers, config) {
-					// Give registration error
-					console.error("Failed");
-					$scope.error = $scope.translations.errors.unknown;
-				});
-			// Reset the values
-			$scope.user.password = ''
+						console.log($scope.error);
+					}).error(function(data, status, headers, config) {
+						// Give registration error
+						console.error("Failed");
+						$scope.error = $scope.translations.errors.unknown;
+					});
+				// Reset the values
+				$scope.user.password = '';
+				$scope.user.confirmPassword = '';
+			} else $scope.error = $scope.translations.errors.noMatch;
 		} else $scope.error = $scope.translations.errors.notEverythingFilledIn;
 	};
 
