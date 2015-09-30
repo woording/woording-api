@@ -175,6 +175,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 					ngDialog.closeAll();
 					$scope.error = null;
+
+					$window.location.href = '/' + $scope.user.username;
 				}
 			}).error(function(data, status, headers, config) {
 				console.error("could not authenticate");
@@ -241,6 +243,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$cookies.remove('loggedIn');
 
 		// Need function to go to main page
+		$window.location.href = '/';
 	};
 
 	// json loading functions
