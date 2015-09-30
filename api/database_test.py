@@ -65,3 +65,5 @@ print(db_manager.get_list('cor', 'engelse_woorden'))
 print(db_manager.get_translations_for_list('cor', 'engelse_woorden'))
 
 
+
+

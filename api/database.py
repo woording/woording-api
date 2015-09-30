@@ -55,7 +55,7 @@ class DatabaseManager(object):
 			db_conn = DatabaseConnection(self.database_path)
 
 			# Genereate the query
-			query_text = 'INSERT INTO user (username, email, email_verified, password_hash, friends) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '", "[]")'
+			query_text = 'INSERT INTO user (username, email, email_verified, password_hash) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '")'
 
 			# Use the query to create a new user
 			db_conn.query(query_text)
@@ -218,10 +218,8 @@ class DatabaseManager(object):
 		if self.email_exists(email_to_check):
 			record = db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
 
-			if record[0] is 1:
-				return True
-			else:
-				return False
+			return record[0] is 1
+
 		else:
 			return False
 
@@ -238,47 +236,61 @@ class DatabaseManager(object):
 		# If the listname is in the user's list of lists, it exiss
 		return listname in self.get_listnames_for_user(username)
 
-	def get_friends(self, username):
-		if self.username_exists(username):
-			user_info = self.get_user(username)
-			friends = user_info.get("friends")
 
-			return friends
+	def get_friend_ids_for_user(self, username):
 
-	def get_friend_ids(self, username):
-		if self.username_exists(username):
+		# Set up the database connection and get the user_id for username
+		db_conn = DatabaseConnection(self.database_path)
+		user_id = self.get_user(username).get("id")
+
+		# Both user_1_id and user_2_id can match our user_id, so we'll have to do two queries
+		friend_id_rows_part1 = db_conn.query('SELECT user_1_id FROM friendship WHERE user_2_id = "' + str(user_id) + '"').fetchall()
+		friend_id_rows_part2 = db_conn.query('SELECT user_2_id FROM friendship WHERE user_1_id = "' + str(user_id) + '"').fetchall()
+
+		# Join the retrieved parts in one array
+		friend_id_rows = friend_id_rows_part1 + friend_id_rows_part2
+
+		# Extract the first item
+		friend_ids = tuple(friend_id[0] for friend_id in friend_id_rows)
+
+		return friend_ids
+
+	def users_are_friends(self, username_1, username_2):
+
+		user_1_friend_ids = self.get_friend_ids_for_user(username_1)
+		user_2_id = self.get_user(username_2).get("id")
+
+		return user_2_id in user_1_friend_ids
+
+
+	def get_friends_for_user(self, username):
+
+		# TDOO: Sanity checks
+
+		# get all friend id's
+		friend_ids = self.get_friend_ids_for_user(username)
+
+		# Map the results of get_username and firend_ids on friends_usernames
+		friend_usernames = list(map (self.get_username, friend_ids))
+
+		# Map the results of get_user and friend_usernames on friends
+		friends = list(map(self.get_user, friend_usernames))
+
+		return friends
+
+	def create_friendship(self, username_1, username_2):
+
+		# TODO: Sanity checks
+
+		user_1_id = self.get_user(username_1).get("id")
+		user_2_id = self.get_user(username_2).get("id")
+
+		if not self.users_are_friends(username_1, username_2):
+
 			db_conn = DatabaseConnection(self.database_path)
+			db_conn.query("INSERT into friendship (user_1_id, user_2_id) VALUES (" + str(user_1_id) + ", " + str(user_2_id) + ")")
 
-			cursor = db_conn.query('SELECT friends FROM user WHERE username = "' + username + '"').fetchone()
 
-			if json.loads(cursor[0]) == None:
-				friends = []
-			else:
-				friends = json.loads(cursor[0])
-			
-			return friends
-
-	def add_friend(self, username, friendname):
-		if self.username_exists(username) and self.username_exists(friendname):
-			db_conn = DatabaseConnection(self.database_path)
-
-			currentFriends = self.get_friend_ids(username)
-			friendID = self.get_user(friendname).get("id")
-
-			print(currentFriends)
-
-			if currentFriends == None:
-				newFriends = json.dumps([friendID])
-			else:
-				currentFriends.append(friendID)
-				newFriends = json.dumps(currentFriends)
-
-			print(newFriends)
-
-			db_conn.query('UPDATE user SET friends = "' + newFriends + '" WHERE username = "' + username + '"')
-
-	def are_friends(self, username, friendname):
-		return friendname in self.get_friends(username) and username in self.get_friends(friendname)
 
 	def get_username_list(self):
 
@@ -370,23 +382,12 @@ class DatabaseManager(object):
 
 	# Generate a Python dictionary from a user record
 	def get_dictionary_from_user_record(self, user_record):
-		if json.loads(user_record[5]) == None:
-			friends = []
-		else:
-			friendIDs = json.loads(user_record[5])
-
-			friends = []
-			for friendID in friendIDs:
-				username = self.get_username(friendID)
-				friends.append(username)
-
 		return {
 			"id": user_record[0],
 			"username": user_record[1],
 			"email": user_record[2],
 			"email_verified": user_record[3],
 			"password_hash": user_record[4],
-			"friends": friends
 		}
 
 	# Generate a Python dictionary from a list record

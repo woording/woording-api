@@ -4,8 +4,7 @@ CREATE TABLE user (
 	username text not null,
 	email text not null,
 	email_verified boolean not null,
-	password_hash text not null,
-	friends text null
+	password_hash text not null
 );
 
 CREATE UNIQUE INDEX user_username_unique
@@ -32,4 +31,13 @@ CREATE TABLE translation (
 	language_1_text text not null,
 	language_2_text text not null,
     FOREIGN KEY(list_id) REFERENCES list(id) ON DELETE CASCADE
+);
+
+# TODO: make user_1_id and user_2_id a unique combo
+DROP TABLE IF EXISTS friendship;
+CREATE TABLE friendship (
+	user_1_id integer not null,
+	user_2_id integer not null,
+	FOREIGN KEY(user_1_id) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY(user_2_id) REFERENCES user(id) ON DELETE CASCADE
 );
