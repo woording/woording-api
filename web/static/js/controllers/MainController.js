@@ -77,13 +77,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		});
 
 		var now = new Date();
-    	// this will set the expiration to 12 months
-    	var exp = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+		// this will set the expiration to 12 months
+		var exp = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
 
-    	// Remove older cookie
-    	$cookies.remove('language');
-    	// Set new cookie
-    	$cookies.put('language', $scope.languages.prefferedLanguage, { expires : exp });
+		// Remove older cookie
+		$cookies.remove('language');
+		// Set new cookie
+		$cookies.put('language', $scope.languages.prefferedLanguage, { expires : exp });
 	};
 
 	// Check if language is available
@@ -255,7 +255,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					// Show login screen
 					$scope.openLogIn();
 				} else {
-					window.history.pushState(null, null, url);
 					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
 					$scope.listData = 0;
@@ -309,7 +308,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		for(var i = 0, x = userLinks.length; i < x; i++){
 			$scope.addUserUrl(userLinks[i]);
-		}		
+		}
 	}
 
 	$scope.addListUrls = function() {
@@ -326,7 +325,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').pop();
 			e.preventDefault();
-			console.log(url);
+			history.pushState(null, null, url);
 			$scope.loadUser('/' + url);
 		}, false);
 	};
