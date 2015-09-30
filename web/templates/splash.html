@@ -31,39 +31,39 @@
 				<div class="flipper" id="flipper">
 					<div id="register_div">
 						<h1>Register</h1>
-						<form>
+						<form ng-submit="registerUser()">
 							Username: <br>
-							<input type="text">
+							<input type="text" ng-model='user.username'>
 							<br>
 							E-mail: <br>
-							<input type="email">
+							<input type="email" ng-model='user.email'>
 							<br>
 							Password: <br>
-							<input type="password">
+							<input type="password" ng-model='user.password'>
 							<br>
 							Repeat password: <br>
-							<input type="password">
+							<input type="password" ng-model='user.repeatPassword'>
 							<br>
 							<br>
-							<button onclick="alert('register')">Register</button>
+							<input type="submit" value="Register"></input>
 							<p>
-								Have an account already? <a href="" onclick="flip_button()">Log in</a>
+								Have an account already? <a href="javascript:void(0)" onclick="flip_button()">Log in</a>
 							</p>
 						</form>
 					</div>
 
 					<div id="login_div">
 						<h1>Login</h1>
-						<form>
+						<form ng-submit="loginUser()">
 							Username: <br>
-							<input type="text">
+							<input type="text" ng-model="user.username">
 							<br>
 							Password: <br>
-							<input type="password">
+							<input type="password" ng-model="user.password">
 							<br>
-							<button onclick="alert('login')">Login</button>
+							<input type="submit" value="Login"></input>
 							<p>
-								Don't have an account? <a href="" onclick="flip_button()">Register</a>
+								Don't have an account? <a href="javascript:void(0)" onclick="flip_button()">Register</a>
 							</p>
 						</form>
 					</div>
