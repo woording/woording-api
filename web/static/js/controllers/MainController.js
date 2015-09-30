@@ -6,6 +6,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	window.onload = function() {
 		$scope.addUserUrls();
 		$scope.addListUrls();
+
+		var content = document.getElementById('content');
+		content.addEventListener('click', function(event) {
+			if ($scope.showProfileInfo == true) {
+				event.preventDefault();
+				$scope.showProfileInfo = false;
+			}
+		});
 	};
 
 	$scope.sizeOf = function(obj) {
