@@ -11,6 +11,11 @@ body {
 	bottom: 0;
 	top: 60px;
 	overflow: auto;
+
+	.error {
+		color: #f44336;
+	}
+
 	
 	#slogan {
 		position: absolute;
