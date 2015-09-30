@@ -14,7 +14,7 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def render():
-    return render_template("index.html")
+    return render_template("splash.html")
 
 @app.route('/translations.json')
 def translations():

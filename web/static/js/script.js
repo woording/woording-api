@@ -2,8 +2,19 @@ var right = document.getElementById('right_content');
 var practice = document.getElementById('practice_div');
 var left = document.getElementById('left_content');
 var middle = document.getElementById('middle_content');
+var flipped = false;
 
 var content = [left, middle, right];
+
+flip_button = function(){
+	if(!flipped){
+		document.getElementById('flipper').style.transform = "rotateY(180deg)";
+		flipped = true;
+	} else {
+		document.getElementById('flipper').style.transform = "rotateY(0deg)";
+		flipped = false;
+	}
+};
 
 document.addEventListener('keydown', function(event) {
 	var activeElement;
