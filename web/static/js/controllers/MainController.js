@@ -342,8 +342,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.addUserUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').pop();
+			console.log(url);
 			e.preventDefault();
-			history.pushState(null, null, url);
+			history.pushState(null, null, '/' + url);
 			$scope.loadUser('/' + url);
 		}, false);
 	};
