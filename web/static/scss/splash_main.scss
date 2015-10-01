@@ -114,12 +114,14 @@ body {
 		z-index: 2;
 		/* for firefox 31 */
 		transform: rotateY(0deg);
+		-webkit-transform: rotateY(0deg);
 	}
 
 	/* back, initially hidden pane */
 	#login_div {
 		//left: calc(-200% - 40px - 80px);
 		transform: rotateY(180deg);
+		-webkit-transform: rotateY(180deg);
 		margin-left: -40px;
 	}
 }

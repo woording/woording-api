@@ -9,9 +9,11 @@ var content = [left, middle, right];
 flip_button = function(){
 	if(!flipped){
 		document.getElementById('flipper').style.transform = "rotateY(180deg)";
+		document.getElementById('flipper').style.webkitTransform = "rotateY(180deg)";
 		flipped = true;
 	} else {
 		document.getElementById('flipper').style.transform = "rotateY(0deg)";
+		document.getElementById('flipper').style.webkitTransform = "rotateY(0deg)";
 		flipped = false;
 	}
 };
