@@ -33,7 +33,7 @@ CREATE TABLE translation (
     FOREIGN KEY(list_id) REFERENCES list(id) ON DELETE CASCADE
 );
 
-# TODO: make user_1_id and user_2_id a unique combo
+-- TODO: make user_1_id and user_2_id a unique combo
 DROP TABLE IF EXISTS friendship;
 CREATE TABLE friendship (
 	user_1_id integer not null,

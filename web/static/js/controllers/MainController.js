@@ -35,6 +35,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		email	:	"",
 		friends	: 	""
 	};
+	$scope.friends = [];
 	$scope.userData = {
 		username: "",
 		email: "",
@@ -246,6 +247,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$window.location.href = '/';
 	};
 
+	$scope.getFriends = function() {
+		var data = {
+			"token": $scope.user.token,
+			"username": $scope.user.username
+		}
+		$http.post($scope.apiAdress + "/getFriends", data)
+			.success(function(data, status, headers, config) {
+				$scope.friends = data;
+			}).error(function(data, status, headers, config) {
+				console.error("Getting friends failed");
+			});
+	}
+
 	// json loading functions
 	// Password list for users that are in the database
 	// cor 		Hunter2
@@ -262,6 +276,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					$scope.userData = data;
 					$scope.listData = 0;
 					$scope.addListUrls();
+					$scope.getFriends();
 				}
 			})
 			.error(function(data, status, headers, config) {

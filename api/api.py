@@ -82,8 +82,7 @@ def authenticate():
 		if db_manager.get_user(username).get('email_verified'):
 			if db_manager.check_password(username, password):
 				return json.dumps({
-					"token": db_manager.generate_auth_token(username).decode("utf-8"),
-					"friends": db_manager.get_user(username).get("friends")
+					"token": db_manager.generate_auth_token(username).decode("utf-8")
 					})
 		else:
 			return "ERROR, Email not verified"
@@ -165,28 +164,50 @@ def friend_request():
 		abort(400)
 
 	if db_manager.username_exists(username) and db_manager.username_exists(friendname):
-		email = db_manager.get_user(friendname).get("email")
+		if not db_manager.users_are_friends(username, friendname):
+			email = db_manager.get_user(friendname).get("email")
 
-		# Email request
-		token = generate_confirmation_token([ username, friendname])
-		confirm_url = url_for('accept_friend', token=token, _external=True)
-		html = render_template('friend.html', confirm_url=confirm_url, name=username)
-		subject = "New friend request"
-		send_email(email, subject, html)
+			# Email request
+			token = generate_confirmation_token([ username, friendname])
+			confirm_url = url_for('accept_friend', token=token, _external=True)
+			html = render_template('friend.html', confirm_url=confirm_url, name=username)
+			subject = "New friend request"
+			send_email(email, subject, html)
 
-		return "Email sent"
+			return "Email sent"
+		else:
+			return "ERROR, already friends"
 
 @app.route('/acceptFriend/<token>')
 def accept_friend(token):
 	db_manager = DatabaseManager()
 	names = confirm_token(token)
 
-	if db_manager.are_friends(names[0], names[1]):
+	if db_manager.users_are_friends(names[0], names[1]):
 		return "Already friends"
 	else:
-		db_manager.add_friend(names[0], names[1])
-		db_manager.add_friend(names[1], names[0])
+		db_manager.create_friendship(names[0], name[1])
 		return "Now friends"
+
+@app.route('/getFriends', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers="content-type")
+def get_friends():
+	db_manager = DatabaseManager()
+
+	username = request.json.get('username')
+	token = request.json.get('token')
+	
+	if username == None or token == None:
+		abort(400)
+
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username == None or token_username != username:
+		abort(401)
+
+	friends = db_manager.get_friends_for_user(username)
+	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
+
+	return json.dumps(friends)
 
 
 # REST Recource with app.route
@@ -214,7 +235,7 @@ def get(username):
 				'email' : user_info.get("email"),
 				'lists' : list_lists
 				})
-		elif db_manager.are_friends(username, token_username):
+		elif db_manager.users_are_friends(username, token_username):
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists:
@@ -277,7 +298,7 @@ def show_user_list(username, listname):
 					'words' : translations,
 					'shared_with' : shared_with
 				})
-			elif shared_with == '1' and db_manager.are_friends(username, token_username): # and isFriend()
+			elif shared_with == '1' and db_manager.users_are_friends(username, token_username): # and isFriend()
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
