@@ -97,6 +97,7 @@ body {
 	.flipper {
 		transition: 0.6s;
 		transform-style: preserve-3d;
+		-webkit-transform-style: preserve-3d;
 		position: relative;
 	}
 
