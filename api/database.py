@@ -35,6 +35,7 @@ class DatabaseManager(object):
 		s = Serializer(SECRET_KEY, expires_in=expiration)
 		return s.dumps({ 'username': username })
 
+	# Verify token
 	def verify_auth_token(self, token):
 		s = Serializer(SECRET_KEY)
 		try:
@@ -184,20 +185,19 @@ class DatabaseManager(object):
  		
  		return user_ids
 
+ 	# Check if the password is correct
 	def check_password(self, username, password):
 
+		# Check if the user does exist
 		if self.username_exists(username):
-
+			# Create database connection
 			db_conn = DatabaseConnection(self.database_path)
 
 			query_text = 'SELECT * FROM user WHERE username = "' + username + '" AND password_hash = "' + password + '"'
 
 			user = db_conn.query(query_text).fetchone();
 
-			if user is None:
-				return False
-			else:
-				return True
+			return user is not None
 
 	def verify_email(self, email_to_verify):
 		if self.email_is_verified(email_to_verify):
@@ -255,6 +255,7 @@ class DatabaseManager(object):
 
 		return friend_ids
 
+	# Check if users are already friends
 	def users_are_friends(self, username_1, username_2):
 
 		user_1_friend_ids = self.get_friend_ids_for_user(username_1)
@@ -262,7 +263,7 @@ class DatabaseManager(object):
 
 		return user_2_id in user_1_friend_ids
 
-
+	# Get all users friends
 	def get_friends_for_user(self, username):
 
 		# TDOO: Sanity checks
@@ -271,13 +272,14 @@ class DatabaseManager(object):
 		friend_ids = self.get_friend_ids_for_user(username)
 
 		# Map the results of get_username and firend_ids on friends_usernames
-		friend_usernames = list(map (self.get_username, friend_ids))
+		friend_usernames = list(map(self.get_username, friend_ids))
 
 		# Map the results of get_user and friend_usernames on friends
 		friends = list(map(self.get_user, friend_usernames))
 
 		return friends
 
+	# Create a friendship between users
 	def create_friendship(self, username_1, username_2):
 
 		# TODO: Sanity checks
@@ -289,7 +291,6 @@ class DatabaseManager(object):
 
 			db_conn = DatabaseConnection(self.database_path)
 			db_conn.query("INSERT into friendship (user_1_id, user_2_id) VALUES (" + str(user_1_id) + ", " + str(user_2_id) + ")")
-
 
 
 	def get_username_list(self):

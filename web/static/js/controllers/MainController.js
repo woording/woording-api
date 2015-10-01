@@ -4,9 +4,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.apiAdress = 'http://127.0.0.1:5000';
 
 	window.onload = function() {
+		// Add a custom click listener to the links
 		$scope.addUserUrls();
 		$scope.addListUrls();
 
+		// Remove the profile info when clicking somewhere else
 		var content = document.getElementById('content');
 		content.addEventListener('click', function(event) {
 			if ($scope.showProfileInfo == true) {
@@ -16,6 +18,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		});
 	};
 
+	// Return size of an object
 	$scope.sizeOf = function(obj) {
 		return Object.keys(obj).length;
 	};
@@ -157,6 +160,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			'username':username,
 			'password':password
 		};
+		// Post data to API
 		$http.post($scope.apiAdress + '/authenticate', data)
 			.success(function(data, status, headers, config) {
 				if (typeof data == "string") {
@@ -177,6 +181,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					ngDialog.closeAll();
 					$scope.error = null;
 
+					// Set location to user home page
 					$window.location.href = '/' + $scope.user.username;
 				}
 			}).error(function(data, status, headers, config) {
@@ -188,13 +193,16 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.registerUser = function() {
+		// Check if everything is filled in
 		if ($scope.user.username && $scope.user.password && $scope.user.email) {
+			// Confirm password
 			if ($scope.user.password == $scope.user.confirmPassword) {
 				data = {
 					'username':this.user.username,
 					'password':this.user.password,
 					'email':this.user.email
 				};
+				// Post data to API server
 				$http.post($scope.apiAdress + '/register', data)
 					.success(function(data, status, headers, config) {
 						if (data.indexOf("ERROR") > - 1) {
@@ -224,7 +232,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.loginUser = function() {
-		console.log('Start logging in');
+		// Check if everything is filled in
 		if ($scope.user.username && $scope.user.password) {
 			$scope.authenticate(this.user.username, this.user.password);
 			// Reset the fields
@@ -243,10 +251,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$cookies.remove('user');
 		$cookies.remove('loggedIn');
 
-		// Need function to go to main page
+		// Go to main page
 		$window.location.href = '/';
 	};
 
+	// Get friends for user
 	$scope.getFriends = function() {
 		var data = {
 			"token": $scope.user.token,
@@ -265,11 +274,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// cor 		Hunter2
 	// leon		all_i_see_is_*****
 	// philip	***hunter***
-	$scope.loadUser = function(url){
+	$scope.loadUser = function(url) {
+		// Post data to API server
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
-					// Show login screen
+					// Show login dialog
 					$scope.openLogIn();
 				} else {
 					document.getElementById('right_content').style.display = 'none';
@@ -280,7 +290,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				}
 			})
 			.error(function(data, status, headers, config) {
-				console.log("error");
+				console.log("error " + status + " while loading user");
 			});
 	};
 
@@ -295,15 +305,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}, 0);
 
 		var data = {
-			"token" : $scope.user.token
+			"token" : $scope.user.token // Token to confirm your username
 		}
-
+		// Post data to API
 		$http.post($scope.apiAdress + url, data)
 			.success(function(data, status, headers, config) {
 				$scope.listData = data;
 			})
 			.error(function(data, status, headers, config) {
-				console.log("error");
+				console.log("error " + status + " while loadin list");
 			});
 	};
 
@@ -321,6 +331,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	}
 
+	// Look for all URL's that link to a user
 	$scope.addUserUrls = function() {
 		var userLinks = document.getElementsByClassName('user_link');
 
@@ -329,6 +340,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	}
 
+	// Look for all URL's that link to a list
 	$scope.addListUrls = function() {
 		var listLinks = document.getElementsByClassName('list_link');
 
@@ -339,6 +351,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}, 0);
 	}
 
+	// Set custom user URL handler
 	$scope.addUserUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').pop();
@@ -349,6 +362,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}, false);
 	};
 
+	// Set custom list URL handler
 	$scope.addListUrl = function(link){
 		link.addEventListener('click', function(e){
 			var url = link.href.split('/').slice(-2);
@@ -368,6 +382,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			shared_with: "",
 		};
 
+		// Add 3 empty input rows
 		for (i = 0; i < 3; i++) {
 			$scope.editData.words[i] = {
 				language_1_text: "",
@@ -377,7 +392,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.importList = function() {
-		ngDialog.open({
+		ngDialog.open({ // Open dialog
 			template: '\
 				<h1>[[ translations.import.title ]]</h1><br>\
 				<p>[[ translations.import.desc ]]</p>\
@@ -450,12 +465,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		ngDialog.close();
 	}
 
+	// Edit the list
 	$scope.editList = function() {
 		document.getElementById('undo_delete').style.display = 'none';
 		$scope.editData = $scope.listData;
 
 		var size = $scope.sizeOf($scope.editData.words);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; i++) { // Add 3 empty input rows
 			$scope.editData.words[size] = {
 				language_1_text: "",
 				language_2_text: ""
@@ -463,6 +479,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 	};
 
+	// Save the list
 	$scope.saveList = function() {
 		var data = {
 			'username':$scope.user.username,
@@ -485,6 +502,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			});
 	};
 
+	// Delete the list
 	$scope.deleteList = function(listname) {
 		document.getElementById('undo_delete').style.display = 'block';
 		$scope.editData = $scope.listData;
@@ -667,7 +685,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Friends
 	$scope.openFriendRequest = function(name) {
-		ngDialog.open({
+		ngDialog.open({ // Open dialog
 			template: '\
 				<h1>Friend request</h1>\
 				<form ng-submit="addFriend()">\

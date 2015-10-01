@@ -42,8 +42,10 @@ def register():
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 	email = request.json.get('email')
 
+	# Check if everything filled in
 	if username is None or password is None or email is None:
 		return "ERROR, not everything filled in" # missing arguments
+	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		return "ERROR, username and/or email do already exist" # username and/or email do already exist
 	else:
@@ -67,6 +69,7 @@ def verify_email(token):
 	if db_manager.email_is_verified(email):
 		return "Email already verified.\n"
 	else:
+		# Verify
 		db_manager.verify_email(email)
 		return "Email Successfully verified.\n"
 
@@ -80,6 +83,7 @@ def authenticate():
 
 	if username and password:
 		if db_manager.get_user(username).get('email_verified'):
+			# Check password
 			if db_manager.check_password(username, password):
 				return json.dumps({
 					"token": db_manager.generate_auth_token(username).decode("utf-8")
@@ -102,6 +106,7 @@ def save_list():
 	if username == None or list_data == None or token == None:
 		abort(400)
 
+	# Verify token
 	token_username = db_manager.verify_auth_token(token=token)
 	if token_username == None or token_username != username:
 		abort(401)
@@ -138,6 +143,7 @@ def delete_list():
 	if username == None or listname == None or token == None:
 		abort(400)
 
+	# Verify token
 	token_username = db_manager.verify_auth_token(token=token)
 	if token_username == None or token_username != username:
 		abort(401)
@@ -200,11 +206,13 @@ def get_friends():
 	if username == None or token == None:
 		abort(400)
 
+	# Verify token
 	token_username = db_manager.verify_auth_token(token=token)
 	if token_username == None or token_username != username:
 		abort(401)
 
 	friends = db_manager.get_friends_for_user(username)
+	# It is unsafe to send your friends password hash to the browser... 	email_verified and id aren't needed
 	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
 
 	return json.dumps(friends)
@@ -220,12 +228,14 @@ def get(username):
 	if token is None or token is "":
 		return json.dumps({ 'username':'ERROR, No token' })
 	
+	# Verifiy token
 	token_username = db_manager.verify_auth_token(token=token)
 	if token_username is None:
 		return json.dumps({ 'username':'ERROR, No user' })
 	
 	if db_manager.username_exists(username):
-		if token_username == username: # Need to do something with shared lists...
+		# Return all lists
+		if token_username == username:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists: del l['user_id']; del l['id']
@@ -235,6 +245,7 @@ def get(username):
 				'email' : user_info.get("email"),
 				'lists' : list_lists
 				})
+		# Return friend lists if you are friends
 		elif db_manager.users_are_friends(username, token_username):
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
@@ -249,6 +260,7 @@ def get(username):
 				'email' : user_info.get("email"),
 				'lists' : list_lists
 				})
+		# Return everyone shared lists
 		else:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
@@ -298,7 +310,8 @@ def show_user_list(username, listname):
 					'words' : translations,
 					'shared_with' : shared_with
 				})
-			elif shared_with == '1' and db_manager.users_are_friends(username, token_username): # and isFriend()
+			# Check if is friend
+			elif shared_with == '1' and db_manager.users_are_friends(username, token_username):
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
