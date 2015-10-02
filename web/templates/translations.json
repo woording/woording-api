@@ -59,7 +59,8 @@
 			"results" : "Results",
 			"incorrectWords" : "Incorrect words",
 			"correct" : "Correct",
-			"typed" : "Typed"
+			"typed" : "Typed",
+			"incorrectWordsAgain" : "Practice incorrect words"
 		},
 		"login" : {
 			"username" : "Username",
@@ -154,7 +155,8 @@
 			"results" : "Resultaten",
 			"incorrectWords" : "Foute woorden",
 			"correct" : "Goed",
-			"typed" : "Geantwoord"
+			"typed" : "Geantwoord",
+			"incorrectWordsAgain" : "Oefen de foute woorden nog een keer"
 		},
 		"login" : {
 			"username" : "Gebruikersnaam",
@@ -249,7 +251,8 @@
 			"results" : "Resultate",
 			"incorrectWords" : "Falschen Wörter",
 			"correct" : "Richtig",
-			"typed" : "Typisierte"
+			"typed" : "Typisierte",
+			"incorrectWordsAgain" : "Üben die Falschen Wörter noch einmal"
 		},
 		"login" : {
 			"username" : "Username",
@@ -260,7 +263,6 @@
 			"login" : "Einloggen",
 			"logout" : "Abmelden",
 			"option" : "Oder registrieren"
-			
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
