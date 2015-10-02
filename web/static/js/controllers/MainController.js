@@ -320,7 +320,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	window.onpopstate = function(){
 		document.getElementById('practice_div').style.display = 'none';
 		document.getElementById('left_content').style.display = 'block';
+		fadeIn(document.getElementById('left_content'));
 		document.getElementById('middle_content').style.display = 'block';
+		fadeIn(document.getElementById('middle_content'));
 
 		if (location.pathname.split('/').length == 2){
 			$scope.loadUser(location.pathname);
@@ -395,7 +397,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		ngDialog.open({ // Open dialog
 			template: '\
 				<h1>[[ translations.import.title ]]</h1><br>\
-				<p>[[ translations.import.desc ]]</p>\
+				<select id="import_select" name="fromwhere">\
+					<option value="woordjesleren">Woordjesleren.nl</option>\
+					<option value="excel">Excel</option>\
+				</select>\
 				<table>\
 					<tr>\
 						<td>[[ translations.import.name ]]: </td>\
@@ -431,6 +436,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						</td>\
 					</tr>\
 				</table>\
+				<p>[[ translations.import.desc ]]</p>\
 				<textarea id="import_area" name="" cols="30" rows="10"></textarea>\
 				<button ng-click="submitImportedList()">[[ translations.import.title ]]</button>\
 			',
@@ -441,9 +447,21 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.submitImportedList = function() {
 		document.getElementById('undo_delete').style.display = 'none';
-		var words = document.getElementById('import_area').value.split(/ = |=|\n/g);
+
+		var import_select = document.getElementById('import_select').value;
+		var import_area = document.getElementById('import_area');
+
+		var added_index;
+
+		if(import_select == 'woordjesleren'){
+			var words = import_area.value.split(/ = |=|\n/g);
+		}
+		else if (import_select == 'excel'){
+			var words = import_area.value.split(/\t|\n/g);
+		}
+
 		var wordObjectArray = [];
-		console.log(wordObjectArray)
+		console.log(wordObjectArray);
 		for (var i = 0, x = words.length; i < x; i+=2){
 			wordObjectArray.push({
 				language_1_text: words[i],
@@ -452,11 +470,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 
 		console.log(words);
+
 		$scope.editData = {
 			listname: $scope.importData.name,
 			language_1_tag: $scope.importData.language1,
 			language_2_tag: $scope.importData.language2,
-			words: wordObjectArray
+			words: wordObjectArray,
+			shared_with: $scope.importData.shared_with
 		}
 
 		console.log($scope.editData);

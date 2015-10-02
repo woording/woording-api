@@ -54,6 +54,7 @@
 				<div ng-init="loadUser('/{{username}}')" id="content">
 			{% endif %}
 				<div id="practice_div">
+					<span id="close_button">X</span>
 
 					<h1><b> [[listData.listname]] </b></h1>
 
@@ -130,6 +131,15 @@
 
 				<div id="right_content">
 					<div id="list_items" class="word_list">
+						<button id="practice_button" ng-click="startList()" onclick="">
+							[[ translations.listControls.practice ]]
+						</button><!--
+						--><button id="edit_button" ng-click="editList()" onclick="showEditor()">
+							[[ translations.listControls.edit ]]
+						</button><!--
+						--><button id="delete_button" ng-click="deleteList(listData.listname)" ng-show="isOwner">
+							[[ translations.listControls.delete ]]
+						</button>
 
 						<div id="list_header">
 							<h3>[[ listData.listname ]]</h3>
@@ -146,15 +156,7 @@
 							</tr>
 						</table>
 
-						<button id="practice_button" ng-click="startList()" onclick="">
-							[[ translations.listControls.practice ]]
-						</button><!--
-						--><button id="edit_button" ng-click="editList()" onclick="showEditor()">
-							[[ translations.listControls.edit ]]
-						</button><!--
-						--><button id="delete_button" ng-click="deleteList(listData.listname)" ng-show="isOwner">
-							[[ translations.listControls.delete ]]
-						</button>
+
 
 					</div> <!-- list_items -->
 

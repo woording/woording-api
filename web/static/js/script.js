@@ -38,6 +38,12 @@ document.addEventListener('keydown', function(event) {
 	}
 }, false);
 
+document.getElementById('close_button').onclick = function(){
+	showResults();
+	document.getElementById('results').style.display = 'none';
+	showList();
+}
+
 function setResult(total, wrong){
 	var correct = document.getElementById('correct_bar');
 	var incorrect = document.getElementById('incorrect_bar');
@@ -124,7 +130,24 @@ function showPractice() {
 
 function showList() {
 	right.style.display = 'inline-block';
+	fadeIn(right);
 	document.getElementById('edit_list').style.display = 'none';
 	document.getElementById('results').style.display = 'none';
 	document.getElementById('list_items').style.display = 'block';
+}
+
+function fadeIn(el) {
+  el.style.opacity = 0;
+
+  var last = +new Date();
+  var tick = function() {
+    el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
+    last = +new Date();
+
+    if (+el.style.opacity < 1) {
+      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
+    }
+  };
+
+  tick();
 }

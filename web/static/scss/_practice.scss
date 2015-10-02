@@ -22,6 +22,11 @@
 	z-index: 10;
 	bottom: 0;
 
+	#close_button {
+		float: right;
+		cursor: pointer;
+	}
+
 	h1 {
 		font-size: 15px;
 		margin: 10px;

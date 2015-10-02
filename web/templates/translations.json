@@ -87,7 +87,7 @@
 		},
 		"import": {
 			"title" : "Import list",
-			"desc" : "Insert words here separated by = or ,",
+			"desc" : "Paste copied list below",
 			"language1" : "Language 1",
 			"language2" : "Language 2",
 			"name" : "Name"
@@ -182,7 +182,7 @@
 		},
 		"import": {
 			"title" : "Importeer lijst",
-			"desc" : "Voer hier woorden in gescheiden door = of ,",
+			"desc" : "Plak gekopieërde woorden hieronder",
 			"language1" : "Taal 1",
 			"language2" : "Taal 2",
 			"name" : "Naam"
@@ -277,7 +277,7 @@
 		},
 		"import": {
 			"title" : "Importier Leiste",
-			"desc" : "Legen Sie hier Worte getrennt durch = oder ,",
+			"desc" : "Einfügen kopiert Wörter unten",
 			"language1" : "Sprache 1",
 			"language2" : "Sprache 2",
 			"name" : "Name"

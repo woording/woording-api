@@ -3,6 +3,24 @@ body {
 	background-size: cover;
 }
 
+header {
+
+	h1 {
+		position: absolute;
+	}
+
+	form {
+		float: right;
+		color: white;
+	}
+
+	p {
+		float: right;
+		color: red;
+		margin: 0 8px;
+	}
+}
+
 #content {
 	width: 100%;
 	height: calc(100% - 60px);
