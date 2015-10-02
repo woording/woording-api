@@ -295,8 +295,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.loadList = function(url){
-		$scope.usedWords = [];
-		$scope.incorrectWords = [];
 
 		$timeout(function(){
 			showList();
@@ -392,6 +390,28 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 		}
 	};
+
+	$scope.practiceIncorrect = function(){
+		var words = $scope.incorrectWords;
+		var listWords = [];
+		for(var i = 0, x = words.length; i < x; i++){
+			listWords.push({
+				language_2_text: words[i].correctWord,
+				language_1_text: words[i].wordShouldBe
+			});
+		}
+		$scope.listData = {
+			listname: $scope.listData.listname,
+			language_2_tag: $scope.listData.language_1_tag,
+			language_1_tag: $scope.listData.language_2_tag,
+			words: listWords,
+			shared_with: $scope.listData.shared_with
+		};
+
+		$scope.numberOfQuestions = $scope.listData.words.length;
+
+		$scope.startList();
+	}
 
 	$scope.importList = function() {
 		ngDialog.open({ // Open dialog
@@ -548,6 +568,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Start practice
 	$scope.startList = function(){
+		$scope.usedWords = [];
+		$scope.incorrectWords = [];
+
 		$http.get('/translations.json').then(function(result) {
 			$scope.translations = result.data[$scope.languages.prefferedLanguage];
 			for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
@@ -589,6 +612,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
+		console.log($scope.numberOfQuestions);
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	};
 
@@ -630,7 +654,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 
 			else {
-				$scope.usedWords.push($scope.randomWord)
+				$scope.usedWords.push($scope.randomWord);
 			}
 		}
 	};
@@ -647,6 +671,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.checkWord = function(wordOne, wordTwo){
+		var wordShouldBe = $scope.questionedLanguage ? wordTwo.language_1_text : wordTwo.language_2_text;
 		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
 
 		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
@@ -672,7 +697,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		}
 
 		else {
-			$scope.wordIsWrong(wordOne, wordTwo);
+			$scope.wordIsWrong(wordOne, wordTwo, wordShouldBe);
 		}
 	};
 
@@ -684,7 +709,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return true;
 	};
 
-	$scope.wordIsWrong = function(wordOne, wordTwo){
+	$scope.wordIsWrong = function(wordOne, wordTwo, wordShouldBe){
 		document.getElementById('words_left').innerHTML++;
 		document.getElementById('wrong_word').innerHTML = wordTwo;
 		document.getElementById('wrong_word').style.color = 'red';
@@ -697,7 +722,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.numberOfQuestions++;
 		$scope.incorrectWords.push({
 			correctWord: wordTwo,
-			incorrectWord: wordOne
+			incorrectWord: wordOne,
+			wordShouldBe: wordShouldBe
 		});
 
 		return false;

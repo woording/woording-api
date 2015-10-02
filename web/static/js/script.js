@@ -48,6 +48,8 @@ function setResult(total, wrong){
 	var correct = document.getElementById('correct_bar');
 	var incorrect = document.getElementById('incorrect_bar');
 	if (!wrong){
+		document.getElementById('practice_incorrect').style.display = 'none'
+		document.getElementById('incorrect_words_paragraph').style.display = 'none'
 		incorrect.style.display = 'none';
 		correct.style.width = Math.round(100 - (wrong/total * 100)) + '%';
 		correct.innerHTML = Math.round((100 - (wrong/total * 100))) + '%';
@@ -55,6 +57,8 @@ function setResult(total, wrong){
 
 	else {
 		incorrect.style.display = 'inline-block';
+		document.getElementById('practice_incorrect').style.display = 'block'
+		document.getElementById('incorrect_words_paragraph').style.display = 'block'
 		incorrect.style.width = Math.round((wrong/total * 100) - 1) + '%';
 		incorrect.innerHTML = Math.round((wrong/total * 100)) + '%';
 		correct.style.width = Math.round(100 - (wrong/total * 100) - 1) + '%';
@@ -141,11 +145,11 @@ function fadeIn(el) {
 
   var last = +new Date();
   var tick = function() {
-    el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
+    el.style.opacity = +el.style.opacity + (new Date() - last) / 1000;
     last = +new Date();
 
     if (+el.style.opacity < 1) {
-      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16)
+      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 1000)
     }
   };
 

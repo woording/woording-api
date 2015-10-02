@@ -214,7 +214,7 @@
 					<div id="results">
 						<table ng-if="incorrectWords.length != 0">
 							<h3> [[ translations.results.results ]]: </h3>
-							[[ translations.results.incorrectWords ]]:
+							<p id="incorrect_words_paragraph">[[ translations.results.incorrectWords ]]:</p>
 							<tr>
 								<th> [[ translations.results.correct ]] </th>
 								<th> [[ translations.results.typed ]] </th>
@@ -224,6 +224,8 @@
 								<td> [[ word.incorrectWord ]] </td>
 							</tr>
 						</table>
+
+						<button id="practice_incorrect" ng-click="practiceIncorrect()">Practice incorrect words</button>
 
 						<div id="results_bar">
 							<p id="correct_bar"></p><p id="incorrect_bar"></p>
