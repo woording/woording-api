@@ -256,7 +256,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	// Get friends for user
-	$scope.getFriends = function() {
+	$scope.getFriends = function() { // You don't have them so get them
 		var data = {
 			"token": $scope.user.token,
 			"username": $scope.user.username

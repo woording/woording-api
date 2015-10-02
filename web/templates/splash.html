@@ -23,20 +23,18 @@
 
 			<header>
 
-				<a href="/"><h1>Wording</h1></a>
+				<a href="#"><h1>Wording</h1></a>
 
 				<form ng-submit="loginUser()">
-							<span>
-								<span>Username: </span>
-								<span><input type="text" ng-model="user.username"></span>
-							</span>
-							<span>
-								<span>Password: </span>
-								<span><input type="password" ng-model="user.password"></span>
-							</span>
-							<span>
-								<span colspan="2"><input type="submit" value="Login"></span>
-							</span>
+					<span>
+						Username: <input type="text" ng-model="user.username">
+					</span>
+					<span>
+						Password: <input type="password" ng-model="user.password">
+					</span>
+					<span>
+						<input type="submit" value="Login">
+					</span>
 				</form>
 				<span><p ng-if="error" class="error">[[ error ]]</p></span>
 			</header>

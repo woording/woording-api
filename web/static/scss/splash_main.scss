@@ -4,14 +4,56 @@ body {
 }
 
 header {
+	$header-height: 60px;
 
 	h1 {
 		position: absolute;
+		font-size: 30px;
+		font-weight: 120;
+		width: 300px;
+		padding-left: 16px;
+		color: #F5F6F6;
 	}
 
 	form {
 		float: right;
 		color: white;
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding: 0;
+		margin: 0;
+		height: $header-height;
+		line-height: $header-height;
+
+		span {
+			height: $header-height;
+			display: inline-block;
+		}
+
+		input[type="text"], input[type="password"] {
+			display: inline-block;
+		}
+
+		input[type="submit"] {
+			outline: none;
+			min-width: 80px;
+			padding: 0 8px;
+			height: $header-height;
+			font-size: 15px;
+			cursor: pointer;
+			border: none;
+			transition: background .1s;
+			background: #48BFD1;
+			color: #F5F6F6;
+			display: inline-block;
+			line-height: unset;
+
+			&:hover {
+				background: #39D5ED;
+			}
+		}
+
 	}
 
 	p {
