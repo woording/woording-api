@@ -27,6 +27,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.showProfileInfo = false;
 
 	$scope.error = null;
+	$scope.success = null;
 	$scope.isOwner = true;
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
@@ -214,7 +215,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 							}
 						} else {
 							// Give success
-							console.log("Verify email");
+							$scope.success = "Please verify your email to login."
 							ngDialog.close('registerDialog');
 							$scope.error = null;
 						}

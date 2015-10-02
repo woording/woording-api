@@ -33,6 +33,7 @@ header {
 
 		input[type="text"], input[type="password"] {
 			display: inline-block;
+			padding: 4px;
 		}
 
 		input[type="submit"] {
@@ -74,6 +75,10 @@ header {
 
 	.error {
 		color: #f44336;
+	}
+
+	.success {
+		color: #4F8A10;
 	}
 
 	#slogan {
