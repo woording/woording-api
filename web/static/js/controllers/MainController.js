@@ -60,6 +60,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.request = {
 		friend: ""
 	};
+	$scope.passwordChange = {
+		oldPassword: "",
+		newPassword: "",
+		confirmPassword: "",
+		error: null,
+		success: null
+	}
 
 	// Language variable
 	$scope.languages = {
@@ -256,29 +263,67 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$window.location.href = '/';
 	};
 
+	$scope.openChangePassword = function() {
+		$scope.passwordChange.success = null;
+		$scope.passwordChange.error = null;
+
+		ngDialog.open({
+			template: '\
+				<h1>[ Change password ]</h1>\
+				<br>\
+				<p ng-if="passwordChange.error" class="error">[[ passwordChange.error ]]</p>\
+				<p ng-if="passwordChange.success" class="success">[[ passwordChange.success ]]</p>\
+				<form ng-submit="changePassword()">\
+					<table>\
+						<tr>\
+							<td>[ Old password ]</td>\
+							<td><input type="password" name="old_password" ng-model="passwordChange.oldPassword"></td>\
+						</tr>\
+						<tr>\
+							<td>[ New password ]</td>\
+							<td><input type="password" name="new_password" ng-model="passwordChange.newPassword"></td>\
+						</tr>\
+						<tr>\
+							<td>[ Confirm new password ]</td>\
+							<td><input type="password" name="confirm_password" ng-model="passwordChange.confirmPassword"></td>\
+						</tr>\
+						<tr>\
+							<td><input type="submit" value="[ Change password ]"></td>\
+						</tr>\
+					</table>\
+				</form>\
+			',
+			plain: true,
+			scope: $scope
+		});
+	}
+
 	// Change password of user
 	$scope.changePassword = function() {
 		// Confirm the 2 given passwords
 		if ($scope.passwordChange.newPassword == $scope.passwordChange.confirmPassword) {
 			var data = {
 				"username": $scope.user.username,
-				"old_password": null,
-				"new_password": null,
+				"old_password": $scope.passwordChange.oldPassword,
+				"new_password": $scope.passwordChange.newPassword,
 				"token": $scope.user.token
 			}
 			$http.post($scope.apiAdress + "/changePassword", data)
 				.success(function(data, status, headers, config) {
 					if (data.indexOf("ERROR") > -1) {
 						// return password is incorrect
+						$scope.passwordChange.error = "[ Wrong password ]";
 					} else {
 						// Changed password
+						$scope.passwordChange.error = null;
+						$scope.passwordChange.success = "[ Change password ]";
 					}
 				}).error(function(data, status, headers, config) {
 					console.error("Error " + status + " while changing password");
 				});
 
 		} else {
-			// Give error
+			$scope.passwordChange.error = $scope.translations.errors.noMatch;
 		}
 	}
 

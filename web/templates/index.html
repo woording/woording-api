@@ -40,10 +40,13 @@
 			<div id="profile_dialog" ng-show="showProfileInfo">
 				<h1>[[ user.username ]]</h1><br>
 				<div id="options_bar">
+					<button ng-click="openChangePassword()">[ Change password ]</button>
+				</div>
+				<div id="options_bar">
 					<select ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"
 						ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">
 					</select>
-					<button ng-click="logoutUser()">[[ translations.login.logout ]]</button>
+					<button ng-click="logoutUser()" name="logout">[[ translations.login.logout ]]</button>
 				</div>
 			</div><!-- Profile dialog -->
 
