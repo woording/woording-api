@@ -198,6 +198,8 @@ class DatabaseManager(object):
 			user = db_conn.query(query_text).fetchone();
 
 			return user is not None
+		else:
+			return False
 
 	# Change the password of a user
 	def change_password(self, username, old_password, new_password):
@@ -207,7 +209,7 @@ class DatabaseManager(object):
 			if self.check_password(old_password):
 				db_conn = DatabaseConnection(self.database_path)
 
-				query_text = 'UPDATE user SET password_hash = "' + new_password + '" WHERE username = "' + username '" AND password_hash = "' + old_password + '"'
+				query_text = 'UPDATE user SET password_hash = "' + new_password + '" WHERE username = "' + username + '" AND password_hash = "' + old_password + '"'
 				db_conn.query(query_text)
 
 	def verify_email(self, email_to_verify):
