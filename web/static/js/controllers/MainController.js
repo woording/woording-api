@@ -256,6 +256,32 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$window.location.href = '/';
 	};
 
+	// Change password of user
+	$scope.changePassword = function() {
+		// Confirm the 2 given passwords
+		if ($scope.passwordChange.newPassword == $scope.passwordChange.confirmPassword) {
+			var data = {
+				"username": $scope.user.username,
+				"old_password": null,
+				"new_password": null,
+				"token": $scope.user.token
+			}
+			$http.post($scope.apiAdress + "/changePassword", data)
+				.success(function(data, status, headers, config) {
+					if (data.indexOf("ERROR") > -1) {
+						// return password is incorrect
+					} else {
+						// Changed password
+					}
+				}).error(function(data, status, headers, config) {
+					console.error("Error " + status + " while changing password");
+				});
+
+		} else {
+			// Give error
+		}
+	}
+
 	// Get friends for user
 	$scope.getFriends = function() { // You don't have them so get them
 		var data = {
