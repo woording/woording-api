@@ -351,8 +351,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
-					// Show login dialog
-					$scope.openLogIn();
+					// Go to main page
+					$window.location.href = '/';
 				} else {
 					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
