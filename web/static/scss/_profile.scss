@@ -53,6 +53,7 @@
 			margin: -8px;
 			border: none;
 			cursor: pointer;
+			width: 150px;
 
 			&:hover {
 				background-color: #ddd;
@@ -64,9 +65,7 @@
 		}
 
 		button[name="logout"] {
-			width: 150px;
-			height: 37px;
-			margin: -8px -8px -8px 4px;
+			margin-left: 4px;
 		}
 	}
 }

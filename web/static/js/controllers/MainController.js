@@ -161,6 +161,27 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			scope:$scope
 		});
 	};
+	$scope.openOptions = function() {
+		ngDialog.open({
+			template: '\
+				<h1>[ Options ]</h1><br>\
+				<table>\
+					<tr>\
+						<td>[ Change language ]</td>\
+						<td>\
+							<select style="min-width: 140px" ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"\
+								ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">\
+							</select>\
+						</td>\
+					</tr>\
+				</table>\
+				<br>\
+				<button ng-click="openChangePassword()">[ Change password ]</button>\
+			',
+			plain: true,
+			scope: $scope
+		});
+	}
 
 	// Authentication functions
 	$scope.authenticate = function(username, password) {
@@ -287,10 +308,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 							<td>[ Confirm new password ]</td>\
 							<td><input type="password" name="confirm_password" ng-model="passwordChange.confirmPassword"></td>\
 						</tr>\
-						<tr>\
-							<td><input type="submit" value="[ Change password ]"></td>\
-						</tr>\
 					</table>\
+					<input type="submit" value="[ Change password ]">\
 				</form>\
 			',
 			plain: true,
