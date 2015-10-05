@@ -164,10 +164,10 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openOptions = function() {
 		ngDialog.open({
 			template: '\
-				<h1>[ Options ]</h1><br>\
+				<h1>[[ translations.options ]]</h1><br>\
 				<table>\
 					<tr>\
-						<td>[ Change language ]</td>\
+						<td>[[ translations.changeLanguage ]]</td>\
 						<td>\
 							<select style="min-width: 140px" ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"\
 								ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">\
@@ -176,7 +176,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 					</tr>\
 				</table>\
 				<br>\
-				<button ng-click="openChangePassword()">[ Change password ]</button>\
+				<button ng-click="openChangePassword()">[[ translations.account.changePassword.title ]]</button>\
 			',
 			plain: true,
 			scope: $scope
@@ -290,26 +290,26 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		ngDialog.open({
 			template: '\
-				<h1>[ Change password ]</h1>\
+				<h1>[[ translations.account.changePassword.title ]]</h1>\
 				<br>\
 				<p ng-if="passwordChange.error" class="error">[[ passwordChange.error ]]</p>\
 				<p ng-if="passwordChange.success" class="success">[[ passwordChange.success ]]</p>\
 				<form ng-submit="changePassword()">\
 					<table>\
 						<tr>\
-							<td>[ Old password ]</td>\
+							<td>[[ translations.account.changePassword.current ]]</td>\
 							<td><input type="password" name="old_password" ng-model="passwordChange.oldPassword"></td>\
 						</tr>\
 						<tr>\
-							<td>[ New password ]</td>\
+							<td>[[ translations.account.changePassword.new ]]</td>\
 							<td><input type="password" name="new_password" ng-model="passwordChange.newPassword"></td>\
 						</tr>\
 						<tr>\
-							<td>[ Confirm new password ]</td>\
+							<td>[[ translations.account.changePassword.confirm ]]</td>\
 							<td><input type="password" name="confirm_password" ng-model="passwordChange.confirmPassword"></td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="[ Change password ]">\
+					<input type="submit" value="[[ translations.account.changePassword.title ]]">\
 				</form>\
 			',
 			plain: true,
@@ -331,11 +331,11 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				.success(function(data, status, headers, config) {
 					if (data.indexOf("ERROR") > -1) {
 						// return password is incorrect
-						$scope.passwordChange.error = "[ Wrong password ]";
+						$scope.passwordChange.error = $scope.translations.errors.wrongPassword;
 					} else {
 						// Changed password
 						$scope.passwordChange.error = null;
-						$scope.passwordChange.success = "[ Change password ]";
+						$scope.passwordChange.success = $scope.translations.account.changePassword.success;
 					}
 				}).error(function(data, status, headers, config) {
 					console.error("Error " + status + " while changing password");
@@ -676,7 +676,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			ngDialog.open({
 				template:'\
-					<h1>[[ translations.practice.options ]]</h1>\
+					<h1>[[ translations.options ]]</h1>\
 					<br>\
 					[[ translations.practice.questionedLanguage ]]?<br>\
 					<form>\

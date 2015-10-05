@@ -33,6 +33,17 @@
 		"undoDelete" : "Undo delete list",
 		"friends" : "Friends",
 		"welcome" : "Hello",
+		"options" : "Options",
+		"changeLanguage" : "Change language",
+		"account" : {
+			"changePassword" : {
+				"title" : "Change password",
+				"current" : "Current password",
+				"new" : "New password",
+				"confirm" : "Confirm new password",
+				"success" : "Password is changed"
+			}
+		},
 		"listControls" : {
 			"practice" : "Practice",
 			"edit" : "Edit",
@@ -50,7 +61,6 @@
 			"right" : "Right",
 			"wrong" : "Wrong",
 			"wordsLeft" : "Words left",
-			"options" : "Options",
 			"start" : "Start practice",
 			"questionedLanguage" : "Questioned language",
 			"both" : "Both"
@@ -79,7 +89,8 @@
 			"validation" : "Username and/or password is incorrect",
 			"unknown" : "An unknown error has occurred",
 			"emailNotVerified" : "Email is not verified",
-			"noMatch" : "Passwords didn't match"
+			"noMatch" : "Passwords didn't match",
+			"wrongPassword" : "Password is wrong"
 		},
 		"sharing": {
 			"sharedWith" : "Shared with",
@@ -129,6 +140,17 @@
 		"undoDelete" : "Lijst verwijderen ongedaan maken",
 		"friends" : "Vrienden",
 		"welcome" : "Hallo",
+		"options" : "Opties",
+		"changeLanguage" : "Verander taal",
+		"account" : {
+			"changePassword" : {
+				"title" : "Verander wachtwoord",
+				"current" : "Huidige wachtwoord",
+				"new" : "Nieuwe wachtwoord",
+				"confirm" : "Bevestig nieuwe wachtwoord",
+				"success" : "Wachtwoord is veranderd"
+			}
+		},
 		"listControls" : {
 			"practice" : "Oefenen",
 			"edit" : "Bewerken",
@@ -146,7 +168,6 @@
 			"right" : "Goed",
 			"wrong" : "Fout",
 			"wordsLeft" : "Woorden over",
-			"options" : "Opties",
 			"start" : "Start oefenen",
 			"questionedLanguage" : "Gevraagde taal",
 			"both" : "Beide"
@@ -225,6 +246,17 @@
 		"undoDelete" : "Zurücksetzen Leiste löschen",
 		"friends" : "Freunde",
 		"welcome" : "Hallo",
+		"options" : "Optionen",
+		"changeLanguage" : "Sprache ändern",
+		"account" : {
+			"changePassword" : {
+				"title" : "Passwort ändern",
+				"current" : "Aktuelles Passwort",
+				"new" : "Neue Passwort",
+				"confirm" : "Bestätige neues Passwort",
+				"success" : "Passwort geändert"
+			}
+		},
 		"listControls" : {
 			"practice" : "Üben",
 			"edit" : "Bearbeiten",
@@ -242,7 +274,6 @@
 			"right" : "Richtig",
 			"wrong" : "Falsch",
 			"wordsLeft" : "Wörter übrig",
-			"options" : "Optionen",
 			"start": "Start üben",
 			"questionedLanguage" : "Frage Sprache",
 			"both" : "Beide"
