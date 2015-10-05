@@ -24,6 +24,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Greek"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spanish"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portuguese"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italian"
 			}
 		],
 		"lists" : "Lists",
@@ -131,6 +143,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Grieks"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spaans"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portugees"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italiaans"
 			}
 		],
 		"lists" : "Lijsten",
@@ -237,6 +261,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Griechisch"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spanisch"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portugiesisch"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italienisch"
 			}
 		],
 		"lists" : "Leisten",
