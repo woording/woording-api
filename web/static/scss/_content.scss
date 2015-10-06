@@ -125,7 +125,7 @@
 			padding-top: 8px;
 			margin-bottom: 2px;
 			background-color: $light_blue_color;
-			color: $whiteish_color;
+			color: $white_color;
 			font-weight: bold;
 			cursor: pointer;
 			transition: background-color 0.3s;
@@ -137,8 +137,7 @@
 
 		#undo_delete {
 			display: none;
-			background-color: black;
-			color: white;
+			background-color: $dark_color;
 
 			&:hover {
 				background-color: #555;
