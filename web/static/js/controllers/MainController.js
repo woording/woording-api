@@ -678,16 +678,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				template:'\
 					<h1>[[ translations.options ]]</h1>\
 					<br>\
-					[[ translations.practice.questionedLanguage ]]?<br>\
 					<form>\
-						<input type="radio" name="language" value="second" id="secondLanguage" checked> ' + $scope.secondLanguage + '\
+						[[ translations.practice.questionedLanguage ]]?<br>\
+						<input type="radio" name="language" value="second" id="secondLanguage" checked> ' + $scope.secondLanguage + '<br>\
+						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '<br>\
+						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]<br>\
 						<br>\
-						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
+						<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
 						<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]\
-						<br>\
-						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.practice.start ]]">\
-						<br>\
+						<input type="submit" ng-click="setPracticeOptions()" value="[[ translations.practice.start ]]">\
 					</form>\
 					',
 				plain:true,
@@ -700,14 +699,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			showPractice();
 		});
 
-
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
 		console.log($scope.numberOfQuestions);
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	};
 
-	$scope.chooseLanguage = function(){
+	$scope.setPracticeOptions = function(){
 		if (document.getElementById('firstLanguage').checked) {
 			$scope.questionedLanguage = true;
 		}
@@ -725,6 +723,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				});
 			}
 		}
+
+		$scope.caseSensitivity = document.getElementById('case_sensitivity').checked;
 
 		ngDialog.close();
 	};
@@ -765,11 +765,14 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		var wordShouldBe = $scope.questionedLanguage ? wordTwo.language_1_text : wordTwo.language_2_text;
 		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
 
-		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
-			$scope.wordIsRight();
+		if (!$scope.caseSensitivity) {
+			wordOne = wordOne.toLowerCase();
+			wordTwo = wordTwo.toLowerCase();
 		}
 
-		else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2){
+		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
+			$scope.wordIsRight();
+		} else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2){
 			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/);
 			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/);
 			wordOneArray = wordOneArray.sort();
@@ -785,9 +788,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 
 			$scope.wordIsRight();
-		}
-
-		else {
+		} else {
 			$scope.wordIsWrong(wordOne, wordTwo, wordShouldBe);
 		}
 	};
