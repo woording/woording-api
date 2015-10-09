@@ -193,7 +193,7 @@ def accept_friend(token):
 	if db_manager.users_are_friends(names[0], names[1]):
 		return "Already friends"
 	else:
-		db_manager.create_friendship(names[0], name[1])
+		db_manager.create_friendship(names[0], names[1])
 		return "Now friends"
 
 @app.route('/getFriends', methods=['POST', 'OPTIONS'])
