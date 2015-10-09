@@ -701,7 +701,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
-		console.log($scope.numberOfQuestions);
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	};
 
@@ -763,6 +762,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	$scope.checkWord = function(wordOne, wordTwo){
 		var wordShouldBe = $scope.questionedLanguage ? wordTwo.language_1_text : wordTwo.language_2_text;
+		var wordObject = wordTwo;
 		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
 
 		if (!$scope.caseSensitivity) {
@@ -789,7 +789,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			$scope.wordIsRight();
 		} else {
-			$scope.wordIsWrong(wordOne, wordTwo, wordShouldBe);
+			$scope.wordIsWrong(wordOne, wordTwo, wordShouldBe, wordObject);
 		}
 	};
 
@@ -801,12 +801,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return true;
 	};
 
-	$scope.wordIsWrong = function(wordOne, wordTwo, wordShouldBe){
+	$scope.wordIsWrong = function(wordOne, wordTwo, wordShouldBe, wordObject){
+		console.log(wordOne + " " + wordTwo);
+
 		document.getElementById('words_left').innerHTML++;
 		document.getElementById('wrong_word').innerHTML = wordTwo;
 		document.getElementById('wrong_word').style.color = 'red';
-		if ($scope.usedWords.indexOf(wordTwo) > -1){
-			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+		if ($scope.usedWords.indexOf(wordObject) > -1){
+			console.log('splice');
+			$scope.usedWords.splice($scope.usedWords.indexOf(wordObject));
 		}
 
 		document.getElementById('incorrect').innerHTML++;
@@ -817,6 +820,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			incorrectWord: wordOne,
 			wordShouldBe: wordShouldBe
 		});
+
+		console.log($scope.usedWords);
+		console.log($scope.incorrectWords);
 
 		return false;
 	};
