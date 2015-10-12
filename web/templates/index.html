@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Wording</title>
@@ -61,10 +62,14 @@
 					<h2 id="wrong_word"></h2>
 
 					<form ng-submit="submit()" id="word_input">
-						<input type="text" ng-model="text" name="text" autocomplete="off" autocorrect="off">
-						<button type="submit" id="submit">[[ translations.practice.next ]]</button>
+						<table>
+							<tr>
+								<td><input type="text" ng-model="text" name="text" autocomplete="off" autocorrect="off"></td>
+								<td><button type="submit" id="submit">[[ translations.practice.next ]]</button></td>
+							</tr>
+						</table>
 					</form>
-
+					<br>
 					<p>[[ translations.practice.right ]] <span id="correct">0</span></p>
 					<br>
 					<p>[[ translations.practice.wrong ]] <span id="incorrect">0</span></p>
@@ -91,7 +96,7 @@
 
 					<a href="javascript:void(0)" ng-click="openFriendRequest()">
 						<div class="user_list_item">
-							+ Add friend
+							+ [ Add friend ]
 						</div>
 					</a>
 
@@ -103,12 +108,20 @@
 						<h3>[[ translations.lists ]]</h3>
 					</div>
 
-					<input ng-model="searchQuery" placeholder="[[ translations.search ]]">
-
 					<table>
+						<tr> <!-- Search bar -->
+							<td colspan="2"><input ng-model="searchQuery" placeholder="[[ translations.search ]]"></td>
+						</tr>
+
+						<tr>
+							<td colspan="2">
+								<div id="practice_all" ng-click="getSelectedLists()">[ Practice selected ]</div>
+							</td>
+						</tr>
+
 						<tr class="list_list-item" ng-repeat="list in userData.lists | filter:searchQuery">
 							<td>
-								<a href="/[[userData.username]]/[[list.listname]]" class="list_link" onclick="showList()">
+								<input type="checkbox" name="list_select" onchange="selectList(this)"> <a href="/[[userData.username]]/[[list.listname]]" class="list_link" onclick="showList()">
 									[[ list.listname ]]
 								</a>
 							</td>

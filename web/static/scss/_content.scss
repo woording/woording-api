@@ -49,6 +49,10 @@
 			}
 		}
 
+		input[ng-model='searchQuery'] {
+			width: calc(100% - 16px);
+		}
+
 		h3 {
 			color: $dark_color;
 		}
@@ -76,24 +80,51 @@
 			}
 
 			.list_list-item td {
+				padding: $padding-unit;
+
 				&:hover {
 					background: #ddd;
-					padding-left: 16px;
+					padding-left: 2 * $padding-unit;
+				}
+
+				&:hover a {
+					width: calc(100% - 21px);
+				}
+
+				&:hover input[type="checkbox"] {
+					display: inline-block;
+					visibility: visible;
+					opacity: 1;
 				}
 			}
 
 			td {
-				padding: $padding-unit;
-				cursor: pointer;
 				transition: background 0.3s;
 				transition: padding-left $timing-unit;
 				transition-timing-function: ease-out;
+				width: auto;
+
+				input[type="checkbox"] {
+					width: auto;
+					display: none;
+					opacity: 0;
+					transition: opacity $timing-unit;
+					transition-timing-function: ease;
+					width: 16px;
+					height: 16px;
+					outline: 0;
+					cursor: pointer;
+
+					&:focus {
+						outline: 0;
+					}
+				}
 
 				.list_link {
 					text-decoration: none;
 					color: black;
 					width: 100%;
-					display: block;
+					display: inline-block;
 					padding: $padding-unit;
 					margin: -$padding-unit;
 
@@ -104,7 +135,7 @@
 			}
 		}
 
-		#new_list, #import_list, #undo_delete {
+		#new_list, #import_list, #undo_delete, #practice_all {
 			text-align: center;
 			width: 100%;
 			padding-bottom: 8px;
@@ -119,6 +150,11 @@
 			&:hover {
 				background-color: #4FD0E3;
 			}
+		}
+
+		#practice_all {
+			margin-bottom: 0;
+			display: none;
 		}
 
 		#undo_delete {

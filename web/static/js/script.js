@@ -44,6 +44,26 @@ document.getElementById('close_button').onclick = function(){
 	showList();
 }
 
+function selectList(element) {
+	element.parentElement.style.background = element.checked ? '#85D4E0' : 'transparent';
+	checkIfSelected();
+}
+
+function checkIfSelected() {
+	var lists = document.getElementsByClassName('list_list-item');
+
+	var x = lists.length;
+	for(var i = 0; i < x; i++) {
+		list = lists[i];
+		if (list.firstElementChild.firstElementChild.checked == true) {
+			document.getElementById('practice_all').style.display = 'block';
+			return;
+		}
+	}
+
+	document.getElementById('practice_all').style.display = 'none';
+}
+
 function setResult(total, wrong){
 	var correct = document.getElementById('correct_bar');
 	var incorrect = document.getElementById('incorrect_bar');

@@ -2,6 +2,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.title = 'Wording';
 	$scope.Object = Object;
 	$scope.apiAdress = 'http://127.0.0.1:5000';
+	$scope.requests = 0;
 
 	window.onload = function() {
 		// Add a custom click listener to the links
@@ -705,12 +706,147 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	};
 
+	$scope.getSelectedLists = function() {
+		var listElements = document.getElementsByClassName('list_list-item');
+		var listNames = [];
+
+		var x = listElements.length;
+		for (var i = 0; i < x; i++) {
+			var list = listElements[i];
+			if (list.firstElementChild.firstElementChild.checked == true) {
+				var listName = $scope.userData.lists[i].listname;
+				// listName.replace(" ", "").replace("\n", "");
+				listNames.push(listName);
+			}
+		}
+
+		var lists = [];
+		var data = {
+			"token" : $scope.user.token // Token to confirm your username
+		}
+		for (var i = 0, x = listNames.length; i < x; i++) {
+			$scope.requests++;
+			// Post data to API
+			$http.post($scope.apiAdress + "/" + $scope.userData.username + "/" + listNames[i], data)
+				.success(function(data, status, headers, config) {
+					if (data.username != 'ERROR, No token' || data.username != 'ERROR, No user') {
+						lists.push(data);
+
+						$scope.requests--;
+						if ($scope.requests == 0) $scope.startLists(lists);
+					}
+				}).error(function(data, status, headers, config) {
+					console.log("error " + status + " while loading list");
+				});
+		}
+	};
+
+	$scope.startLists = function(lists) {
+		// check for the languages
+		var languages_1 = [];
+		var languages_2 = [];
+
+		for (var i = 0, x = lists.length; i < x; i++) {
+			var list = lists[i];
+
+			if (languages_1.length == 0 && languages_2.length == 0) {
+				languages_1.push(list.language_1_tag);
+				languages_2.push(list.language_2_tag);
+			} else if (languages_1.indexOf(list.language_1_tag) === -1) {
+				if (languages_1.indexOf(list.language_2_tag) > -1 && languages_2.indexOf(list.language_1_tag) > -1) {
+					// Swap languages
+					var temp = list.language_1_tag;
+					list.language_1_tag = list.language_2_tag;
+					list.language_2_tag = temp;
+
+					// Swap words
+					for (var j = 0, y = list.words.length; j < y; j++) {
+						var word = list.words[j];
+						temp = word.language_1_text;
+						word.language_1_text = word.language_2_text;
+						word.language_2_text = temp;
+					}
+				} else {
+					languages_1.push(list.language_1_tag);
+					languages_2.push(list.language_2_tag);
+				}
+			} else if (languages_2.indexOf(list.language_2_tag) === -1) {
+				languages_1.push(list.language_1_tag);
+				languages_2.push(list.language_2_tag);
+			} else {
+				continue;
+			}
+		}
+
+		$scope.languages = [];
+
+		for (var i = 0, x = languages_1.length; i < x; i++) {
+			var first, second;
+
+			for(var j = 0, y = $scope.translations.languages.length; j < y; j++){
+				if ($scope.translations.languages[j].iso == languages_1[i]){
+					first = $scope.translations.languages[j].displayText;
+				} else if ($scope.translations.languages[j].iso == languages_2[i]){
+					second = $scope.translations.languages[j].displayText;
+				}
+			}
+
+			$scope.languages.push({
+				language1: first,
+				language2: second
+			});
+		}
+
+		// Display dialog with language options
+		ngDialog.open({
+			template:'\
+				<h1>[[ translations.options ]]</h1>\
+				<br>\
+				<form>\
+					<p ng-repeat="language in languages">\
+						[[ translations.practice.questionedLanguage ]]?<br>\
+						<input type="radio" name="[[ language ]]" value="first" id="firstLanguage" checked> [[ language.language1 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="second" id="secondLanguage"> [[ language.language2 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="both" id="bothLanguages"> [[ translations.practice.both ]]<br>\
+					</p>\
+					<br>\
+					<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
+					<br>\
+					<input type="submit" ng-click="setPracticeOptions()" value="[[ translations.practice.start ]]">\
+				</form>\
+				',
+			plain:true,
+			scope:$scope,
+			closeByEscape: false,
+			closeByDocument: false,
+			showClose: false
+		});
+
+		if ($scope.languages.length === 1) {
+			$scope.listData = lists[0];
+			for (var i = 1, x = lists.length; i < x; i++) {
+				var list = lists[i];
+				for (var j = 0, y = list.words.length; j < y; j++) {
+					$scope.listData.words.push(list.words[j]);
+				}
+			}
+
+			console.log($scope.listData);
+
+			$scope.getRandomWord();
+			showPractice();
+
+			$scope.numberOfQuestions = $scope.listData.words.length;
+			document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
+		} else {
+			// TODO
+		}
+	};
+
 	$scope.setPracticeOptions = function(){
 		if (document.getElementById('firstLanguage').checked) {
 			$scope.questionedLanguage = true;
-		}
-
-		else if (document.getElementById('secondLanguage').checked){
+		} else if (document.getElementById('secondLanguage').checked){
 			$scope.questionedLanguage = false;
 		}
 
