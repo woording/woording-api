@@ -127,10 +127,6 @@ class DatabaseManager(object):
 				query_text = 'DELETE FROM list WHERE id = ' + str(list_id)
 				db_conn.query(query_text)
 
-				# # Delete translations
-				# query_text = 'DELETE FROM translation WHERE list_id = ' + str(list_id)
-				# db_conn.query(query_text)
-
 			else:
 				print('ERROR: List does not exist')
 
@@ -277,7 +273,7 @@ class DatabaseManager(object):
 	# Get all users friends
 	def get_friends_for_user(self, username):
 
-		# TDOO: Sanity checks
+		# TODO: Sanity checks
 
 		# get all friend id's
 		friend_ids = self.get_friend_ids_for_user(username)

@@ -663,42 +663,46 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.usedWords = [];
 		$scope.incorrectWords = [];
 
-		$http.get('/translations.json').then(function(result) {
-			$scope.translations = result.data[$scope.languages.prefferedLanguage];
-			for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
-				if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
-					$scope.firstLanguage = $scope.translations.languages[i].displayText;
-				}
-
-				else if ($scope.translations.languages[i].iso == $scope.listData.language_2_tag){
-					$scope.secondLanguage = $scope.translations.languages[i].displayText;
-				}
+		for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
+			if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
+				$scope.firstLanguage = $scope.translations.languages[i].displayText;
 			}
 
-			ngDialog.open({
-				template:'\
-					<h1>[[ translations.options ]]</h1>\
-					<br>\
-					<form>\
-						[[ translations.practice.questionedLanguage ]]?<br>\
-						<input type="radio" name="language" value="second" id="secondLanguage" checked> ' + $scope.secondLanguage + '<br>\
-						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]<br>\
-						<br>\
-						<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
-						<br>\
-						<input type="submit" ng-click="setPracticeOptions()" value="[[ translations.practice.start ]]">\
-					</form>\
-					',
-				plain:true,
-				scope:$scope,
-				closeByEscape: false,
-				closeByDocument: false,
-				showClose: false
-			});
+			else if ($scope.translations.languages[i].iso == $scope.listData.language_2_tag){
+				$scope.secondLanguage = $scope.translations.languages[i].displayText;
+			}
+		}
 
-			showPractice();
+		$scope.languages = [{
+			language1: $scope.firstLanguage,
+			language2: $scope.secondLanguage
+		}];
+
+		// Open the dialog with options
+		// TODO: Integrate this in the practice screen
+		ngDialog.open({
+			template:'\
+				<h1>[[ translations.options ]]</h1>\
+				<br>\
+				<form>\
+					[[ translations.practice.questionedLanguage ]]?<br>\
+					<input type="radio" name="language" value="second" class="secondLanguage" checked> ' + $scope.secondLanguage + '<br>\
+					<input type="radio" name="language" value="first" class="firstLanguage"> ' + $scope.firstLanguage + '<br>\
+					<input type="radio" name="language" value="both" class="bothLanguages"> [[ translations.practice.both ]]<br>\
+					<br>\
+					<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
+					<br>\
+					<input type="submit" ng-click="setPracticeOptions([[ languages ]])" value="[[ translations.practice.start ]]">\
+				</form>\
+				',
+			plain:true,
+			scope:$scope,
+			closeByEscape: false,
+			closeByDocument: false,
+			showClose: false
 		});
+
+		showPractice();
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
@@ -732,7 +736,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 						lists.push(data);
 
 						$scope.requests--;
-						if ($scope.requests == 0) $scope.startLists(lists);
+						if ($scope.requests == 0) $scope.startLists(lists); // If this is the last request, start the lists
 					}
 				}).error(function(data, status, headers, config) {
 					console.log("error " + status + " while loading list");
@@ -741,6 +745,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.startLists = function(lists) {
+		// Reset older practice
+		$scope.usedWords = [];
+		$scope.incorrectWords = [];
 		// check for the languages
 		var languages_1 = [];
 		var languages_2 = [];
@@ -748,7 +755,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		for (var i = 0, x = lists.length; i < x; i++) {
 			var list = lists[i];
 
-			if (languages_1.length == 0 && languages_2.length == 0) {
+			if (languages_1.length === 0 && languages_2.length === 0) {
 				languages_1.push(list.language_1_tag);
 				languages_2.push(list.language_2_tag);
 			} else if (languages_1.indexOf(list.language_1_tag) === -1) {
@@ -783,9 +790,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			var first, second;
 
 			for(var j = 0, y = $scope.translations.languages.length; j < y; j++){
-				if ($scope.translations.languages[j].iso == languages_1[i]){
+				if ($scope.translations.languages[j].iso === languages_1[i]){
 					first = $scope.translations.languages[j].displayText;
-				} else if ($scope.translations.languages[j].iso == languages_2[i]){
+				} else if ($scope.translations.languages[j].iso === languages_2[i]){
 					second = $scope.translations.languages[j].displayText;
 				}
 			}
@@ -804,24 +811,26 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				<form>\
 					<p ng-repeat="language in languages">\
 						[[ translations.practice.questionedLanguage ]]?<br>\
-						<input type="radio" name="[[ language ]]" value="first" id="firstLanguage" checked> [[ language.language1 ]]<br>\
-						<input type="radio" name="[[ language ]]" value="second" id="secondLanguage"> [[ language.language2 ]]<br>\
-						<input type="radio" name="[[ language ]]" value="both" id="bothLanguages"> [[ translations.practice.both ]]<br>\
+						<input type="radio" name="[[ language ]]" value="first" class="firstLanguage" checked="true"> [[ language.language1 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="second" class="secondLanguage"> [[ language.language2 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="both" class="bothLanguages"> [[ translations.practice.both ]]<br>\
 					</p>\
 					<br>\
 					<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
 					<br>\
-					<input type="submit" ng-click="setPracticeOptions()" value="[[ translations.practice.start ]]">\
+					<input type="submit" ng-click="setPracticeOptions([[ languages ]])" value="[[ translations.practice.start ]]">\
 				</form>\
 				',
-			plain:true,
-			scope:$scope,
+			plain: true,
+			scope: $scope,
 			closeByEscape: false,
 			closeByDocument: false,
 			showClose: false
 		});
 
+		// Do something different when there is only one language
 		if ($scope.languages.length === 1) {
+			// Add the words of all lists to one list
 			$scope.listData = lists[0];
 			for (var i = 1, x = lists.length; i < x; i++) {
 				var list = lists[i];
@@ -830,32 +839,31 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				}
 			}
 
-			console.log($scope.listData);
-
 			$scope.getRandomWord();
 			showPractice();
 
 			$scope.numberOfQuestions = $scope.listData.words.length;
 			document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 		} else {
-			// TODO
+			// TODO: Create this function
+			
 		}
 	};
 
-	$scope.setPracticeOptions = function(){
-		if (document.getElementById('firstLanguage').checked) {
-			$scope.questionedLanguage = true;
-		} else if (document.getElementById('secondLanguage').checked){
-			$scope.questionedLanguage = false;
-		}
-
-		else if (document.getElementById('bothLanguages').checked){
-			document.getElementById('words_left').innerHTML *= 2;
-			for (var i = 0, x = $scope.listData.words.length; i < x; i++){
-				$scope.listData.words.push({
-					language_1_text: $scope.listData.words[i].language_2_text,
-					language_2_text: $scope.listData.words[i].language_1_text
-				});
+	$scope.setPracticeOptions = function(languages) {
+		for (var j = 0, y = languages.length; j < y; j++) {
+			if (document.getElementsByClassName('firstLanguage')[j].checked) {
+				$scope.questionedLanguage = true;
+			} else if (document.getElementsByClassName('secondLanguage')[j].checked){
+				$scope.questionedLanguage = false;
+			} else if (document.getElementsByClassName('bothLanguages')[j].checked){
+				document.getElementById('words_left').innerHTML *= 2;
+				for (var i = 0, x = $scope.listData.words.length; i < x; i++){
+					$scope.listData.words.push({
+						language_1_text: $scope.listData.words[i].language_2_text,
+						language_2_text: $scope.listData.words[i].language_1_text
+					});
+				}
 			}
 		}
 
@@ -866,7 +874,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Practice lists
 	$scope.getRandomWord = function(){
-		if ($scope.usedWords.length == $scope.listData.words.length){
+		if ($scope.usedWords.length === $scope.listData.words.length){
 			showResults();
 			setResult($scope.numberOfQuestions, $scope.incorrectWords.length);
 			return true;
@@ -877,9 +885,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			if ($scope.usedWords.indexOf($scope.randomWord) > -1){
 				$scope.getRandomWord();
-			}
-
-			else {
+			} else {
 				$scope.usedWords.push($scope.randomWord);
 			}
 		}
@@ -896,28 +902,24 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		this.text = '';
 	};
 
-	$scope.checkWord = function(wordOne, wordTwo){
+	$scope.checkWord = function(wordOne, wordTwo) {
 		var wordShouldBe = $scope.questionedLanguage ? wordTwo.language_1_text : wordTwo.language_2_text;
 		var wordObject = wordTwo;
-		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
+		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text;
 
 		if (!$scope.caseSensitivity) {
 			wordOne = wordOne.toLowerCase();
 			wordTwo = wordTwo.toLowerCase();
 		}
 
-		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
+		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2) {
 			$scope.wordIsRight();
-		} else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2){
-			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/);
-			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/);
-			wordOneArray = wordOneArray.sort();
-			wordTwoArray = wordTwoArray.sort();
-			console.log(wordOneArray);
-			console.log(wordTwoArray);
+		} else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2) {
+			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/).sort();
+			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/).sort();
 
-			for(var i = 0; i < wordOneArray.length; i++){
-				if (wordOneArray[i] != wordTwoArray[i]){
+			for(var i = 0; i < wordOneArray.length; i++) {
+				if (wordOneArray[i] != wordTwoArray[i]) {
 					$scope.wordIsWrong(wordOne, wordTwo);
 					return false;
 				}
@@ -957,9 +959,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			wordShouldBe: wordShouldBe
 		});
 
-		console.log($scope.usedWords);
-		console.log($scope.incorrectWords);
-
 		return false;
 	};
 
@@ -967,19 +966,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openFriendRequest = function(name) {
 		ngDialog.open({ // Open dialog
 			template: '\
-				<h1>Friend request</h1>\
+				<h1>[ Friend request ]</h1>\
 				<form ng-submit="addFriend()">\
 					<table>\
 						<tr>\
 							<td>\
-								Friend name:\
+								[ Friend name: ]\
 							</td>\
 							<td>\
-								<input type="text" ng-model="request.friend" placeholder="name">\
+								<input type="text" ng-model="request.friend" placeholder="[ name ]">\
 							</td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="Request">\
+					<input type="submit" value="[ Request ]">\
 				</form>\
 			',
 			plain: true,
