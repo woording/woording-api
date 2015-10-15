@@ -102,7 +102,8 @@
 			"unknown" : "An unknown error has occurred",
 			"emailNotVerified" : "Email is not verified",
 			"noMatch" : "Passwords didn't match",
-			"wrongPassword" : "Password is wrong"
+			"wrongPassword" : "Password is wrong",
+			"noUser" : "User does not exist"
 		},
 		"sharing": {
 			"sharedWith" : "Shared with",
@@ -220,7 +221,8 @@
 			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
 			"unknown" : "Er is een onbekende fout opgetreden",
 			"emailNotVerified" : "Email is niet geverifieerd",
-			"noMatch" : "Wachtwoorden komen niet overeen"
+			"noMatch" : "Wachtwoorden komen niet overeen",
+			"noUser" : "Gebruiker bestaat niet"
 		},
 		"sharing": {
 			"sharedWith" : "Gedeeld met",
@@ -337,7 +339,8 @@
 			"validation" : "Username und/oder Password sind nicht korrekt",
 			"unknown" : "Ein unbekannter Fehler ist augetreten",
 			"emailNotVerified" : "Email nicht verifiziert",
-			"noMatch" : "Passwörter stimmen nicht überein"
+			"noMatch" : "Passwörter stimmen nicht überein",
+			"noUser" : "Benutzer ist nicht vorhanden"
 		},
 		"sharing": {
 			"sharedWith" : "Gemeinschafts mit",

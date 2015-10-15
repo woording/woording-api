@@ -83,14 +83,17 @@ def authenticate():
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	if username and password:
-		if db_manager.get_user(username).get('email_verified'):
-			# Check password
-			if db_manager.check_password(username, password):
-				return json.dumps({
-					"token": db_manager.generate_auth_token(username).decode("utf-8")
-					})
+		if db_manager.get_user(username):
+			if db_manager.get_user(username).get('email_verified'):
+				# Check password
+				if db_manager.check_password(username, password):
+					return json.dumps({
+						"token": db_manager.generate_auth_token(username).decode("utf-8")
+						})
+			else:
+				return "ERROR, Email not verified"
 		else:
-			return "ERROR, Email not verified"
+			return "ERROR, User not found"
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 

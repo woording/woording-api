@@ -195,6 +195,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			.success(function(data, status, headers, config) {
 				if (typeof data == "string") {
 					if (data == 'ERROR, Email not verified') $scope.error = $scope.translations.errors.emailNotVerified;
+					else if (data == 'ERROR, User not found') $scope.error = $scope.translations.errors.noUser;
 				} else {
 					$scope.user.token = data.token;
 					$scope.user.friends = data.friends;
@@ -788,7 +789,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		for (var i = 0, x = languages_1.length; i < x; i++) {
 			var first, second;
-
 			for(var j = 0, y = $scope.translations.languages.length; j < y; j++){
 				if ($scope.translations.languages[j].iso === languages_1[i]){
 					first = $scope.translations.languages[j].displayText;
@@ -867,6 +867,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 		}
 
+		// Check case sensitivity
 		$scope.caseSensitivity = document.getElementById('case_sensitivity').checked;
 
 		ngDialog.close();
