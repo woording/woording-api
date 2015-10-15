@@ -26,6 +26,7 @@
 				<a href="#"><h1>Wording</h1></a>
 
 				<form ng-submit="loginUser()">
+					<p ng-if="error" class="error">[[ error ]]</p>
 					<span>
 						Username: <input type="text" ng-model="user.username">
 					</span>
@@ -36,7 +37,6 @@
 						<input type="submit" value="Login">
 					</span>
 				</form>
-				<span><p ng-if="error" class="error">[[ error ]]</p></span>
 			</header>
 
 			<div id="content">
