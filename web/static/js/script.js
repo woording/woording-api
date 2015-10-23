@@ -52,8 +52,7 @@ function selectList(element) {
 function checkIfSelected() {
 	var lists = document.getElementsByClassName('list_list-item');
 
-	var x = lists.length;
-	for(var i = 0; i < x; i++) {
+	for(var i = 0, x = lists.length; i < x; i++) {
 		list = lists[i];
 		if (list.firstElementChild.firstElementChild.checked == true) {
 			document.getElementById('practice_all').style.display = 'block';

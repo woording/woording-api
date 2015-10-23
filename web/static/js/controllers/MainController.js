@@ -45,7 +45,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		username: "",
 		email: "",
 		lists: []
-	}
+	};
 	$scope.editData = {
 		listname: "",
 		language_1_tag: "",
@@ -67,13 +67,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		confirmPassword: "",
 		error: null,
 		success: null
-	}
+	};
 
 	// Language variable
 	$scope.languages = {
 		prefferedLanguage : $cookies.get('language') ? $cookies.get('language') : "eng",
 		availableLanguages : ["eng", "dut", "ger"]
-	}
+	};
 
 	// load translations from translations.json
 	$http.get('/translations.json').then(function(result) {
@@ -102,12 +102,12 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	// Check if language is available
 	$scope.languageAvailable = function(value, index, array) {
 		return ($scope.languages.availableLanguages.indexOf(value.iso) != -1)
-	}
+	};
 
 	// Toggle show profile
 	$scope.toggleShowProfile = function() {
 		$scope.showProfileInfo = !$scope.showProfileInfo
-	}
+	};
 
 	// Dialogs
 	$scope.openSignUp = function() {
@@ -182,7 +182,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			plain: true,
 			scope: $scope
 		});
-	}
+	};
 
 	// Authentication functions
 	$scope.authenticate = function(username, password) {
@@ -317,7 +317,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			plain: true,
 			scope: $scope
 		});
-	}
+	};
 
 	// Change password of user
 	$scope.changePassword = function() {
@@ -346,7 +346,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		} else {
 			$scope.passwordChange.error = $scope.translations.errors.noMatch;
 		}
-	}
+	};
 
 	// Get friends for user
 	$scope.getFriends = function() { // You don't have them so get them
@@ -360,7 +360,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}).error(function(data, status, headers, config) {
 				console.error("Getting friends failed");
 			});
-	}
+	};
 
 	// json loading functions
 	// Password list for users that are in the database
@@ -422,7 +422,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		else if (location.pathname.split('/').length == 3){
 			$scope.loadList(location.pathname);
 		}
-	}
+	};
 
 	// Look for all URL's that link to a user
 	$scope.addUserUrls = function() {
@@ -431,7 +431,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		for(var i = 0, x = userLinks.length; i < x; i++){
 			$scope.addUserUrl(userLinks[i]);
 		}
-	}
+	};
 
 	// Look for all URL's that link to a list
 	$scope.addListUrls = function() {
@@ -442,7 +442,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 				$scope.addListUrl(listLinks[i]);
 			}
 		}, 0);
-	}
+	};
 
 	// Set custom user URL handler
 	$scope.addUserUrl = function(link){
@@ -504,7 +504,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.numberOfQuestions = $scope.listData.words.length;
 
 		$scope.startList();
-	}
+	};
 
 	$scope.importList = function() {
 		ngDialog.open({ // Open dialog
@@ -556,7 +556,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			plain:true,
 			scope:$scope
 		});
-	}
+	};
 
 	$scope.submitImportedList = function() {
 		document.getElementById('undo_delete').style.display = 'none';
@@ -596,7 +596,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 		$scope.saveList();
 		ngDialog.close();
-	}
+	};
 
 	// Edit the list
 	$scope.editList = function() {
@@ -657,7 +657,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.undoDelete = function() {
 		document.getElementById('undo_delete').style.display = 'none';
 		$scope.saveList();
-	}
+	};
 
 	// Start practice
 	$scope.startList = function(){
@@ -913,13 +913,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			wordTwo = wordTwo.toLowerCase();
 		}
 
-		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2) {
+		if (wordOne == wordTwo) {
 			$scope.wordIsRight();
 		} else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2) {
 			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/).sort();
 			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/).sort();
 
-			for(var i = 0; i < wordOneArray.length; i++) {
+			for (var i = 0; i < wordOneArray.length; i++) {
 				if (wordOneArray[i] != wordTwoArray[i]) {
 					$scope.wordIsWrong(wordOne, wordTwo);
 					return false;
@@ -985,7 +985,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			plain: true,
 			scope: $scope
 		});
-	}
+	};
 
 	$scope.addFriend = function() {
 		// Send friend request
@@ -1000,5 +1000,5 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			.error(function(data, status, headers, config) {
 				console.error("error");
 			});
-	}
+	};
 });
