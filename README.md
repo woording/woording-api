@@ -39,13 +39,6 @@ python3 site.py
 open http://127.0.0.1:5001/
 ```
 
-#### How to only use login
-```bash
-cd login
-./create-env.sh
-python main.py
-```
-
 #### How to use the login system in API
 ```bash
 # First start the api

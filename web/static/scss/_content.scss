@@ -49,6 +49,10 @@
 			}
 		}
 
+		input[ng-model='searchQuery'] {
+			width: calc(100% - 16px);
+		}
+
 		h3 {
 			color: $dark_color;
 		}
@@ -60,7 +64,6 @@
 		table {
 			text-align: left;
 			width: 100%;
-			// border: 1px solid #ddd;
 			border-top: none;
 
 			p {
@@ -77,24 +80,51 @@
 			}
 
 			.list_list-item td {
+				padding: $padding-unit;
+
 				&:hover {
 					background: #ddd;
-					padding-left: 16px;
+					padding-left: 2 * $padding-unit;
+				}
+
+				&:hover a {
+					width: calc(100% - 21px);
+				}
+
+				&:hover input[type="checkbox"] {
+					display: inline-block;
+					visibility: visible;
+					opacity: 1;
 				}
 			}
 
 			td {
-				padding: $padding-unit;
-				cursor: pointer;
 				transition: background 0.3s;
 				transition: padding-left $timing-unit;
 				transition-timing-function: ease-out;
+				width: auto;
+
+				input[type="checkbox"] {
+					width: auto;
+					display: none;
+					opacity: 0;
+					transition: opacity $timing-unit;
+					transition-timing-function: ease;
+					width: 16px;
+					height: 16px;
+					outline: 0;
+					cursor: pointer;
+
+					&:focus {
+						outline: 0;
+					}
+				}
 
 				.list_link {
 					text-decoration: none;
 					color: black;
 					width: 100%;
-					display: block;
+					display: inline-block;
 					padding: $padding-unit;
 					margin: -$padding-unit;
 
@@ -103,30 +133,16 @@
 					}
 				}
 			}
-
-			button {
-				height: 100%;
-
-				margin: -$padding-unit;
-
-				transition: opacity 0.3s;
-				opacity: 0;
-				float: right;
-				padding: 0 10px;
-				cursor: pointer;
-				font-size: 12px;
-				color: white;
-			}
 		}
 
-		#new_list, #import_list, #undo_delete {
+		#new_list, #import_list, #undo_delete, #practice_all {
 			text-align: center;
 			width: 100%;
 			padding-bottom: 8px;
 			padding-top: 8px;
 			margin-bottom: 2px;
 			background-color: $light_blue_color;
-			color: $whiteish_color;
+			color: $white_color;
 			font-weight: bold;
 			cursor: pointer;
 			transition: background-color 0.3s;
@@ -136,10 +152,14 @@
 			}
 		}
 
+		#practice_all {
+			margin-bottom: 0;
+			display: none;
+		}
+
 		#undo_delete {
 			display: none;
-			background-color: black;
-			color: white;
+			background-color: $dark_color;
 
 			&:hover {
 				background-color: #555;
@@ -239,6 +259,24 @@
 
 				tr:nth-child(even) {
 					background: #f1f1f1;
+				}
+			}
+
+			#practice_incorrect {
+				width: 90%;
+				background-color: $light_blue_color;
+				color: $whiteish_color;
+				font-size: 16px;
+				padding: $padding-unit;
+				border: none;
+				font-weight: bold;
+				margin: .5*$padding-unit 0;
+				text-align: center;
+				transition: background-color ease $timing-unit;
+				cursor: pointer;
+				
+				&:hover {
+					background: #39D5ED;
 				}
 			}
 

@@ -24,6 +24,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Greek"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spanish"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portuguese"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italian"
 			}
 		],
 		"lists" : "Lists",
@@ -33,6 +45,17 @@
 		"undoDelete" : "Undo delete list",
 		"friends" : "Friends",
 		"welcome" : "Hello",
+		"options" : "Options",
+		"changeLanguage" : "Change language",
+		"account" : {
+			"changePassword" : {
+				"title" : "Change password",
+				"current" : "Current password",
+				"new" : "New password",
+				"confirm" : "Confirm new password",
+				"success" : "Password is changed"
+			}
+		},
 		"listControls" : {
 			"practice" : "Practice",
 			"edit" : "Edit",
@@ -50,7 +73,6 @@
 			"right" : "Right",
 			"wrong" : "Wrong",
 			"wordsLeft" : "Words left",
-			"options" : "Options",
 			"start" : "Start practice",
 			"questionedLanguage" : "Questioned language",
 			"both" : "Both"
@@ -59,7 +81,8 @@
 			"results" : "Results",
 			"incorrectWords" : "Incorrect words",
 			"correct" : "Correct",
-			"typed" : "Typed"
+			"typed" : "Typed",
+			"incorrectWordsAgain" : "Practice incorrect words"
 		},
 		"login" : {
 			"username" : "Username",
@@ -78,7 +101,9 @@
 			"validation" : "Username and/or password is incorrect",
 			"unknown" : "An unknown error has occurred",
 			"emailNotVerified" : "Email is not verified",
-			"noMatch" : "Passwords didn't match"
+			"noMatch" : "Passwords didn't match",
+			"wrongPassword" : "Password is wrong",
+			"noUser" : "User does not exist"
 		},
 		"sharing": {
 			"sharedWith" : "Shared with",
@@ -119,6 +144,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Grieks"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spaans"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portugees"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italiaans"
 			}
 		],
 		"lists" : "Lijsten",
@@ -128,6 +165,17 @@
 		"undoDelete" : "Lijst verwijderen ongedaan maken",
 		"friends" : "Vrienden",
 		"welcome" : "Hallo",
+		"options" : "Opties",
+		"changeLanguage" : "Verander taal",
+		"account" : {
+			"changePassword" : {
+				"title" : "Verander wachtwoord",
+				"current" : "Huidige wachtwoord",
+				"new" : "Nieuwe wachtwoord",
+				"confirm" : "Bevestig nieuwe wachtwoord",
+				"success" : "Wachtwoord is veranderd"
+			}
+		},
 		"listControls" : {
 			"practice" : "Oefenen",
 			"edit" : "Bewerken",
@@ -145,7 +193,6 @@
 			"right" : "Goed",
 			"wrong" : "Fout",
 			"wordsLeft" : "Woorden over",
-			"options" : "Opties",
 			"start" : "Start oefenen",
 			"questionedLanguage" : "Gevraagde taal",
 			"both" : "Beide"
@@ -154,7 +201,8 @@
 			"results" : "Resultaten",
 			"incorrectWords" : "Foute woorden",
 			"correct" : "Goed",
-			"typed" : "Geantwoord"
+			"typed" : "Geantwoord",
+			"incorrectWordsAgain" : "Oefen de foute woorden nog een keer"
 		},
 		"login" : {
 			"username" : "Gebruikersnaam",
@@ -173,7 +221,8 @@
 			"validation" : "Gebruikersnaam en/of wachtwoord is fout",
 			"unknown" : "Er is een onbekende fout opgetreden",
 			"emailNotVerified" : "Email is niet geverifieerd",
-			"noMatch" : "Wachtwoorden komen niet overeen"
+			"noMatch" : "Wachtwoorden komen niet overeen",
+			"noUser" : "Gebruiker bestaat niet"
 		},
 		"sharing": {
 			"sharedWith" : "Gedeeld met",
@@ -214,6 +263,18 @@
 			{
 				"iso" : "gre",
 				"displayText" : "Griechisch"
+			},
+			{
+				"iso" : "spa",
+				"displayText" : "Spanisch"
+			},
+			{
+				"iso" : "por",
+				"displayText" : "Portugiesisch"
+			},
+			{
+				"iso" : "ita",
+				"displayText" : "Italienisch"
 			}
 		],
 		"lists" : "Leisten",
@@ -223,6 +284,17 @@
 		"undoDelete" : "Zurücksetzen Leiste löschen",
 		"friends" : "Freunde",
 		"welcome" : "Hallo",
+		"options" : "Optionen",
+		"changeLanguage" : "Sprache ändern",
+		"account" : {
+			"changePassword" : {
+				"title" : "Passwort ändern",
+				"current" : "Aktuelles Passwort",
+				"new" : "Neue Passwort",
+				"confirm" : "Bestätige neues Passwort",
+				"success" : "Passwort geändert"
+			}
+		},
 		"listControls" : {
 			"practice" : "Üben",
 			"edit" : "Bearbeiten",
@@ -240,7 +312,6 @@
 			"right" : "Richtig",
 			"wrong" : "Falsch",
 			"wordsLeft" : "Wörter übrig",
-			"options" : "Optionen",
 			"start": "Start üben",
 			"questionedLanguage" : "Frage Sprache",
 			"both" : "Beide"
@@ -249,7 +320,8 @@
 			"results" : "Resultate",
 			"incorrectWords" : "Falschen Wörter",
 			"correct" : "Richtig",
-			"typed" : "Typisierte"
+			"typed" : "Typisierte",
+			"incorrectWordsAgain" : "Üben die Falschen Wörter noch einmal"
 		},
 		"login" : {
 			"username" : "Username",
@@ -260,7 +332,6 @@
 			"login" : "Einloggen",
 			"logout" : "Abmelden",
 			"option" : "Oder registrieren"
-			
 		},
 		"errors" : {
 			"notEverythingFilledIn" : "Nicht alles ist ausgefüllt",
@@ -268,7 +339,8 @@
 			"validation" : "Username und/oder Password sind nicht korrekt",
 			"unknown" : "Ein unbekannter Fehler ist augetreten",
 			"emailNotVerified" : "Email nicht verifiziert",
-			"noMatch" : "Passwörter stimmen nicht überein"
+			"noMatch" : "Passwörter stimmen nicht überein",
+			"noUser" : "Benutzer ist nicht vorhanden"
 		},
 		"sharing": {
 			"sharedWith" : "Gemeinschafts mit",

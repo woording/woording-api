@@ -11,6 +11,10 @@
 		color: $error_red;
 	}
 
+	.success {
+		color: #4F8A10;
+	}
+
 	// Text input style
 	input[type="text"], input[type="password"], input[type="email"], select {
 		transition: border-color 0.25s ease 0s;

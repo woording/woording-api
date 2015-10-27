@@ -2,6 +2,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.title = 'Wording';
 	$scope.Object = Object;
 	$scope.apiAdress = 'http://127.0.0.1:5000';
+	$scope.requests = 0;
 
 	window.onload = function() {
 		// Add a custom click listener to the links
@@ -27,6 +28,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.showProfileInfo = false;
 
 	$scope.error = null;
+	$scope.success = null;
 	$scope.isOwner = true;
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
@@ -59,6 +61,13 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.request = {
 		friend: ""
 	};
+	$scope.passwordChange = {
+		oldPassword: "",
+		newPassword: "",
+		confirmPassword: "",
+		error: null,
+		success: null
+	}
 
 	// Language variable
 	$scope.languages = {
@@ -153,6 +162,27 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			scope:$scope
 		});
 	};
+	$scope.openOptions = function() {
+		ngDialog.open({
+			template: '\
+				<h1>[[ translations.options ]]</h1><br>\
+				<table>\
+					<tr>\
+						<td>[[ translations.changeLanguage ]]</td>\
+						<td>\
+							<select style="min-width: 140px" ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"\
+								ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">\
+							</select>\
+						</td>\
+					</tr>\
+				</table>\
+				<br>\
+				<button ng-click="openChangePassword()">[[ translations.account.changePassword.title ]]</button>\
+			',
+			plain: true,
+			scope: $scope
+		});
+	}
 
 	// Authentication functions
 	$scope.authenticate = function(username, password) {
@@ -165,6 +195,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			.success(function(data, status, headers, config) {
 				if (typeof data == "string") {
 					if (data == 'ERROR, Email not verified') $scope.error = $scope.translations.errors.emailNotVerified;
+					else if (data == 'ERROR, User not found') $scope.error = $scope.translations.errors.noUser;
 				} else {
 					$scope.user.token = data.token;
 					$scope.user.friends = data.friends;
@@ -214,7 +245,7 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 							}
 						} else {
 							// Give success
-							console.log("Verify email");
+							$scope.success = "Please verify your email to login."
 							ngDialog.close('registerDialog');
 							$scope.error = null;
 						}
@@ -255,8 +286,70 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$window.location.href = '/';
 	};
 
+	$scope.openChangePassword = function() {
+		$scope.passwordChange.success = null;
+		$scope.passwordChange.error = null;
+
+		ngDialog.open({
+			template: '\
+				<h1>[[ translations.account.changePassword.title ]]</h1>\
+				<br>\
+				<p ng-if="passwordChange.error" class="error">[[ passwordChange.error ]]</p>\
+				<p ng-if="passwordChange.success" class="success">[[ passwordChange.success ]]</p>\
+				<form ng-submit="changePassword()">\
+					<table>\
+						<tr>\
+							<td>[[ translations.account.changePassword.current ]]</td>\
+							<td><input type="password" name="old_password" ng-model="passwordChange.oldPassword"></td>\
+						</tr>\
+						<tr>\
+							<td>[[ translations.account.changePassword.new ]]</td>\
+							<td><input type="password" name="new_password" ng-model="passwordChange.newPassword"></td>\
+						</tr>\
+						<tr>\
+							<td>[[ translations.account.changePassword.confirm ]]</td>\
+							<td><input type="password" name="confirm_password" ng-model="passwordChange.confirmPassword"></td>\
+						</tr>\
+					</table>\
+					<input type="submit" value="[[ translations.account.changePassword.title ]]">\
+				</form>\
+			',
+			plain: true,
+			scope: $scope
+		});
+	}
+
+	// Change password of user
+	$scope.changePassword = function() {
+		// Confirm the 2 given passwords
+		if ($scope.passwordChange.newPassword == $scope.passwordChange.confirmPassword) {
+			var data = {
+				"username": $scope.user.username,
+				"old_password": $scope.passwordChange.oldPassword,
+				"new_password": $scope.passwordChange.newPassword,
+				"token": $scope.user.token
+			}
+			$http.post($scope.apiAdress + "/changePassword", data)
+				.success(function(data, status, headers, config) {
+					if (data.indexOf("ERROR") > -1) {
+						// return password is incorrect
+						$scope.passwordChange.error = $scope.translations.errors.wrongPassword;
+					} else {
+						// Changed password
+						$scope.passwordChange.error = null;
+						$scope.passwordChange.success = $scope.translations.account.changePassword.success;
+					}
+				}).error(function(data, status, headers, config) {
+					console.error("Error " + status + " while changing password");
+				});
+
+		} else {
+			$scope.passwordChange.error = $scope.translations.errors.noMatch;
+		}
+	}
+
 	// Get friends for user
-	$scope.getFriends = function() {
+	$scope.getFriends = function() { // You don't have them so get them
 		var data = {
 			"token": $scope.user.token,
 			"username": $scope.user.username
@@ -279,8 +372,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$http.post($scope.apiAdress + url, { 'token':$scope.user.token })
 			.success(function(data, status, headers, config) {
 				if (data.username == 'ERROR, No token' || data.username == 'ERROR, No user') {
-					// Show login dialog
-					$scope.openLogIn();
+					// Go to main page
+					$window.location.href = '/';
 				} else {
 					document.getElementById('right_content').style.display = 'none';
 					$scope.userData = data;
@@ -295,8 +388,6 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	};
 
 	$scope.loadList = function(url){
-		$scope.usedWords = [];
-		$scope.incorrectWords = [];
 
 		$timeout(function(){
 			showList();
@@ -392,6 +483,28 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 			}
 		}
 	};
+
+	$scope.practiceIncorrect = function(){
+		var words = $scope.incorrectWords;
+		var listWords = [];
+		for(var i = 0, x = words.length; i < x; i++){
+			listWords.push({
+				language_2_text: words[i].correctWord,
+				language_1_text: words[i].wordShouldBe
+			});
+		}
+		$scope.listData = {
+			listname: $scope.listData.listname,
+			language_2_tag: $scope.listData.language_1_tag,
+			language_1_tag: $scope.listData.language_2_tag,
+			words: listWords,
+			shared_with: $scope.listData.shared_with
+		};
+
+		$scope.numberOfQuestions = $scope.listData.words.length;
+
+		$scope.startList();
+	}
 
 	$scope.importList = function() {
 		ngDialog.open({ // Open dialog
@@ -548,75 +661,221 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 	// Start practice
 	$scope.startList = function(){
-		$http.get('/translations.json').then(function(result) {
-			$scope.translations = result.data[$scope.languages.prefferedLanguage];
-			for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
-				if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
-					$scope.firstLanguage = $scope.translations.languages[i].displayText;
-				}
+		$scope.usedWords = [];
+		$scope.incorrectWords = [];
 
-				else if ($scope.translations.languages[i].iso == $scope.listData.language_2_tag){
-					$scope.secondLanguage = $scope.translations.languages[i].displayText;
-				}
+		for(var i = 0, x = $scope.translations.languages.length; i < x; i++){
+			if ($scope.translations.languages[i].iso == $scope.listData.language_1_tag){
+				$scope.firstLanguage = $scope.translations.languages[i].displayText;
 			}
 
-			ngDialog.open({
-				template:'\
-					<h1>[[ translations.practice.options ]]</h1>\
-					<br>\
-					[[ translations.practice.questionedLanguage ]]?<br>\
-					<form>\
-						<input type="radio" name="language" value="second" id="secondLanguage" checked> ' + $scope.secondLanguage + '\
-						<br>\
-						<input type="radio" name="language" value="first" id="firstLanguage"> ' + $scope.firstLanguage + '\
-						<br>\
-						<input type="radio" name="language" value="both" id="bothLanguages"> [[ translations.practice.both ]]\
-						<br>\
-						<input type="submit" ng-click="chooseLanguage()" value="[[ translations.practice.start ]]">\
-						<br>\
-					</form>\
-					',
-				plain:true,
-				scope:$scope,
-				closeByEscape: false,
-				closeByDocument: false,
-				showClose: false
-			});
+			else if ($scope.translations.languages[i].iso == $scope.listData.language_2_tag){
+				$scope.secondLanguage = $scope.translations.languages[i].displayText;
+			}
+		}
 
-			showPractice();
+		$scope.languages = [{
+			language1: $scope.firstLanguage,
+			language2: $scope.secondLanguage
+		}];
+
+		// Open the dialog with options
+		// TODO: Integrate this in the practice screen
+		ngDialog.open({
+			template:'\
+				<h1>[[ translations.options ]]</h1>\
+				<br>\
+				<form>\
+					[[ translations.practice.questionedLanguage ]]?<br>\
+					<input type="radio" name="language" value="second" class="secondLanguage" checked> ' + $scope.secondLanguage + '<br>\
+					<input type="radio" name="language" value="first" class="firstLanguage"> ' + $scope.firstLanguage + '<br>\
+					<input type="radio" name="language" value="both" class="bothLanguages"> [[ translations.practice.both ]]<br>\
+					<br>\
+					<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
+					<br>\
+					<input type="submit" ng-click="setPracticeOptions([[ languages ]])" value="[[ translations.practice.start ]]">\
+				</form>\
+				',
+			plain:true,
+			scope:$scope,
+			closeByEscape: false,
+			closeByDocument: false,
+			showClose: false
 		});
 
+		showPractice();
 
 		$scope.getRandomWord();
 		$scope.numberOfQuestions = $scope.listData.words.length;
 		document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
 	};
 
-	$scope.chooseLanguage = function(){
-		if (document.getElementById('firstLanguage').checked) {
-			$scope.questionedLanguage = true;
-		}
+	$scope.getSelectedLists = function() {
+		var listElements = document.getElementsByClassName('list_list-item');
+		var listNames = [];
 
-		else if (document.getElementById('secondLanguage').checked){
-			$scope.questionedLanguage = false;
-		}
-
-		else if (document.getElementById('bothLanguages').checked){
-			document.getElementById('words_left').innerHTML *= 2;
-			for (var i = 0, x = $scope.listData.words.length; i < x; i++){
-				$scope.listData.words.push({
-					language_1_text: $scope.listData.words[i].language_2_text,
-					language_2_text: $scope.listData.words[i].language_1_text
-				});
+		var x = listElements.length;
+		for (var i = 0; i < x; i++) {
+			var list = listElements[i];
+			if (list.firstElementChild.firstElementChild.checked == true) {
+				var listName = $scope.userData.lists[i].listname;
+				// listName.replace(" ", "").replace("\n", "");
+				listNames.push(listName);
 			}
 		}
+
+		var lists = [];
+		var data = {
+			"token" : $scope.user.token // Token to confirm your username
+		}
+		for (var i = 0, x = listNames.length; i < x; i++) {
+			$scope.requests++;
+			// Post data to API
+			$http.post($scope.apiAdress + "/" + $scope.userData.username + "/" + listNames[i], data)
+				.success(function(data, status, headers, config) {
+					if (data.username != 'ERROR, No token' || data.username != 'ERROR, No user') {
+						lists.push(data);
+
+						$scope.requests--;
+						if ($scope.requests == 0) $scope.startLists(lists); // If this is the last request, start the lists
+					}
+				}).error(function(data, status, headers, config) {
+					console.log("error " + status + " while loading list");
+				});
+		}
+	};
+
+	$scope.startLists = function(lists) {
+		// Reset older practice
+		$scope.usedWords = [];
+		$scope.incorrectWords = [];
+		// check for the languages
+		var languages_1 = [];
+		var languages_2 = [];
+
+		for (var i = 0, x = lists.length; i < x; i++) {
+			var list = lists[i];
+
+			if (languages_1.length === 0 && languages_2.length === 0) {
+				languages_1.push(list.language_1_tag);
+				languages_2.push(list.language_2_tag);
+			} else if (languages_1.indexOf(list.language_1_tag) === -1) {
+				if (languages_1.indexOf(list.language_2_tag) > -1 && languages_2.indexOf(list.language_1_tag) > -1) {
+					// Swap languages
+					var temp = list.language_1_tag;
+					list.language_1_tag = list.language_2_tag;
+					list.language_2_tag = temp;
+
+					// Swap words
+					for (var j = 0, y = list.words.length; j < y; j++) {
+						var word = list.words[j];
+						temp = word.language_1_text;
+						word.language_1_text = word.language_2_text;
+						word.language_2_text = temp;
+					}
+				} else {
+					languages_1.push(list.language_1_tag);
+					languages_2.push(list.language_2_tag);
+				}
+			} else if (languages_2.indexOf(list.language_2_tag) === -1) {
+				languages_1.push(list.language_1_tag);
+				languages_2.push(list.language_2_tag);
+			} else {
+				continue;
+			}
+		}
+
+		$scope.languages = [];
+
+		for (var i = 0, x = languages_1.length; i < x; i++) {
+			var first, second;
+			for(var j = 0, y = $scope.translations.languages.length; j < y; j++){
+				if ($scope.translations.languages[j].iso === languages_1[i]){
+					first = $scope.translations.languages[j].displayText;
+				} else if ($scope.translations.languages[j].iso === languages_2[i]){
+					second = $scope.translations.languages[j].displayText;
+				}
+			}
+
+			$scope.languages.push({
+				language1: first,
+				language2: second
+			});
+		}
+
+		// Display dialog with language options
+		ngDialog.open({
+			template:'\
+				<h1>[[ translations.options ]]</h1>\
+				<br>\
+				<form>\
+					<p ng-repeat="language in languages">\
+						[[ translations.practice.questionedLanguage ]]?<br>\
+						<input type="radio" name="[[ language ]]" value="first" class="firstLanguage" checked="true"> [[ language.language1 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="second" class="secondLanguage"> [[ language.language2 ]]<br>\
+						<input type="radio" name="[[ language ]]" value="both" class="bothLanguages"> [[ translations.practice.both ]]<br>\
+					</p>\
+					<br>\
+					<input type="checkbox" id="case_sensitivity" checked> [ Case sensitive? ]<br>\
+					<br>\
+					<input type="submit" ng-click="setPracticeOptions([[ languages ]])" value="[[ translations.practice.start ]]">\
+				</form>\
+				',
+			plain: true,
+			scope: $scope,
+			closeByEscape: false,
+			closeByDocument: false,
+			showClose: false
+		});
+
+		// Do something different when there is only one language
+		if ($scope.languages.length === 1) {
+			// Add the words of all lists to one list
+			$scope.listData = lists[0];
+			for (var i = 1, x = lists.length; i < x; i++) {
+				var list = lists[i];
+				for (var j = 0, y = list.words.length; j < y; j++) {
+					$scope.listData.words.push(list.words[j]);
+				}
+			}
+
+			$scope.getRandomWord();
+			showPractice();
+
+			$scope.numberOfQuestions = $scope.listData.words.length;
+			document.getElementById('words_left').innerHTML = $scope.numberOfQuestions;
+		} else {
+			// TODO: Create this function
+			
+		}
+	};
+
+	$scope.setPracticeOptions = function(languages) {
+		for (var j = 0, y = languages.length; j < y; j++) {
+			if (document.getElementsByClassName('firstLanguage')[j].checked) {
+				$scope.questionedLanguage = true;
+			} else if (document.getElementsByClassName('secondLanguage')[j].checked){
+				$scope.questionedLanguage = false;
+			} else if (document.getElementsByClassName('bothLanguages')[j].checked){
+				document.getElementById('words_left').innerHTML *= 2;
+				for (var i = 0, x = $scope.listData.words.length; i < x; i++){
+					$scope.listData.words.push({
+						language_1_text: $scope.listData.words[i].language_2_text,
+						language_2_text: $scope.listData.words[i].language_1_text
+					});
+				}
+			}
+		}
+
+		// Check case sensitivity
+		$scope.caseSensitivity = document.getElementById('case_sensitivity').checked;
 
 		ngDialog.close();
 	};
 
 	// Practice lists
 	$scope.getRandomWord = function(){
-		if ($scope.usedWords.length == $scope.listData.words.length){
+		if ($scope.usedWords.length === $scope.listData.words.length){
 			showResults();
 			setResult($scope.numberOfQuestions, $scope.incorrectWords.length);
 			return true;
@@ -627,10 +886,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 
 			if ($scope.usedWords.indexOf($scope.randomWord) > -1){
 				$scope.getRandomWord();
-			}
-
-			else {
-				$scope.usedWords.push($scope.randomWord)
+			} else {
+				$scope.usedWords.push($scope.randomWord);
 			}
 		}
 	};
@@ -646,33 +903,32 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		this.text = '';
 	};
 
-	$scope.checkWord = function(wordOne, wordTwo){
-		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text
+	$scope.checkWord = function(wordOne, wordTwo) {
+		var wordShouldBe = $scope.questionedLanguage ? wordTwo.language_1_text : wordTwo.language_2_text;
+		var wordObject = wordTwo;
+		wordTwo = $scope.questionedLanguage ? wordTwo.language_2_text : wordTwo.language_1_text;
 
-		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2){
-			$scope.wordIsRight();
+		if (!$scope.caseSensitivity) {
+			wordOne = wordOne.toLowerCase();
+			wordTwo = wordTwo.toLowerCase();
 		}
 
-		else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2){
-			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/);
-			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/);
-			wordOneArray = wordOneArray.sort();
-			wordTwoArray = wordTwoArray.sort();
-			console.log(wordOneArray);
-			console.log(wordTwoArray);
+		if(wordOne == wordTwo && wordOne.split(/\s*[,|/|;]\s*/).length < 2) {
+			$scope.wordIsRight();
+		} else if (wordTwo.split(/\s*[,|/|;]\s*/).length >= 2) {
+			var wordOneArray = wordOne.split(/\s*[,|/|;]\s*/).sort();
+			var wordTwoArray = wordTwo.split(/\s*[,|/|;]\s*/).sort();
 
-			for(var i = 0; i < wordOneArray.length; i++){
-				if (wordOneArray[i] != wordTwoArray[i]){
+			for(var i = 0; i < wordOneArray.length; i++) {
+				if (wordOneArray[i] != wordTwoArray[i]) {
 					$scope.wordIsWrong(wordOne, wordTwo);
 					return false;
 				}
 			}
 
 			$scope.wordIsRight();
-		}
-
-		else {
-			$scope.wordIsWrong(wordOne, wordTwo);
+		} else {
+			$scope.wordIsWrong(wordOne, wordTwo, wordShouldBe, wordObject);
 		}
 	};
 
@@ -684,12 +940,15 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		return true;
 	};
 
-	$scope.wordIsWrong = function(wordOne, wordTwo){
+	$scope.wordIsWrong = function(wordOne, wordTwo, wordShouldBe, wordObject){
+		console.log(wordOne + " " + wordTwo);
+
 		document.getElementById('words_left').innerHTML++;
 		document.getElementById('wrong_word').innerHTML = wordTwo;
 		document.getElementById('wrong_word').style.color = 'red';
-		if ($scope.usedWords.indexOf(wordTwo) > -1){
-			$scope.usedWords.splice($scope.usedWords.indexOf(wordTwo));
+		if ($scope.usedWords.indexOf(wordObject) > -1){
+			console.log('splice');
+			$scope.usedWords.splice($scope.usedWords.indexOf(wordObject));
 		}
 
 		document.getElementById('incorrect').innerHTML++;
@@ -697,7 +956,8 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 		$scope.numberOfQuestions++;
 		$scope.incorrectWords.push({
 			correctWord: wordTwo,
-			incorrectWord: wordOne
+			incorrectWord: wordOne,
+			wordShouldBe: wordShouldBe
 		});
 
 		return false;
@@ -707,19 +967,19 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.openFriendRequest = function(name) {
 		ngDialog.open({ // Open dialog
 			template: '\
-				<h1>Friend request</h1>\
+				<h1>[ Friend request ]</h1>\
 				<form ng-submit="addFriend()">\
 					<table>\
 						<tr>\
 							<td>\
-								Friend name:\
+								[ Friend name: ]\
 							</td>\
 							<td>\
-								<input type="text" ng-model="request.friend" placeholder="name">\
+								<input type="text" ng-model="request.friend" placeholder="[ name ]">\
 							</td>\
 						</tr>\
 					</table>\
-					<input type="submit" value="Request">\
+					<input type="submit" value="[ Request ]">\
 				</form>\
 			',
 			plain: true,

@@ -73,6 +73,7 @@ def verify_email(token):
 		db_manager.verify_email(email)
 		return "Email Successfully verified.\n"
 
+# Authenticate user
 @app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
 @crossdomain(origin='*', headers='content-type') # Headers need to be set
 def authenticate():
@@ -82,14 +83,17 @@ def authenticate():
 	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
 	if username and password:
-		if db_manager.get_user(username).get('email_verified'):
-			# Check password
-			if db_manager.check_password(username, password):
-				return json.dumps({
-					"token": db_manager.generate_auth_token(username).decode("utf-8")
-					})
+		if db_manager.get_user(username):
+			if db_manager.get_user(username).get('email_verified'):
+				# Check password
+				if db_manager.check_password(username, password):
+					return json.dumps({
+						"token": db_manager.generate_auth_token(username).decode("utf-8")
+						})
+			else:
+				return "ERROR, Email not verified"
 		else:
-			return "ERROR, Email not verified"
+			return "ERROR, User not found"
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -192,7 +196,7 @@ def accept_friend(token):
 	if db_manager.users_are_friends(names[0], names[1]):
 		return "Already friends"
 	else:
-		db_manager.create_friendship(names[0], name[1])
+		db_manager.create_friendship(names[0], names[1])
 		return "Now friends"
 
 @app.route('/getFriends', methods=['POST', 'OPTIONS'])
@@ -217,6 +221,30 @@ def get_friends():
 
 	return json.dumps(friends)
 
+@app.route('/changePassword', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers="content-type")
+def change_password():
+	db_manager = DatabaseManager()
+
+	username = request.json.get('username')
+	old_password = sha512_crypt.encrypt(request.json.get('old_password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+	new_password = sha512_crypt.encrypt(request.json.get('new_password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+	token = request.json.get('token')
+
+	# Not everything filled in
+	if username == None or old_password == None or new_password == None or token == None:
+		abort(400)
+
+	# Verify token
+	token_username = db_manager.verify_auth_token(token=token)
+	if token_username == None or token_username != username:
+		abort(401)
+
+	if db_manager.check_password(username, old_password):
+		db_manager.change_password(username, old_password, new_password)
+		return "Changed password"
+	else:
+		return "ERROR, Wrong password"
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])

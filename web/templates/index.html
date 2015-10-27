@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Wording</title>
@@ -40,10 +41,8 @@
 			<div id="profile_dialog" ng-show="showProfileInfo">
 				<h1>[[ user.username ]]</h1><br>
 				<div id="options_bar">
-					<select ng-model="languages.prefferedLanguage" value="" ng-change="switchLanguage()"
-						ng-options="language.iso as language.displayText for language in translations.languages | filter:languageAvailable">
-					</select>
-					<button ng-click="logoutUser()">[[ translations.login.logout ]]</button>
+					<button ng-click="openOptions()">[[ translations.options ]]</button>
+					<button ng-click="logoutUser()" name="logout">[[ translations.login.logout ]]</button>
 				</div>
 			</div><!-- Profile dialog -->
 
@@ -54,7 +53,7 @@
 				<div ng-init="loadUser('/{{username}}')" id="content">
 			{% endif %}
 				<div id="practice_div">
-					<span id="close_button">X</span>
+					<span id="close_button"><i class="material-icons">close</i></span>
 
 					<h1><b> [[listData.listname]] </b></h1>
 
@@ -63,10 +62,14 @@
 					<h2 id="wrong_word"></h2>
 
 					<form ng-submit="submit()" id="word_input">
-						<input type="text" ng-model="text" name="text" autocomplete="off" autocorrect="off">
-						<button type="submit" id="submit">[[ translations.practice.next ]]</button>
+						<table>
+							<tr>
+								<td><input type="text" ng-model="text" name="text" autocomplete="off" autocorrect="off"></td>
+								<td><button type="submit" id="submit">[[ translations.practice.next ]]</button></td>
+							</tr>
+						</table>
 					</form>
-
+					<br>
 					<p>[[ translations.practice.right ]] <span id="correct">0</span></p>
 					<br>
 					<p>[[ translations.practice.wrong ]] <span id="incorrect">0</span></p>
@@ -93,7 +96,7 @@
 
 					<a href="javascript:void(0)" ng-click="openFriendRequest()">
 						<div class="user_list_item">
-							+ Add friend
+							+ [ Add friend ]
 						</div>
 					</a>
 
@@ -105,12 +108,20 @@
 						<h3>[[ translations.lists ]]</h3>
 					</div>
 
-					<input ng-model="searchQuery" placeholder="[[ translations.search ]]">
-
 					<table>
+						<tr> <!-- Search bar -->
+							<td colspan="2"><input ng-model="searchQuery" placeholder="[[ translations.search ]]"></td>
+						</tr>
+
+						<tr>
+							<td colspan="2">
+								<div id="practice_all" ng-click="getSelectedLists()">[ Practice selected ]</div>
+							</td>
+						</tr>
+
 						<tr class="list_list-item" ng-repeat="list in userData.lists | filter:searchQuery">
 							<td>
-								<a href="/[[userData.username]]/[[list.listname]]" class="list_link" onclick="showList()">
+								<input type="checkbox" name="list_select" onchange="selectList(this)"> <a href="/[[userData.username]]/[[list.listname]]" class="list_link" onclick="showList()">
 									[[ list.listname ]]
 								</a>
 							</td>
@@ -214,7 +225,7 @@
 					<div id="results">
 						<table ng-if="incorrectWords.length != 0">
 							<h3> [[ translations.results.results ]]: </h3>
-							[[ translations.results.incorrectWords ]]:
+							<p id="incorrect_words_paragraph">[[ translations.results.incorrectWords ]]:</p>
 							<tr>
 								<th> [[ translations.results.correct ]] </th>
 								<th> [[ translations.results.typed ]] </th>
@@ -224,6 +235,8 @@
 								<td> [[ word.incorrectWord ]] </td>
 							</tr>
 						</table>
+
+						<button id="practice_incorrect" ng-click="practiceIncorrect()">[[ translations.results.incorrectWordsAgain ]]</button>
 
 						<div id="results_bar">
 							<p id="correct_bar"></p><p id="incorrect_bar"></p>

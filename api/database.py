@@ -127,10 +127,6 @@ class DatabaseManager(object):
 				query_text = 'DELETE FROM list WHERE id = ' + str(list_id)
 				db_conn.query(query_text)
 
-				# # Delete translations
-				# query_text = 'DELETE FROM translation WHERE list_id = ' + str(list_id)
-				# db_conn.query(query_text)
-
 			else:
 				print('ERROR: List does not exist')
 
@@ -199,6 +195,17 @@ class DatabaseManager(object):
 
 			return user is not None
 
+	# Change the password of a user
+	def change_password(self, username, old_password, new_password):
+		# Check if the user does exist
+		if self.username_exists(username):
+			# Check if the old password isn't wrong
+			if self.check_password(username, old_password):
+				db_conn = DatabaseConnection(self.database_path)
+
+				query_text = 'UPDATE user SET password_hash = "' + new_password + '" WHERE username = "' + username + '" AND password_hash = "' + old_password + '"'
+				db_conn.query(query_text)
+
 	def verify_email(self, email_to_verify):
 		if self.email_is_verified(email_to_verify):
 			print('Email already verified')
@@ -266,7 +273,7 @@ class DatabaseManager(object):
 	# Get all users friends
 	def get_friends_for_user(self, username):
 
-		# TDOO: Sanity checks
+		# TODO: Sanity checks
 
 		# get all friend id's
 		friend_ids = self.get_friend_ids_for_user(username)

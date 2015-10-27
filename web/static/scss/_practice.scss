@@ -41,16 +41,20 @@
 		text-align: center;
 	}
 
+	table {
+		width: 100%;
+	}
+
 	input {
-		width: 80%;
-		height: 50px;
+		width: calc(100% - 8px);
+		height: 42px;
 		font-size: 20px;
-		padding: 10px;
+		padding: 4px;
 		margin: 0 auto;
 	}
 
 	button {
-		width: 15%;
+		width: calc(100% - 20px);
 		height: 50px;
 
 		margin: 10px;
