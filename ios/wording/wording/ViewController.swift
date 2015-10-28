@@ -23,6 +23,10 @@ class ViewController: UIViewController {
         print(translationIsCorrect(translation1))
         print(translationIsCorrect(translation2))
         
+        let wordingService = WordingService()
+        print("token: \(wordingService.token)")
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

@@ -45,9 +45,11 @@ def register():
 	# Check if everything filled in
 	if username is None or password is None or email is None:
 		return "ERROR, not everything filled in" # missing arguments
+
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		return "ERROR, username and/or email do already exist" # username and/or email do already exist
+		
 	else:
 		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 

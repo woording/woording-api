@@ -31,9 +31,9 @@ app.controller('MainController', function($scope, $http, $window, ngDialog, $int
 	$scope.success = null;
 	$scope.isOwner = true;
 	$scope.loggedIn = $cookies.get('loggedIn') ? $cookies.get('loggedIn') : false;
+	
 	$scope.user = $cookies.getObject('user') ? $cookies.getObject('user') : {
 		token	:	"",
-
 		username:	"",
 		password:	"",
 		confirmPassword: "",
