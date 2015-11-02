@@ -4,7 +4,7 @@
 		<title>Wording</title>
 
 		<!-- stylesheets -->
-		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/icon-font.css') }}">
 
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ngDialog.min.css') }}">
@@ -19,7 +19,7 @@
 	<body ng-app="myApp">
 
 		<div ng-controller="MainController" id="main_controller">
-		<div id="overlay"></div>
+			<div id="overlay"></div>
 
 			<header>
 
@@ -55,10 +55,10 @@
 				<div id="practice_div">
 					<span id="close_button"><i class="material-icons">close</i></span>
 
-					<h1><b> [[listData.listname]] </b></h1>
+					<h1><b>[[ listData.listname ]]</b></h1>
 
-					<h2 id="current_word" ng-show="questionedLanguage"> [[ randomWord.language_1_text ]] </h2>
-					<h2 id="current_word" ng-show="!questionedLanguage"> [[ randomWord.language_2_text ]] </h2>
+					<h2 id="current_word" ng-show="questionedLanguage">[[ randomWord.language_1_text ]]</h2>
+					<h2 id="current_word" ng-show="!questionedLanguage">[[ randomWord.language_2_text ]]</h2>
 					<h2 id="wrong_word"></h2>
 
 					<form ng-submit="submit()" id="word_input">
