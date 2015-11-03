@@ -15,4 +15,8 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
+    <!-- Strings related to the lists -->
+    <string name="my_lists">My lists</string>
+    <string name="others_lists">$s\'s lists</string>
+
 </resources>

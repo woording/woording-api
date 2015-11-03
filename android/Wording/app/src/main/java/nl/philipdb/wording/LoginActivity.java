@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * A login screen that offers login via email/password.
@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         setupActionBar();
 
         // Set up the login form.
@@ -196,7 +198,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             HttpURLConnection urlConnection = null;
             InputStream inputStream = null;
             JSONObject response = null;
@@ -204,17 +205,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Server Request
                 // Setup connection
-                URL url = new URL(MainActivity.API_LOCATION + "/authenticate");
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setReadTimeout(15000);
-                urlConnection.setConnectTimeout(15000);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-                urlConnection.setUseCaches(false);
-                urlConnection.setInstanceFollowRedirects(false);
-                // Set the content-type as json --> Important
-                urlConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+                urlConnection = NetworkCaller.setupConnection("/authenticate");
                 // Now create the JSONObject
                 JSONObject data = new JSONObject();
                 data.put("username", mUsername);
@@ -244,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     response = new JSONObject(json.toString());
+                    MainActivity.username = mUsername;
                     MainActivity.handleResponse(response);
                 }
 

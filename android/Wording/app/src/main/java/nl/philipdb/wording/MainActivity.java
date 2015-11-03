@@ -3,21 +3,45 @@ package nl.philipdb.wording;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    public static final String API_LOCATION = "http://api-wording.rhcloud.com";
+    public static String username;
+
+    private Toolbar mToolbar;
+    private RecyclerView mRecyclerView;
+
+    private static ListsViewAdapter mListsViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Setup toolbar
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        // Setup RecyclerView
+        mRecyclerView = (RecyclerView) findViewById(R.id.lists_view);
+        // Setup LinearLayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        // Setup RecyclerView Adapter
+        mListsViewAdapter = new ListsViewAdapter(new ArrayList<String>());
+        mRecyclerView.setAdapter(mListsViewAdapter);
+
+        // TODO: Only start when not logged in
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }
@@ -47,5 +71,13 @@ public class MainActivity extends AppCompatActivity {
     public static void handleResponse(JSONObject response) {
         // TODO: Handle response
         Log.d("HandleResponse", response.toString());
+        try {
+            // Get the token
+            NetworkCaller.mToken = response.getString("token");
+            // Get the lists and add them
+            mListsViewAdapter.addItemsToList(NetworkCaller.getLists(username));
+        } catch (Exception e) {
+            Log.w("Exception", e.getMessage());
+        }
     }
 }
