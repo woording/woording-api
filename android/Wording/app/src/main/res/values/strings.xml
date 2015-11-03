@@ -16,6 +16,7 @@
     <string name="error_field_required">This field is required</string>
 
     <!-- Strings related to the lists -->
+    <string name="list_item_subtitle">%1$s ↔ %2$s</string>
     <string name="my_lists">My lists</string>
     <string name="others_lists">$s\'s lists</string>
 

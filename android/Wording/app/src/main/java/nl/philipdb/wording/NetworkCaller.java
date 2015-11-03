@@ -1,7 +1,5 @@
 package nl.philipdb.wording;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,6 +12,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 public class NetworkCaller {
     public static final String API_LOCATION = "http://api-wording.rhcloud.com";
@@ -37,8 +36,8 @@ public class NetworkCaller {
         return urlConnection;
     }
 
-    public static String[] getLists(String username) throws Exception {
-        String[] lists = null;
+    public static List[] getLists(String username) throws Exception {
+        List[] lists = null;
 
         // Initialize connection
         HttpURLConnection urlConnection = setupConnection("/" + username);
@@ -73,11 +72,14 @@ public class NetworkCaller {
             // Handle the response
             JSONArray jsonArray = response.getJSONArray("lists");
             JSONObject listObject;
-            lists = new String[jsonArray.length()];
-            for (int i = 0; i < lists.length; i++) {
+            lists = new List[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i ++) {
                 listObject = jsonArray.getJSONObject(i);
-                lists[i] = listObject.getString("listname");
+                List tmp = new List(listObject.getString("listname"), listObject.getString("language_1_tag"),
+                        listObject.getString("language_2_tag"), listObject.getString("shared_with"));
+                lists[i] = tmp;
             }
+            // TODO: Create function that sorts the lists
         }
 
         return lists;

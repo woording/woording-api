@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.ViewHolder> {
-    private ArrayList<String> mListNames;
+    private ArrayList<List> mLists;
 
-    public ListsViewAdapter(ArrayList<String> listNames) {
-        mListNames = listNames;
+    public ListsViewAdapter(ArrayList<List> listNames) {
+        mLists = listNames;
     }
 
     // Create new views (invoked by the layout manager)
@@ -29,11 +29,13 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mListNames.get(position));
+        holder.mTitle.setText(mLists.get(position).name);
+        holder.mSubTitle.setText(App.getAppContext().getString(R.string.list_item_subtitle,
+                mLists.get(position).language1, mLists.get(position).language2));
     }
 
-    public void addItemsToList(String[] array) {
-        mListNames.addAll(Arrays.asList(array));
+    public void addItemsToList(List[] array) {
+        mLists.addAll(Arrays.asList(array));
 
         // Report that the data changed
         notifyDataSetChanged();
@@ -42,15 +44,17 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mListNames.size();
+        return mLists.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        public TextView mTitle;
+        public TextView mSubTitle;
 
         public ViewHolder(View view) {
             super(view);
-            mTextView = (TextView) view.findViewById(R.id.list_item_textview);
+            mTitle = (TextView) view.findViewById(R.id.list_item_title);
+            mSubTitle = (TextView) view.findViewById(R.id.list_item_subtitle);
         }
     }
 }

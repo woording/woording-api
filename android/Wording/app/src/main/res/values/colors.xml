@@ -10,4 +10,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
+    <color name="semi_transparent">#66000000</color>
+
 </resources>

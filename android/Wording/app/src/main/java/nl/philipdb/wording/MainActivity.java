@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         // Setup RecyclerView Adapter
-        mListsViewAdapter = new ListsViewAdapter(new ArrayList<String>());
+        mListsViewAdapter = new ListsViewAdapter(new ArrayList<List>());
         mRecyclerView.setAdapter(mListsViewAdapter);
 
-        // TODO: Only start when not logged in
+        // TODO: Only start login intent when not logged in
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void handleResponse(JSONObject response) {
-        // TODO: Handle response
         Log.d("HandleResponse", response.toString());
         try {
             // Get the token
