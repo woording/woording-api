@@ -34,11 +34,23 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
                 mLists.get(position).language1, mLists.get(position).language2));
     }
 
-    public void addItemsToList(List[] array) {
-        mLists.addAll(Arrays.asList(array));
+    public void updateList(List[] lists) {
+        mLists.clear();
+        mLists.addAll(Arrays.asList(lists));
 
         // Report that the data changed
         notifyDataSetChanged();
+    }
+
+    public void addItemsToList(List[] lists) {
+        mLists.addAll(Arrays.asList(lists));
+
+        // Report that the data changed
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(List list) {
+        mLists.remove(list);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

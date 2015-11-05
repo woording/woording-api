@@ -1,6 +1,7 @@
 package nl.philipdb.wording;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static ListsViewAdapter mListsViewAdapter;
 
@@ -40,6 +42,21 @@ public class MainActivity extends AppCompatActivity {
         // Setup RecyclerView Adapter
         mListsViewAdapter = new ListsViewAdapter(new ArrayList<List>());
         mRecyclerView.setAdapter(mListsViewAdapter);
+
+        // Setup SwipeRefresLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    mListsViewAdapter.updateList(NetworkCaller.getLists(username));
+                } catch (Exception e) {
+
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         // TODO: Only start login intent when not logged in
         Intent loginIntent = new Intent(this, LoginActivity.class);

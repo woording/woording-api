@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/list_item_subtitle"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/secondary_text"
                 tools:text="Placeholder"/>
 
         </LinearLayout>

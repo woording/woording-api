@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 
 public class NetworkCaller {
     public static final String API_LOCATION = "http://api-wording.rhcloud.com";
@@ -83,6 +82,10 @@ public class NetworkCaller {
         }
 
         return lists;
+    }
+
+    public static void deleteList(List list) throws  IOException {
+        HttpURLConnection urlConnection = setupConnection("/deleteList");
     }
 
 }
