@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Wording</string>
+
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_list_view">List</string>
 
     <string name="action_settings">Settings</string>
 
@@ -19,5 +21,16 @@
     <string name="list_item_subtitle">%1$s ↔ %2$s</string>
     <string name="my_lists">My lists</string>
     <string name="others_lists">$s\'s lists</string>
+
+    <!-- Languages -->
+    <string name="english">English</string>
+    <string name="dutch">Dutch</string>
+    <string name="german">German</string>
+    <string name="french">French</string>
+    <string name="latin">Latin</string>
+    <string name="greek">Greek</string>
+    <string name="spanish">Spanish</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="italian">Italian</string>
 
 </resources>

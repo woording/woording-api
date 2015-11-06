@@ -1,6 +1,7 @@
 package nl.philipdb.wording;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -12,10 +13,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class NetworkCaller {
     public static final String API_LOCATION = "http://api-wording.rhcloud.com";
-    public static String mToken;
+    public static String mToken = null;
 
     public static HttpURLConnection setupConnection(String location) throws IOException {
         HttpURLConnection urlConnection = null;
@@ -27,7 +29,7 @@ public class NetworkCaller {
         urlConnection.setRequestMethod("POST");
         urlConnection.setDoInput(true);
         urlConnection.setDoOutput(true);
-        urlConnection.setUseCaches(false);
+        urlConnection.setUseCaches(true);
         urlConnection.setInstanceFollowRedirects(false);
         // Set the content-type as json --> Important
         urlConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
@@ -78,9 +80,9 @@ public class NetworkCaller {
                         listObject.getString("language_2_tag"), listObject.getString("shared_with"));
                 lists[i] = tmp;
             }
-            // TODO: Create function that sorts the lists
         }
 
+        urlConnection.disconnect();
         return lists;
     }
 
