@@ -3,7 +3,6 @@ package nl.philipdb.wording;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

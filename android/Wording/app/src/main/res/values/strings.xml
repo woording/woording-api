@@ -21,6 +21,9 @@
     <string name="list_item_subtitle">%1$s ↔ %2$s</string>
     <string name="my_lists">My lists</string>
     <string name="others_lists">$s\'s lists</string>
+    <string name="edit_list">Edit list</string>
+    <string name="practice">Practice list</string>
+    <string name="delete">Delete list</string>
 
     <!-- Languages -->
     <string name="english">English</string>
