@@ -36,9 +36,21 @@
             android:label="@string/title_activity_list_view"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.philipdb.wording.MainActivity" />
+        </activity>
+        <activity
+            android:name=".PracticeActivity"
+            android:label="@string/title_activity_practice"
+            android:parentActivityName=".ListViewActivity"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.philipdb.wording.ListViewActivity" />
         </activity>
     </application>
 

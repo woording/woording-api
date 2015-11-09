@@ -45,15 +45,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        setupActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
@@ -80,26 +80,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            int result = 0;
-//            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-//            if (resourceId > 0) {
-//                result = getResources().getDimensionPixelSize(resourceId);
-//                mToolbar.setPadding(0, result, 0, 0);
-//            }
-//        }
     }
 
     /**
@@ -221,10 +201,7 @@ public class LoginActivity extends AppCompatActivity {
                 urlConnection.connect();
 
                 // Now check the response code
-                int responseCode = urlConnection.getResponseCode();
-                Log.d("Connection", "Response code: " + responseCode);
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
+                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     inputStream = urlConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                     StringBuilder json = new StringBuilder();

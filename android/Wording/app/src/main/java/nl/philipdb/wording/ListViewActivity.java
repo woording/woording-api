@@ -2,6 +2,8 @@ package nl.philipdb.wording;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -83,6 +85,14 @@ public class ListViewActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_practice) {
+            // TODO: Create way to ask these parameters
+
+            // Create and launch new intent
+            Intent newIntent = new Intent(this, PracticeActivity.class);
+            newIntent.putExtra("list", mList);
+            newIntent.putExtra("askedLanguage", 1);
+            newIntent.putExtra("caseSensitive", true);
+            startActivity(newIntent);
             return true;
         }
 
@@ -92,7 +102,6 @@ public class ListViewActivity extends AppCompatActivity {
     private void setWordsTable() {
         // Set title and languages
         getSupportActionBar().setTitle(mList.mName);
-//        ((TextView) findViewById(R.id.title)).setText(mList.mName);
         ((TextView) findViewById(R.id.language_1)).setText(List.getLanguageName(mList.mLanguage1));
         ((TextView) findViewById(R.id.language_2)).setText(List.getLanguageName(mList.mLanguage2));
 
@@ -196,7 +205,6 @@ public class ListViewActivity extends AppCompatActivity {
 
                     inputStream.close();
 
-                    // TODO
                     mList = new List(response.getString("listname"), response.getString("language_1_tag"),
                             response.getString("language_2_tag"), response.getString("shared_with"));
                     JSONArray JSONWords = response.getJSONArray("words");
