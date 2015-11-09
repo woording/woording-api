@@ -25,4 +25,6 @@
 
     <include layout="@layout/content_practice" />
 
+    <include layout="@layout/content_practice_results" />
+
 </android.support.design.widget.CoordinatorLayout>

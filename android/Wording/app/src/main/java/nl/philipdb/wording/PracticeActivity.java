@@ -7,8 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,9 +23,13 @@ public class PracticeActivity extends AppCompatActivity {
     private int mAskedLanguage; // 1 = language 1 | 2 = language 2 | 0 = both
     private boolean mCaseSensitive = true;
     private ArrayList<String> mUsedWords = new ArrayList<>();
+    private ArrayList<String[]> mWrongWords = new ArrayList<>();
     private String[] mRandomWord = new String[2];
+    private int mTotalWords = 0;
 
+    // UI elements
     private EditText mTranslation;
+    private TextView mRightWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,7 @@ public class PracticeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Setup button actions
+        mRightWord = (TextView) findViewById(R.id.right_word);
         mTranslation = (EditText) findViewById(R.id.translation);
         mTranslation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -69,7 +77,8 @@ public class PracticeActivity extends AppCompatActivity {
     private void nextWord() {
         // Check if list is done
         if (mUsedWords.size() == mList.mLanguage1Words.size()) {
-            // TODO: Show results
+            showPracticeResults();
+            return;
         }
 
         int randomIndexInt = (int) Math.floor(Math.random() * mList.mLanguage1Words.size());
@@ -85,12 +94,21 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     private void checkWord() {
+        mTotalWords++;
         if (mAskedLanguage == 1 || mAskedLanguage == 2) {
             if (isInputRight(mTranslation.getText().toString(), mRandomWord[mAskedLanguage == 1 ? 1 : 0])) {
                 mTranslation.setText("");
+                mTranslation.setError(null);
+                mRightWord.setVisibility(View.GONE);
                 nextWord();
             } else {
-                // TODO: Create function for wrong word
+                mWrongWords.add(new String[]{mTranslation.getText().toString(), mRandomWord[mAskedLanguage == 1 ? 1 : 0]});
+                mRightWord.setText(mRandomWord[mAskedLanguage == 1 ? 1 : 0]);
+                mRightWord.setVisibility(View.VISIBLE);
+                mTranslation.setError(getString(R.string.error_wrong_translation));
+
+                if (mUsedWords.indexOf(mRandomWord[mAskedLanguage == 1 ? 1 : 2]) >= -1)
+                    mUsedWords.remove(mRandomWord[mAskedLanguage == 1 ? 1 : 2]);
             }
         }
     }
@@ -119,6 +137,39 @@ public class PracticeActivity extends AppCompatActivity {
 
             return true;
         } else return false;
+    }
+
+    private void showPracticeResults() {
+        findViewById(R.id.practice_layout).setVisibility(View.GONE);
+        findViewById(R.id.practice_results_layout).setVisibility(View.VISIBLE);
+        // Set right percentages
+        int rightPercentage = (int) Math.round(100 - ((double) mWrongWords.size() / (double) mTotalWords * 100));
+        ((TextView) findViewById(R.id.right_text)).setText(getString(R.string.right_text, rightPercentage));
+//        ((ProgressBar) findViewById(R.id.right_progress_bar)).setProgress(rightPercentage);
+
+        // Display the wrong words
+        if (mWrongWords.size() > 0) {
+            findViewById(R.id.wrong_words_layout).setVisibility(View.VISIBLE);
+
+            TableLayout wrongWordsTable = (TableLayout) findViewById(R.id.wrong_words);
+            for (String[] word : mWrongWords) {
+                TableRow tableRow = new TableRow(this);
+                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                tableRow.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView rightWord = new TextView(this);
+                rightWord.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                rightWord.setText(word[1]);
+                tableRow.addView(rightWord);
+
+                TextView myInput = new TextView(this);
+                myInput.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                myInput.setText(word[0]);
+                tableRow.addView(myInput);
+
+                wrongWordsTable.addView(tableRow);
+            }
+        }
     }
 
 }
