@@ -90,7 +90,7 @@ def authenticate():
 				# Check password
 				if db_manager.check_password(username, password):
 					return json.dumps({
-						"token": db_manager.generate_auth_token(username).decode("utf-8")
+						"token": db_manager.generate_auth_token(username, password).decode("utf-8")
 						})
 			else:
 				return "ERROR, Email not verified"
@@ -112,9 +112,13 @@ def save_list():
 	if username == None or list_data == None or token == None:
 		abort(400)
 
-	# Verify token
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username == None or token_username != username:
+	# Verifiy token
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
+		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
+	elif token_credentials[0] != username:
 		abort(401)
 
 	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None or list_data.get('shared_with') is None:
@@ -149,9 +153,13 @@ def delete_list():
 	if username == None or listname == None or token == None:
 		abort(400)
 
-	# Verify token
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username == None or token_username != username:
+	# Verifiy token
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
+		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
+	elif token_credentials[0] != username:
 		abort(401)
 
 	if not db_manager.listname_exists_for_user(username, listname):
@@ -212,9 +220,13 @@ def get_friends():
 	if username == None or token == None:
 		abort(400)
 
-	# Verify token
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username == None or token_username != username:
+	# Verifiy token
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
+		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
+	elif token_credentials[0] != username:
 		abort(401)
 
 	friends = db_manager.get_friends_for_user(username)
@@ -237,9 +249,13 @@ def change_password():
 	if username == None or old_password == None or new_password == None or token == None:
 		abort(400)
 
-	# Verify token
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username == None or token_username != username:
+	# Verifiy token
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
+		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
+	elif token_credentials[0] != username:
 		abort(401)
 
 	if db_manager.check_password(username, old_password):
@@ -259,13 +275,15 @@ def get(username):
 		return json.dumps({ 'username':'ERROR, No token' })
 	
 	# Verifiy token
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username is None:
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
 		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
 	
 	if db_manager.username_exists(username):
 		# Return all lists
-		if token_username == username:
+		if token_credentials[0] == username:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists: del l['user_id']; del l['id']
@@ -276,7 +294,7 @@ def get(username):
 				'lists' : list_lists
 				})
 		# Return friend lists if you are friends
-		elif db_manager.users_are_friends(username, token_username):
+		elif db_manager.users_are_friends(username, token_credentials[0]):
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists:
@@ -320,9 +338,12 @@ def show_user_list(username, listname):
 	if token is None or token is "":
 		return json.dumps({ 'username':'ERROR, No token' })
 	
-	token_username = db_manager.verify_auth_token(token=token)
-	if token_username is None:
+	# Verifiy token
+	token_credentials = db_manager.verify_auth_token(token=token)
+	if token_credentials is None:
 		return json.dumps({ 'username':'ERROR, No user' })
+	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+		return json.dumps({ 'username':'ERROR, Wrong token'})
 
 	if db_manager.username_exists(username):
 		if db_manager.listname_exists_for_user(username, listname):
@@ -332,7 +353,7 @@ def show_user_list(username, listname):
 			for translation in translations: del translation['id']; del translation['list_id']
 			
 			# Check if is owner
-			if username == token_username:
+			if username == token_credentials[0]:
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
@@ -341,7 +362,7 @@ def show_user_list(username, listname):
 					'shared_with' : shared_with
 				})
 			# Check if is friend
-			elif shared_with == '1' and db_manager.users_are_friends(username, token_username):
+			elif shared_with == '1' and db_manager.users_are_friends(username, token_credentials[0]):
 				return json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),

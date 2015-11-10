@@ -31,9 +31,9 @@ class DatabaseManager(object):
 		self.database_path = 'wording.db'
 
 	# Token
-	def generate_auth_token(self, username, expiration = 3600):
-		s = Serializer(SECRET_KEY, expires_in=expiration)
-		return s.dumps({ 'username': username })
+	def generate_auth_token(self, username, password, expiration = 60):
+		s = Serializer(SECRET_KEY)
+		return s.dumps({ 'username': username, 'password': password })
 
 	# Verify token
 	def verify_auth_token(self, token):
@@ -44,7 +44,7 @@ class DatabaseManager(object):
 			return None # valid token, but expired
 		except BadSignature:
 			return None # invalid token
-		return data['username']
+		return [data['username'], data['password']]
 
 	# Create a user database record
 	def create_user(self, username, email, email_verified, password_hash):
