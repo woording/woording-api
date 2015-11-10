@@ -47,7 +47,8 @@
             android:name=".PracticeActivity"
             android:label="@string/title_activity_practice"
             android:parentActivityName=".ListViewActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="nl.philipdb.wording.ListViewActivity" />

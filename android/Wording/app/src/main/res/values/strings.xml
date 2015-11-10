@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wording</string>
+    <string name="app_name" translatable="false">Wording</string>
 
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_list_view">List</string>
@@ -11,7 +11,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
 
-    <string name="error_invalid_email">This email address is invalid</string>
+    <!--<string name="error_invalid_email">This email address is invalid</string>-->
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -19,7 +19,7 @@
     <!-- Strings related to the lists -->
     <string name="list_item_subtitle">%1$s ↔ %2$s</string>
     <string name="my_lists">My lists</string>
-    <string name="others_lists">$s\'s lists</string>
+    <string name="others_lists">%1$s\'s lists</string>
     <string name="edit_list">Edit list</string>
     <string name="practice">Practice list</string>
     <string name="delete">Delete list</string>
@@ -32,6 +32,9 @@
     <string name="right_word">Right word</string>
     <string name="my_translation">My translation</string>
     <string name="right_text">You got %1$d%% right.</string>
+    <string name="asked_language">Asked language</string>
+    <string name="both">Both</string>
+    <string name="case_sensitive">Case sensitive</string>
 
     <string name="error_wrong_translation">Wrong translation</string>
 

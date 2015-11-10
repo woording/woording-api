@@ -1,15 +1,20 @@
 package nl.philipdb.wording;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -74,6 +79,31 @@ public class PracticeActivity extends AppCompatActivity {
         nextWord();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.putExtra("listname", mList.mName);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                                    // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void nextWord() {
         // Check if list is done
         if (mUsedWords.size() == mList.mLanguage1Words.size()) {
@@ -98,14 +128,13 @@ public class PracticeActivity extends AppCompatActivity {
         if (mAskedLanguage == 1 || mAskedLanguage == 2) {
             if (isInputRight(mTranslation.getText().toString(), mRandomWord[mAskedLanguage == 1 ? 1 : 0])) {
                 mTranslation.setText("");
-                mTranslation.setError(null);
                 mRightWord.setVisibility(View.GONE);
                 nextWord();
             } else {
                 mWrongWords.add(new String[]{mTranslation.getText().toString(), mRandomWord[mAskedLanguage == 1 ? 1 : 0]});
                 mRightWord.setText(mRandomWord[mAskedLanguage == 1 ? 1 : 0]);
                 mRightWord.setVisibility(View.VISIBLE);
-                mTranslation.setError(getString(R.string.error_wrong_translation));
+                Snackbar.make(mTranslation, getString(R.string.error_wrong_translation), Snackbar.LENGTH_LONG).show();
 
                 if (mUsedWords.indexOf(mRandomWord[mAskedLanguage == 1 ? 1 : 2]) >= -1)
                     mUsedWords.remove(mRandomWord[mAskedLanguage == 1 ? 1 : 2]);
@@ -140,12 +169,18 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     private void showPracticeResults() {
+        // Hide keyboard
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         findViewById(R.id.practice_layout).setVisibility(View.GONE);
         findViewById(R.id.practice_results_layout).setVisibility(View.VISIBLE);
         // Set right percentages
         int rightPercentage = (int) Math.round(100 - ((double) mWrongWords.size() / (double) mTotalWords * 100));
         ((TextView) findViewById(R.id.right_text)).setText(getString(R.string.right_text, rightPercentage));
-//        ((ProgressBar) findViewById(R.id.right_progress_bar)).setProgress(rightPercentage);
 
         // Display the wrong words
         if (mWrongWords.size() > 0) {

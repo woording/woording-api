@@ -3,6 +3,7 @@ package nl.philipdb.wording;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import android.os.Build;
@@ -214,6 +215,13 @@ public class LoginActivity extends AppCompatActivity {
                     response = new JSONObject(json.toString());
                     MainActivity.username = mUsername;
                     NetworkCaller.mToken = response.getString("token");
+
+                    // Save the token
+                    SharedPreferences prefs = MainActivity.mContext.getSharedPreferences("data", MODE_APPEND);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("token", NetworkCaller.mToken);
+                    editor.putString("username", MainActivity.username);
+                    editor.apply();
                 }
 
             } catch (Exception e) {

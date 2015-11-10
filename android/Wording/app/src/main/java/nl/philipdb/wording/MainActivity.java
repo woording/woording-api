@@ -2,6 +2,7 @@ package nl.philipdb.wording;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -72,10 +73,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Load saved data
+        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        username = sharedPreferences.getString("username", null);
+        NetworkCaller.mToken = sharedPreferences.getString("token", null);
+
         // TODO: Needs better logic
-        if (NetworkCaller.mToken == null) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+        if (NetworkCaller.mToken == null || username == null) {
+            openLoginActivity(this);
         } else getLists();
 
 //        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -106,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void openLoginActivity(Context context) {
+        Intent loginIntent = new Intent(context, LoginActivity.class);
+        context.startActivity(loginIntent);
     }
 
     public void getLists() {
@@ -157,6 +167,12 @@ public class MainActivity extends AppCompatActivity {
                     response = new JSONObject(json.toString());
 
                     inputStream.close();
+
+                    // Check for errors
+                    if (response.getString("username") != null && response.getString("username").matches("ERROR")) {
+                        MainActivity.openLoginActivity(MainActivity.mContext);
+                        return false;
+                    }
 
                     // Handle the response
                     JSONArray jsonArray = response.getJSONArray("lists");

@@ -2,7 +2,6 @@ package nl.philipdb.wording;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,14 +57,6 @@ public class ListViewActivity extends AppCompatActivity {
         mListName = getIntent().getStringExtra("listname");
         getList();
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -205,17 +196,25 @@ public class ListViewActivity extends AppCompatActivity {
 
                     inputStream.close();
 
-                    mList = new List(response.getString("listname"), response.getString("language_1_tag"),
-                            response.getString("language_2_tag"), response.getString("shared_with"));
-                    JSONArray JSONWords = response.getJSONArray("words");
-                    ArrayList<String> language1Words = new ArrayList<>();
-                    ArrayList<String> language2Words = new ArrayList<>();
-                    for (int i = 0; i < JSONWords.length(); i++) {
-                        JSONObject object = JSONWords.getJSONObject(i);
-                        language1Words.add(object.getString("language_1_text"));
-                        language2Words.add(object.getString("language_2_text"));
+                    // Check for errors
+                    try {
+                        if (response.getString("username") != null) {
+                            MainActivity.openLoginActivity(MainActivity.mContext);
+                            return false;
+                        }
+                    } catch (JSONException e) {
+                        mList = new List(response.getString("listname"), response.getString("language_1_tag"),
+                                response.getString("language_2_tag"), response.getString("shared_with"));
+                        JSONArray JSONWords = response.getJSONArray("words");
+                        ArrayList<String> language1Words = new ArrayList<>();
+                        ArrayList<String> language2Words = new ArrayList<>();
+                        for (int i = 0; i < JSONWords.length(); i++) {
+                            JSONObject object = JSONWords.getJSONObject(i);
+                            language1Words.add(object.getString("language_1_text"));
+                            language2Words.add(object.getString("language_2_text"));
+                        }
+                        mList.setWords(language1Words, language2Words);
                     }
-                    mList.setWords(language1Words, language2Words);
                 }
             } catch (IOException e) {
                 Log.d("IOException", "Something bad happened on the IO");
