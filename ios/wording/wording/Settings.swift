@@ -9,6 +9,5 @@
 import Foundation
 
 class Settings {
-//    var ip = "http://192.168.2.24:5001/"
-    var ip = "http://127.0.0.1:5001/"
+    let ip = "http://127.0.0.1:5000/"
 }

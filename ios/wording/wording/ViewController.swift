@@ -24,7 +24,11 @@ class ViewController: UIViewController {
         print(translationIsCorrect(translation2))
         
         let wordingService = WordingService()
-        print("token: \(wordingService.token)")
+        
+        wordingService.getToken() {
+            token in
+            print(token!)
+        }
         
         
     }
