@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 class WordingService {
     var settings: Settings!
@@ -30,8 +31,7 @@ class WordingService {
             let params = ["username": "cor", "password": "Hunter2"]
             
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-                print("HTTPBODY: \(request.HTTPBody)");
+                request.HTTPBody = try JSON(params).rawData()
             } catch {
                 print(error)
             }
@@ -43,12 +43,13 @@ class WordingService {
             let task = session.dataTaskWithRequest(request) {
                 data, response, error in
                 
-                print("RESPONSE: \(response)")
                 print("DATA: \(data)")
+                print("RESPONSE: \(response)")
                 print("ERROR: \(error)")
                 
-                let token = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                onCompletion(token: token as String?)
+                let json = JSON(data: data!)
+                self.token = json["token"].stringValue
+                onCompletion(token: self.token)
             }
             
             task.resume()
@@ -61,6 +62,7 @@ class WordingService {
         
     }
     
+    
     func getLists(callback: (NSDictionary) -> ()) {
         request(settings.ip, callback: callback)
     }
@@ -70,6 +72,8 @@ class WordingService {
         // the url
         let nsURL = NSURL(string: url)!
         let request = NSMutableURLRequest(URL: nsURL)
+        
+//        let params = ["token": ]
         
         // the NSURLSession
         let task = NSURLSession.sharedSession().dataTaskWithURL(nsURL) {
