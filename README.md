@@ -3,6 +3,11 @@
 ## Setup
 ```bash
 gulp
+
+# For iOS app
+cd ios/wording
+pod install
+open wording.xcworkspace
 ```
 
 ### How to install gulp & required plugins

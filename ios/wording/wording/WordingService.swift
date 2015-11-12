@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 class WordingService {
     var settings: Settings!
@@ -14,42 +15,53 @@ class WordingService {
     
     init() {
         self.settings = Settings()
-        getToken() { token in
-            self.token = token
-            print("Token: \(self.token)");
-        }
     }
     
     func getToken(onCompletion: (token: String?) -> ()) {
         
-        
-        // TODO: Make this safe
-        let request = NSMutableURLRequest(URL: NSURL(string: "\(settings.ip)authenticate")!)
-        print("\(settings.ip)authenticate")
-        let session = NSURLSession.sharedSession()
-        request.HTTPMethod = "POST"
-        let params = ["username": "cor", "password": "Hunter2"]
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-        } catch {
-            print(error)
-        }
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
-        
-        
-        let task = session.dataTaskWithRequest(request) {
-            data, response, error in
+        if token == nil {
             
-            let token = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            onCompletion(token: token as String?)
+            let url = "\(settings.ip)authenticate"
+            print("URL: \(settings.ip)authenticate")
+            
+            let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+            request.HTTPMethod = "POST"
+            
+            let session = NSURLSession.sharedSession()
+            let params = ["username": "cor", "password": "Hunter2"]
+            
+            do {
+                request.HTTPBody = try JSON(params).rawData()
+            } catch {
+                print(error)
+            }
+            
+            request.addValue("application/json charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            
+            let task = session.dataTaskWithRequest(request) {
+                data, response, error in
+                
+                print("DATA: \(data)")
+                print("RESPONSE: \(response)")
+                print("ERROR: \(error)")
+                
+                let json = JSON(data: data!)
+                self.token = json["token"].stringValue
+                onCompletion(token: self.token)
+            }
+            
+            task.resume()
+            
+        } else {
+            
+            onCompletion(token: token)
         }
         
-        task.resume()
         
     }
+    
     
     func getLists(callback: (NSDictionary) -> ()) {
         request(settings.ip, callback: callback)
@@ -60,6 +72,8 @@ class WordingService {
         // the url
         let nsURL = NSURL(string: url)!
         let request = NSMutableURLRequest(URL: nsURL)
+        
+//        let params = ["token": ]
         
         // the NSURLSession
         let task = NSURLSession.sharedSession().dataTaskWithURL(nsURL) {
