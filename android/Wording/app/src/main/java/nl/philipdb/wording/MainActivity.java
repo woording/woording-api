@@ -3,6 +3,7 @@ package nl.philipdb.wording;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 getLists();
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -78,20 +79,37 @@ public class MainActivity extends AppCompatActivity {
         username = sharedPreferences.getString("username", null);
         NetworkCaller.mToken = sharedPreferences.getString("token", null);
 
+        mContext = this;
+
+        // Enable caching
+        try {
+            File httpCacheDir = new File(getCacheDir(), "http");
+            long httpCacheSize = 10 * 1024; // 10 KiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        } catch (IOException e) {
+            Log.i("MainActivity", "HTTP response cache installation failed:" + e);
+        }
+
         // TODO: Needs better logic
         if (NetworkCaller.mToken == null || username == null) {
             openLoginActivity(this);
         } else getLists();
-
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-        mContext = this;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (NetworkCaller.mToken != null) getLists();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        HttpResponseCache cache = HttpResponseCache.getInstalled();
+        if (cache != null) {
+            cache.flush();
+        }
     }
 
     @Override
@@ -118,13 +136,16 @@ public class MainActivity extends AppCompatActivity {
         context.startActivity(loginIntent);
     }
 
-    public void getLists() {
+    private void getLists() {
         if (mGetListsTask != null) {
             return;
         }
+        mSwipeRefreshLayout.setRefreshing(true);
 
         mGetListsTask = new GetListsTask();
         mGetListsTask.execute((Void) null);
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public class GetListsTask extends AsyncTask<Void, Void, Boolean> {
@@ -169,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     inputStream.close();
 
                     // Check for errors
-                    if (response.getString("username") != null && response.getString("username").matches("ERROR")) {
+                    if (response.getString("username") != null && response.getString("username").contains("ERROR")) {
                         MainActivity.openLoginActivity(MainActivity.mContext);
                         return false;
                     }

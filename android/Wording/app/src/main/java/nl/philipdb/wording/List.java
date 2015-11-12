@@ -1,10 +1,10 @@
 package nl.philipdb.wording;
 
-import android.content.res.Resources;
+import android.content.Context;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class List implements Serializable {
     public String mName;
@@ -14,6 +14,8 @@ public class List implements Serializable {
 
     public ArrayList<String> mLanguage1Words;
     public ArrayList<String> mLanguage2Words;
+
+    public static HashMap<String, String> mLanguageCodes = null;
 
     public List(String n, String l1, String l2, String sw) {
         mName = n;
@@ -35,12 +37,20 @@ public class List implements Serializable {
         else return null;
     }
 
-    public static String getLanguageName(String languageCode) {
-        Resources res = MainActivity.mContext.getResources();
-        ArrayList<String> codes = new ArrayList<>(Arrays.asList(res.getStringArray(R.array.language_codes)));
-        ArrayList<String> languages = new ArrayList<>(Arrays.asList(res.getStringArray(R.array.languages)));
-
-        return languages.get(codes.indexOf(languageCode));
+    public static String getLanguageName(Context context, String languageCode) {
+        if (mLanguageCodes == null) {
+            mLanguageCodes = new HashMap<>();
+            mLanguageCodes.put("eng", context.getString(R.string.english));
+            mLanguageCodes.put("dut", context.getString(R.string.dutch));
+            mLanguageCodes.put("ger", context.getString(R.string.german));
+            mLanguageCodes.put("fre", context.getString(R.string.french));
+            mLanguageCodes.put("lat", context.getString(R.string.latin));
+            mLanguageCodes.put("gre", context.getString(R.string.greek));
+            mLanguageCodes.put("spa", context.getString(R.string.spanish));
+            mLanguageCodes.put("por", context.getString(R.string.portuguese));
+            mLanguageCodes.put("ita", context.getString(R.string.italian));
+        }
+        return mLanguageCodes.get(languageCode);
     }
 
     public int getTotalWords() {

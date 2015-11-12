@@ -2,6 +2,10 @@ package nl.philipdb.wording;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,6 +46,11 @@ public class ListViewActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
     private LinearLayout mLinearLayout;
+
+    public int askedLanguage = 1;
+    public boolean caseSensitive = true;
+    public boolean cancelled = false;
+    protected final Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +87,54 @@ public class ListViewActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_practice) {
-            // TODO: Create way to ask these parameters
+            // Create custom AlertDialog
+            View view = getLayoutInflater().inflate(R.layout.content_practice_options, null);
+            ((TextView) view.findViewById(R.id.ask_language_1)).setText(List.getLanguageName(this, mList.mLanguage1));
+            ((TextView) view.findViewById(R.id.ask_language_2)).setText(List.getLanguageName(this, mList.mLanguage2));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_AlertDialog).setTitle(getString(R.string.practice_options))
+                    .setCancelable(true).setView(view);
 
-            // Create and launch new intent
-            Intent newIntent = new Intent(this, PracticeActivity.class);
-            newIntent.putExtra("list", mList);
-            newIntent.putExtra("askedLanguage", 1);
-            newIntent.putExtra("caseSensitive", true);
-            startActivity(newIntent);
-            return true;
+            final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_asked_language);
+            final CheckBox checkBox = (CheckBox) view.findViewById(R.id.case_sensitive_check_box);
+
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Get user inputs
+                    switch (radioGroup.getCheckedRadioButtonId()) {
+                        case R.id.ask_language_1:
+                            askedLanguage = 1;
+                            break;
+                        case R.id.ask_language_2:
+                            askedLanguage = 2;
+                            break;
+                        case R.id.ask_both:
+                            askedLanguage = 0;
+                            break;
+                    }
+                    caseSensitive = checkBox.isChecked();
+
+                    // Create and launch new intent
+                    Intent newIntent = new Intent(mContext, PracticeActivity.class);
+                    newIntent.putExtra("list", mList);
+                    newIntent.putExtra("askedLanguage", askedLanguage);
+                    newIntent.putExtra("caseSensitive", caseSensitive);
+                    startActivity(newIntent);
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancelled = true;
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+
+            return !cancelled;
         }
 
         return super.onOptionsItemSelected(item);
@@ -93,8 +143,8 @@ public class ListViewActivity extends AppCompatActivity {
     private void setWordsTable() {
         // Set title and languages
         getSupportActionBar().setTitle(mList.mName);
-        ((TextView) findViewById(R.id.language_1)).setText(List.getLanguageName(mList.mLanguage1));
-        ((TextView) findViewById(R.id.language_2)).setText(List.getLanguageName(mList.mLanguage2));
+        ((TextView) findViewById(R.id.language_1)).setText(List.getLanguageName(this, mList.mLanguage1));
+        ((TextView) findViewById(R.id.language_2)).setText(List.getLanguageName(this, mList.mLanguage2));
 
         // Set words
         TableLayout table = (TableLayout) findViewById(R.id.word_table);
@@ -117,7 +167,7 @@ public class ListViewActivity extends AppCompatActivity {
         }
     }
 
-    public void getList() {
+    private void getList() {
         if (mGetListTask != null) {
             return;
         }
@@ -127,7 +177,7 @@ public class ListViewActivity extends AppCompatActivity {
         mGetListTask.execute((Void) null);
     }
 
-    public void showProgress(final boolean show) {
+    private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

@@ -42,7 +42,8 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
         });
         holder.mTitle.setText(mLists.get(position).mName);
         holder.mSubTitle.setText(App.getAppContext().getString(R.string.list_item_subtitle,
-                List.getLanguageName(mLists.get(position).mLanguage1), List.getLanguageName(mLists.get(position).mLanguage2)));
+                List.getLanguageName(MainActivity.mContext, mLists.get(position).mLanguage1),
+                List.getLanguageName(MainActivity.mContext, mLists.get(position).mLanguage2)));
     }
 
     public void updateList(List[] lists) {

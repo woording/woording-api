@@ -73,8 +73,8 @@ public class PracticeActivity extends AppCompatActivity {
 
         // Set asked language
         if (mAskedLanguage != 0) {
-            if (mAskedLanguage == 1) ((TextView) findViewById(R.id.language)).setText(List.getLanguageName(mList.mLanguage1));
-            else if (mAskedLanguage == 2) ((TextView) findViewById(R.id.language)).setText(List.getLanguageName(mList.mLanguage2));
+            if (mAskedLanguage == 1) ((TextView) findViewById(R.id.language)).setText(List.getLanguageName(this, mList.mLanguage1));
+            else if (mAskedLanguage == 2) ((TextView) findViewById(R.id.language)).setText(List.getLanguageName(this, mList.mLanguage2));
         }
         nextWord();
     }
@@ -92,7 +92,7 @@ public class PracticeActivity extends AppCompatActivity {
                     TaskStackBuilder.create(this)
                             // Add all of this activity's parents to the back stack
                             .addNextIntentWithParentStack(upIntent)
-                                    // Navigate up to the closest parent
+                            // Navigate up to the closest parent
                             .startActivities();
                 } else {
                     // This activity is part of this app's task, so simply
