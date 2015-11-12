@@ -27,9 +27,9 @@ class ViewController: UIViewController {
         
         let wordingService = WordingService()
         
-        wordingService.getLists {
+        wordingService.getUser("cor") {
             json in
-            print(json.stringValue)
+            print(json)
         }
         
         
