@@ -1,3 +1,9 @@
+/*
+ * Wording is a project by PhiliPdB
+ *
+ * Copyright (c) 2015.
+ */
+
 package nl.philipdb.wording;
 
 import android.content.Intent;
@@ -53,18 +59,6 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
         // Report that the data changed
         notifyDataSetChanged();
     }
-
-//    public void addItemsToList(List[] lists) {
-//        mLists.addAll(Arrays.asList(lists));
-//
-//        // Report that the data changed
-//        notifyDataSetChanged();
-//    }
-
-//    public void removeItem(List list) {
-//        mLists.remove(list);
-//        // TODO
-//    }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
