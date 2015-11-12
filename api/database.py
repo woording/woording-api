@@ -1,5 +1,5 @@
 import sqlite3, json
-from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+from itsdangerous import (JSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 SECRET_KEY = "SECRET"
 
@@ -31,7 +31,7 @@ class DatabaseManager(object):
 		self.database_path = 'wording.db'
 
 	# Token
-	def generate_auth_token(self, username, password, expiration = 60):
+	def generate_auth_token(self, username, password, expiration = 0):
 		s = Serializer(SECRET_KEY)
 		return s.dumps({ 'username': username, 'password': password })
 
