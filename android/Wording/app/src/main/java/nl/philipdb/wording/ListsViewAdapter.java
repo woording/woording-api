@@ -54,17 +54,17 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
         notifyDataSetChanged();
     }
 
-    public void addItemsToList(List[] lists) {
-        mLists.addAll(Arrays.asList(lists));
+//    public void addItemsToList(List[] lists) {
+//        mLists.addAll(Arrays.asList(lists));
+//
+//        // Report that the data changed
+//        notifyDataSetChanged();
+//    }
 
-        // Report that the data changed
-        notifyDataSetChanged();
-    }
-
-    public void removeItem(List list) {
-        mLists.remove(list);
-        // TODO
-    }
+//    public void removeItem(List list) {
+//        mLists.remove(list);
+//        // TODO
+//    }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
