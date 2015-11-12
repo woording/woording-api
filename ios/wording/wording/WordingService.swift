@@ -17,12 +17,12 @@ class WordingService {
         self.settings = Settings()
     }
     
-    func getToken(onCompletion: (token: String?) -> ()) {
+    func getToken(onCompletion: (token: String) -> ()) {
         
         if token == nil {
             
             let url = "\(settings.ip)authenticate"
-            print("URL: \(settings.ip)authenticate")
+            print("URL: \(url)")
             
             let request = NSMutableURLRequest(URL: NSURL(string: url)!)
             request.HTTPMethod = "POST"
@@ -49,46 +49,65 @@ class WordingService {
                 
                 let json = JSON(data: data!)
                 self.token = json["token"].stringValue
-                onCompletion(token: self.token)
+                onCompletion(token: self.token!)
             }
             
             task.resume()
             
         } else {
-            
-            onCompletion(token: token)
+            onCompletion(token: self.token!)
         }
         
-        
     }
     
     
-    func getLists(callback: (NSDictionary) -> ()) {
-        request(settings.ip, callback: callback)
+    func getLists(callback: (json: JSON) -> ()) {
+        request("\(settings.ip)cor") { json in
+            print(json)
+        }
     }
     
-    func request(url: String, callback:(NSDictionary) -> ()) {
+    func request(url: String, callback:(JSON) -> ()) {
         
-        // the url
-        let nsURL = NSURL(string: url)!
-        let request = NSMutableURLRequest(URL: nsURL)
-        
-//        let params = ["token": ]
-        
-        // the NSURLSession
-        let task = NSURLSession.sharedSession().dataTaskWithURL(nsURL) {
-            (data, response, error) in
+        getToken {
             
+            token in
+            print("TOKEN IN REQUEST: \(token)")
+            
+            let nsURL = NSURL(string: url)!
+            let request = NSMutableURLRequest(URL: nsURL)
+            let params = ["token" : token]
+            
+            request.HTTPMethod = "POST"
             do {
-                if let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    print(jsonResult)
-                    callback(jsonResult)
-                }
+                request.HTTPBody = try JSON(params).rawData()
+                print("request HTTPBody \(request.HTTPBody)")
             } catch {
                 print(error)
             }
+            
+            
+            request.addValue("application/json charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            
+            let session = NSURLSession.sharedSession()
+            
+            // the NSURLSession
+            let task = session.dataTaskWithRequest(request) {
+                (data, response, error) in
+                
+                print("DATA: \(data)")
+                print("RESPONSE: \(response)")
+                print("ERROR: \(error)")
+                
+                let jsonResult = JSON(data: data!)
+                
+                callback(jsonResult)
+            }
+            
+            task.resume()
         }
-        task.resume()
     }
 }
 
