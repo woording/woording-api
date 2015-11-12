@@ -6,7 +6,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- From appcompat -->
-    <dimen name="dialog_min_width_major">65%</dimen>
-    <dimen name="dialog_min_width_minor">95%</dimen>
+    <item name="dialog_min_width_major" type="dimen">65%</item>
+    <item name="dialog_min_width_minor" type="dimen">95%</item>
     <dimen name="dialog_padding_material">24dp</dimen>
 </resources>

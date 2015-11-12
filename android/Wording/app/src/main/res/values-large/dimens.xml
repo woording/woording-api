@@ -2,7 +2,7 @@
 <resources>
 
     <!-- From AppCompat -->
-    <dimen name="dialog_min_width_major">55%</dimen>
-    <dimen name="dialog_min_width_minor">80%</dimen>
+    <item name="dialog_min_width_major" type="dimen">55%</item>
+    <item name="dialog_min_width_minor" type="dimen">80%</item>
 
 </resources>
