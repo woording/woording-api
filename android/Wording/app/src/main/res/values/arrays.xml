@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Wording is a project by PhiliPdB
+  ~
+  ~ Copyright (c) 2015.
+  -->
+
 <resources>
 
     <string-array name="languages">

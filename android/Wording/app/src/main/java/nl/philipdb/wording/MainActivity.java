@@ -1,3 +1,9 @@
+/*
+ * Wording is a project by PhiliPdB
+ *
+ * Copyright (c) 2015.
+ */
+
 package nl.philipdb.wording;
 
 import android.content.Context;
@@ -5,15 +11,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;

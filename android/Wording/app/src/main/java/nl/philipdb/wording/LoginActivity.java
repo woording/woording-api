@@ -1,10 +1,15 @@
+/*
+ * Wording is a project by PhiliPdB
+ *
+ * Copyright (c) 2015.
+ */
+
 package nl.philipdb.wording;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
