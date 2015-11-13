@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.HttpResponseCache;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,19 +20,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -86,15 +75,6 @@ public class MainActivity extends AppCompatActivity {
         NetworkCaller.mToken = sharedPreferences.getString("token", null);
 
         mContext = this;
-
-        // Enable caching
-        try {
-            File httpCacheDir = new File(getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024; // 10 KiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        } catch (IOException e) {
-            Log.i("MainActivity", "HTTP response cache installation failed:" + e);
-        }
 
         // TODO: Needs better logic
         if (NetworkCaller.mToken == null || username == null) {
@@ -154,73 +134,22 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public class GetListsTask extends AsyncTask<Void, Void, Boolean> {
+    public class GetListsTask extends NetworkCaller {
 
         GetListsTask() {
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            HttpURLConnection urlConnection = null;
-            JSONObject response = null;
-
             try {
-                // Initialize connection
-                urlConnection = NetworkCaller.setupConnection("/" + username);
-                // Add content
-                JSONObject data = new JSONObject();
-                data.put("token", NetworkCaller.mToken);
-                // And send the data
-                OutputStream output = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
-                writer.write(data.toString());
-                writer.flush();
-                writer.close();
-                output.close();
-                // And connect
-                urlConnection.connect();
-
-                // Check for the response from the server
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    InputStream inputStream = urlConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder json = new StringBuilder();
-                    String inputLine = "";
-
-                    while ((inputLine = bufferedReader.readLine()) != null) {
-                        json.append(inputLine);
-                    }
-
-                    response = new JSONObject(json.toString());
-
-                    inputStream.close();
-
-                    // Check for errors
-                    if (response.getString("username") != null && response.getString("username").contains("ERROR")) {
-                        MainActivity.openLoginActivity(MainActivity.mContext);
-                        return false;
-                    }
-
-                    // Handle the response
-                    JSONArray jsonArray = response.getJSONArray("lists");
-                    JSONObject listObject;
-                    mLists = new List[jsonArray.length()];
-                    for (int i = 0; i < jsonArray.length(); i ++) {
-                        listObject = jsonArray.getJSONObject(i);
-                        List tmp = new List(listObject.getString("listname"), listObject.getString("language_1_tag"),
-                                listObject.getString("language_2_tag"), listObject.getString("shared_with"));
-                        mLists[i] = tmp;
-                    }
-                }
+                mLists = getLists(username);
+                return mLists != null;
             } catch (IOException e) {
                 Log.d("IOException", "Something bad happened on the IO");
             } catch (JSONException e) {
                 Log.d("JSONException", "The JSON fails");
-            } finally {
-                if (urlConnection != null) urlConnection.disconnect();
             }
-
-            return response != null;
+            return false;
         }
 
         @Override

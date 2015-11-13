@@ -12,7 +12,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,19 +27,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
 
 public class ListViewActivity extends AppCompatActivity {
 
@@ -205,7 +194,7 @@ public class ListViewActivity extends AppCompatActivity {
         });
     }
 
-    public class GetListTask extends AsyncTask<Void, Void, Boolean> {
+    public class GetListTask extends NetworkCaller {
 
         private final String mListName;
         private final String mUsername;
@@ -217,69 +206,15 @@ public class ListViewActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            HttpURLConnection urlConnection = null;
-            JSONObject response = null;
-
             try {
-                // Initialize connection
-                urlConnection = NetworkCaller.setupConnection("/" + mUsername + "/" + mListName.replace(" ", "%20"));
-                // Add content
-                JSONObject data = new JSONObject();
-                data.put("token", NetworkCaller.mToken);
-                // And send the data
-                OutputStream output = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
-                writer.write(data.toString());
-                writer.flush();
-                writer.close();
-                output.close();
-                // And connect
-                urlConnection.connect();
-
-                // Check for the response from the server
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    InputStream inputStream = urlConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder json = new StringBuilder();
-                    String inputLine = "";
-
-                    while ((inputLine = bufferedReader.readLine()) != null) {
-                        json.append(inputLine);
-                    }
-
-                    response = new JSONObject(json.toString());
-
-                    inputStream.close();
-
-                    // Check for errors
-                    try {
-                        if (response.getString("username") != null) {
-                            MainActivity.openLoginActivity(MainActivity.mContext);
-                            return false;
-                        }
-                    } catch (JSONException e) {
-                        mList = new List(response.getString("listname"), response.getString("language_1_tag"),
-                                response.getString("language_2_tag"), response.getString("shared_with"));
-                        JSONArray JSONWords = response.getJSONArray("words");
-                        ArrayList<String> language1Words = new ArrayList<>();
-                        ArrayList<String> language2Words = new ArrayList<>();
-                        for (int i = 0; i < JSONWords.length(); i++) {
-                            JSONObject object = JSONWords.getJSONObject(i);
-                            language1Words.add(object.getString("language_1_text"));
-                            language2Words.add(object.getString("language_2_text"));
-                        }
-                        mList.setWords(language1Words, language2Words);
-                    }
-                }
+                mList = getList(mUsername, mListName);
+                return mList != null;
             } catch (IOException e) {
                 Log.d("IOException", "Something bad happened on the IO");
             } catch (JSONException e) {
                 Log.d("JSONException", "The JSON fails");
-            } finally {
-                if (urlConnection != null) urlConnection.disconnect();
             }
-
-            return response != null;
+            return false;
         }
 
         @Override

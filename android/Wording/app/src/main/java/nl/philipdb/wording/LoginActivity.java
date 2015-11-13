@@ -8,8 +8,6 @@ package nl.philipdb.wording;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,17 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 
 /**
  * A login screen that offers login via email/password.
@@ -170,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends NetworkCaller {
 
         private final String mUsername;
         private final String mPassword;
@@ -182,65 +169,13 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            HttpURLConnection urlConnection = null;
-            InputStream inputStream = null;
-            JSONObject response = null;
-
             try {
                 // Server Request
-                // Setup connection
-                urlConnection = NetworkCaller.setupConnection("/authenticate");
-                // Now create the JSONObject
-                JSONObject data = new JSONObject();
-                data.put("username", mUsername);
-                data.put("password", mPassword);
-                // And send the data
-                OutputStream output = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
-                writer.write(data.toString());
-                writer.flush();
-                writer.close();
-                output.close();
-                // And now connect to the server
-                urlConnection.connect();
-
-                // Now check the response code
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    inputStream = urlConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder json = new StringBuilder();
-                    String inputLine = "";
-
-                    while ((inputLine = bufferedReader.readLine()) != null) {
-                        json.append(inputLine);
-                    }
-
-                    response = new JSONObject(json.toString());
-                    MainActivity.username = mUsername;
-                    NetworkCaller.mToken = response.getString("token");
-
-                    // Save the token
-                    SharedPreferences prefs = MainActivity.mContext.getSharedPreferences("data", MODE_APPEND);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("token", NetworkCaller.mToken);
-                    editor.putString("username", MainActivity.username);
-                    editor.apply();
-                }
-
+                return authorize(mUsername, mPassword);
             } catch (Exception e) {
                 Log.d("InputStream", e.getMessage());
-            } finally {
-                if (urlConnection != null) urlConnection.disconnect();
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.w("IOExeption", e.getMessage());
-                    }
-                }
             }
-
-            return response != null;
+            return false;
         }
 
         @Override
