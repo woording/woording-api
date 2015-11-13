@@ -16,6 +16,7 @@
 		873561AD1BB1D66E0099B9D1 /* wordingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873561AC1BB1D66E0099B9D1 /* wordingUITests.swift */; };
 		879C2D101BE0394B0074EEF7 /* WordingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C2D0F1BE0394B0074EEF7 /* WordingService.swift */; };
 		879C2D121BE039520074EEF7 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C2D111BE039520074EEF7 /* Settings.swift */; };
+		87B5C8061BF538B4001FFDBE /* WordingConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B5C8051BF538B4001FFDBE /* WordingConnection.swift */; };
 		87F2621C1BDF9C4300FFC011 /* Translation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2621B1BDF9C4300FFC011 /* Translation.swift */; };
 		939C5041CA8F03EC6BB16761 /* Pods_wordingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40317586E5B49F362D88D53F /* Pods_wordingTests.framework */; };
 		DB24FC248CF67D45E38D49D0 /* Pods_wording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E2CAD4132ABD9A41CB74B12 /* Pods_wording.framework */; };
@@ -62,6 +63,7 @@
 		873561AE1BB1D66E0099B9D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		879C2D0F1BE0394B0074EEF7 /* WordingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordingService.swift; sourceTree = "<group>"; };
 		879C2D111BE039520074EEF7 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		87B5C8051BF538B4001FFDBE /* WordingConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordingConnection.swift; sourceTree = "<group>"; };
 		87F2621B1BDF9C4300FFC011 /* Translation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Translation.swift; sourceTree = "<group>"; };
 		9A6B2C81DC779A7B94019231 /* Pods-wordingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wordingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-wordingTests/Pods-wordingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B06CCF531ABE54A729A2DBEA /* Pods-wordingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wordingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-wordingTests/Pods-wordingTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				8735618C1BB1D66E0099B9D1 /* AppDelegate.swift */,
 				8735618E1BB1D66E0099B9D1 /* ViewController.swift */,
 				879C2D0F1BE0394B0074EEF7 /* WordingService.swift */,
+				87B5C8051BF538B4001FFDBE /* WordingConnection.swift */,
 				879C2D111BE039520074EEF7 /* Settings.swift */,
 				873561901BB1D66E0099B9D1 /* Main.storyboard */,
 				873561931BB1D66E0099B9D1 /* Assets.xcassets */,
@@ -435,6 +438,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87B5C8061BF538B4001FFDBE /* WordingConnection.swift in Sources */,
 				8735618F1BB1D66E0099B9D1 /* ViewController.swift in Sources */,
 				8735618D1BB1D66E0099B9D1 /* AppDelegate.swift in Sources */,
 				879C2D101BE0394B0074EEF7 /* WordingService.swift in Sources */,

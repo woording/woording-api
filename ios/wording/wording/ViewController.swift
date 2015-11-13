@@ -9,6 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +27,9 @@ class ViewController: UIViewController {
         
         let wordingService = WordingService()
         
-        wordingService.getToken() {
-            token in
-            print(token!)
+        wordingService.getUser("cor") {
+            json in
+            print(json)
         }
         
         
