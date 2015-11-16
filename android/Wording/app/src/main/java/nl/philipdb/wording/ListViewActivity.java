@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,7 +36,6 @@ public class ListViewActivity extends AppCompatActivity {
 
     private GetListTask mGetListTask = null;
 
-    private String mListName;
     private List mList;
 
     private ProgressBar mProgressBar;
@@ -59,8 +59,23 @@ public class ListViewActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.list_view_layout);
 
         // Load List from Intent
-        mListName = getIntent().getStringExtra("listname");
-        getList();
+        mList = (List) getIntent().getSerializableExtra("list");
+        if (MainActivity.isNetworkAvailable(this)) getList();
+        else {
+            // Try to read from cache
+            try {
+                mList = CacheHandler.readList(this, mList.mName);
+            } catch (IOException e) {
+                Log.d("Cache", "Something went wrong with the IO: " + e);
+            } catch (JSONException e) {
+                Log.d("Cache", "Something went wrong with the JSON: " + e);
+            }
+            if (mList.getTotalWords() == 0) {
+                Snackbar.make(mLinearLayout, getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
+                finish(); // No words data
+            }
+            else setWordsTable();
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -87,11 +102,11 @@ public class ListViewActivity extends AppCompatActivity {
             ((TextView) view.findViewById(R.id.ask_language_2)).setText(List.getLanguageName(this, mList.mLanguage2));
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_AlertDialog).setTitle(getString(R.string.practice_options))
                     .setCancelable(true).setView(view);
-
+            // Set option buttons
             final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_asked_language);
             final CheckBox checkBox = (CheckBox) view.findViewById(R.id.case_sensitive_check_box);
-
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            // Setup start and cancel buttons
+            builder.setPositiveButton(R.string.start_practice, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Get user inputs
@@ -123,10 +138,9 @@ public class ListViewActivity extends AppCompatActivity {
                     dialog.cancel();
                 }
             });
-
+            // Create and show dialog
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-
 
             return !cancelled;
         }
@@ -167,7 +181,7 @@ public class ListViewActivity extends AppCompatActivity {
         }
 
         showProgress(true);
-        mGetListTask = new GetListTask(mListName, MainActivity.username);
+        mGetListTask = new GetListTask(mList.mName, MainActivity.username);
         mGetListTask.execute((Void) null);
     }
 
@@ -224,8 +238,28 @@ public class ListViewActivity extends AppCompatActivity {
 
             if (success) {
                 setWordsTable();
+                // Write list to cache
+                try {
+                    CacheHandler.writeList(mContext, mList);
+                } catch (IOException e) {
+                    Log.d("IO", "Something bad with the IO: " + e);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Something bad with the JSON: " + e);
+                }
             } else {
-                finish();
+                // Try to read from cache
+                try {
+                    mList = CacheHandler.readList(mContext, mList.mName);
+                } catch (IOException e) {
+                    Log.d("Cache", "Something went wrong with the IO: " + e);
+                } catch (JSONException e) {
+                    Log.d("Cache", "Something went wrong with the JSON: " + e);
+                }
+                if (mList.getTotalWords() == 0) {
+                    Snackbar.make(mLinearLayout, getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
+                    finish(); // No words data
+                }
+                else setWordsTable();
             }
         }
 

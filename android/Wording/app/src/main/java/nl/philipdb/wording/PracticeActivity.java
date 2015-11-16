@@ -91,7 +91,7 @@ public class PracticeActivity extends AppCompatActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 Intent upIntent = NavUtils.getParentActivityIntent(this);
-                upIntent.putExtra("listname", mList.mName);
+                upIntent.putExtra("list", mList);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is NOT part of this app's task, so create a new task
                     // when navigating up, with a synthesized back stack.

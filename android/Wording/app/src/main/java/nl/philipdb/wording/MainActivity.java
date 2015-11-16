@@ -9,8 +9,10 @@ package nl.philipdb.wording;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.http.HttpResponseCache;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Load cache
+        try {
+            mLists = CacheHandler.readLists(this);
+        } catch (IOException e) {
+            Log.d("Cache", "Something went wrong with the IO: " + e);
+        } catch (JSONException e) {
+            Log.d("Cache", "Something went wrong with the JSON: " + e);
+        }
+
         // Setup toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -79,23 +90,16 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Needs better logic
         if (NetworkCaller.mToken == null || username == null) {
             openLoginActivity(this);
-        } else getLists();
+        } else {
+            if (isNetworkAvailable(this)) getLists();
+            else Snackbar.make(mSwipeRefreshLayout, getString(R.string.error_no_connection), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (NetworkCaller.mToken != null) getLists();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        HttpResponseCache cache = HttpResponseCache.getInstalled();
-        if (cache != null) {
-            cache.flush();
-        }
     }
 
     @Override
@@ -117,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     public static void openLoginActivity(Context context) {
         Intent loginIntent = new Intent(context, LoginActivity.class);
         context.startActivity(loginIntent);
@@ -130,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
 
         mGetListsTask = new GetListsTask();
         mGetListsTask.execute((Void) null);
-
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public class GetListsTask extends NetworkCaller {
@@ -155,9 +164,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mGetListsTask = null;
+            mSwipeRefreshLayout.setRefreshing(false);
 
             if (success) {
                 mListsViewAdapter.updateList(mLists);
+                // Write lists to cache
+                try {
+                    CacheHandler.writeLists(MainActivity.mContext, mLists);
+                } catch (IOException e) {
+                    Log.d("IO", "Something bad with the IO: " + e);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Something bad with the JSON: " + e);
+                }
             }
         }
 

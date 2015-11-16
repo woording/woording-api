@@ -42,7 +42,7 @@ public class ListsViewAdapter extends RecyclerView.Adapter<ListsViewAdapter.View
             public void onClick(View v) {
                 // Start intent
                 Intent intent = new Intent(MainActivity.mContext, ListViewActivity.class);
-                intent.putExtra("listname", mLists.get(position).mName);
+                intent.putExtra("list", mLists.get(position));
                 MainActivity.mContext.startActivity(intent);
             }
         });

@@ -8,6 +8,10 @@ package nl.philipdb.wording;
 
 import android.content.Context;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +22,8 @@ public class List implements Serializable {
     public String mLanguage2;
     public String mSharedWith;
 
-    public ArrayList<String> mLanguage1Words;
-    public ArrayList<String> mLanguage2Words;
+    public ArrayList<String> mLanguage1Words = new ArrayList<>();
+    public ArrayList<String> mLanguage2Words = new ArrayList<>();
 
     public static HashMap<String, String> mLanguageCodes = null;
 
@@ -37,11 +41,11 @@ public class List implements Serializable {
         }
     }
 
-    public String getTranslation(String word) {
-        if (mLanguage1Words.contains(word)) return mLanguage2Words.get(mLanguage1Words.indexOf(word));
-        else if (mLanguage2Words.contains(word)) return mLanguage1Words.get(mLanguage1Words.indexOf(word));
-        else return null;
-    }
+//    public String getTranslation(String word) {
+//        if (mLanguage1Words.contains(word)) return mLanguage2Words.get(mLanguage1Words.indexOf(word));
+//        else if (mLanguage2Words.contains(word)) return mLanguage1Words.get(mLanguage1Words.indexOf(word));
+//        else return null;
+//    }
 
     public static String getLanguageName(Context context, String languageCode) {
         if (mLanguageCodes == null) {
@@ -61,5 +65,24 @@ public class List implements Serializable {
 
     public int getTotalWords() {
         return mLanguage1Words.size();
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("listname", mName);
+        json.put("language_1_tag", mLanguage1);
+        json.put("language_2_tag", mLanguage2);
+        json.put("shared_with", mSharedWith);
+        if (getTotalWords() > 0) {
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < mLanguage1Words.size(); i++) {
+                JSONObject temp = new JSONObject();
+                temp.put("language_1_text", mLanguage1Words.get(i));
+                temp.put("language_2_text", mLanguage2Words.get(i));
+                array.put(temp);
+            }
+            json.put("words", array);
+        }
+        return json;
     }
 }

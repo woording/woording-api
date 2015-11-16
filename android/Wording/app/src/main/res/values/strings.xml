@@ -11,6 +11,8 @@
     <string name="title_activity_list_view">List</string>
     <string name="title_activity_practice">Practice List</string>
 
+    <string name="error_no_connection">No connection</string>
+
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
@@ -40,6 +42,7 @@
     <string name="right_text">You got %1$d%% right.</string>
     <!-- Practice options -->
     <string name="practice_options">Practice options</string>
+    <string name="start_practice">Start practice</string>
     <string name="asked_language">Asked language</string>
     <string name="both">Both</string>
     <string name="case_sensitive">Case sensitive</string>
