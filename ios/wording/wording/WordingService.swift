@@ -23,5 +23,13 @@ class WordingService {
         }
     }
     
+    func getList(user: String, listname: String, callback: (JSON) -> ()) {
+        connection.request(connection.settings.ip + user + "/" + listname) {
+            json in
+            callback(json)
+        }
+    }
+    
+    
 }
 

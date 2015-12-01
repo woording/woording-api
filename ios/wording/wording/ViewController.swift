@@ -31,6 +31,10 @@ class ViewController: UIViewController {
             json in
             print(json)
         }
+        wordingService.getList("cor", listname: "engelse_woorden") {
+            json in
+            print(json)
+        }
         
         
     }
