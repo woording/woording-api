@@ -19,6 +19,8 @@ node_modules/
 node_modules/*
 api/wording.db
 
+env/*
+
 
 # Xcode
 #
