@@ -1,4 +1,4 @@
-#!/Users/cor/Development/woording/woording/env/bin/python3.4
+#!/Users/cor/Development/woording/woording-api/env/bin/python3.4
 
 # -*- coding: utf-8 -*-
 import re
