@@ -393,4 +393,4 @@ def show_user_list(username, listname):
 
 # Run app
 if __name__ == '__main__':
-	app.run('127.0.0.1', debug=True)
+	app.run('127.0.0.1', debug=False)
