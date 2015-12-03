@@ -1,5 +1,6 @@
 from flask import Flask, request, abort, url_for, render_template, session, Response
 from flask import g
+from flask.ext.cors import CORS
 from flask_restful import Resource, Api
 from flask_mail import Mail
 from passlib.hash import sha512_crypt
@@ -26,6 +27,7 @@ MAIL_PASSWORD = "TestingPassword"
 MAIL_DEFAULT_SENDER = "noreply.wording@gmail.com"
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(__name__)
 api = Api(app)
 
@@ -390,7 +392,14 @@ def show_user_list(username, listname):
 			'username': 'ERROR: This shouldn\'t happen'
 			})
 
+@app.after_request
+def after_request(response):
+	print("after_request happening")
+	response.headers.add('Access-Control-Allow-Origin', '*')
+	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+	return response
 
 # Run app
 if __name__ == '__main__':
-	app.run('127.0.0.1', debug=False)
+	app.run(host='0.0.0.0', port=5000, debug=False)
