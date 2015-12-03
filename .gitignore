@@ -20,6 +20,9 @@ node_modules/*
 api/wording.db
 
 env/*
+env/
+env/**/*
+**/env/**/*
 
 
 # Xcode

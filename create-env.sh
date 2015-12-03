@@ -12,10 +12,10 @@ echo "Activating env"
 . env/bin/activate
 
 echo "Installing required components using pip"
-pip install flask
-pip install flask-restful
-pip install flask-login
-pip install flask-mail
-pip install flask-sqlalchemy
-pip install passlib
-pip install flask-httpauth
+pip3 install flask
+pip3 install flask-restful
+pip3 install flask-login
+pip3 install flask-mail
+pip3 install flask-sqlalchemy
+pip3 install passlib
+pip3 install flask-httpauth
