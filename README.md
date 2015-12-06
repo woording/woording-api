@@ -17,7 +17,8 @@ All user data gets stored in a SQL database, and database.py let's you use that 
 
 
 ## How to use the API
-You will need to get a token from the server, to do this, send a POST to request to http://api.woording.com/authenticate containing the username and password in json format, for example:
+You will first need to get a token from the server, to do this, send a POST to request to http://api.woording.com/authenticate   
+This post request should have zContent-Type: application/json` in the header and also contain the username and password in json format as data, like this:
 ```json
 {
 	"username" : "cor",
