@@ -32,9 +32,6 @@ This will send you a new JSON object containing the token:
 ```
 
 ### For registering users, do:
+```bash
 curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
 ```
-
-#### How to contribute to translations
-You can add translations to the translation file which is located at 'web/templates/translations.json'.
-The iso codes are in the following format: ISO 639-2B, more information on [this wikipedia link](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
