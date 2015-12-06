@@ -26,7 +26,7 @@ You will need to get a token from the server, to do this, send a POST to request
 ```
 
 This will send you a new JSON object containing the token:
-```
+```json
 {
 	"token" : "jkdlf;adsfkjl;adsjkfk;lasdfjkdfjk3849347"
 }
