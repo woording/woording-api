@@ -398,7 +398,7 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-	response.cache_control.max_age = 1000 * 3600 * 24 * 7  # One week
+	response.cache_control.max_age = 3600 * 24 * 7  # One week
 	return response
 
 # Run app
