@@ -46,14 +46,14 @@ def register():
 
 	# Check if everything filled in
 	if username is None or password is None or email is None:
-		return "ERROR, not everything filled in" # missing arguments
+		return abort(400) # missing arguments
 
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		return "ERROR, username and/or email do already exist" # username and/or email do already exist
 		
 	else:
-		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
+		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=True)
 
 		# Email verification
 		token = generate_confirmation_token(email)
@@ -117,9 +117,9 @@ def save_list():
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
-		return json.dumps({ 'username':'ERROR, No user' })
+		return abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return json.dumps({ 'username':'ERROR, Wrong token'})
+		return abort(401)
 	elif token_credentials[0] != username:
 		abort(401)
 
@@ -274,14 +274,14 @@ def get(username):
 
 	token = request.json.get('token')
 	if token is None or token is "":
-		return json.dumps({ 'username':'ERROR, No token' })
+		return abort(401)
 	
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
-		return json.dumps({ 'username':'ERROR, No user' })
+		return abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return json.dumps({ 'username':'ERROR, Wrong token'})
+		return abort(401)
 	
 	if db_manager.username_exists(username):
 		# Return all lists
@@ -338,14 +338,14 @@ def show_user_list(username, listname):
 
 	token = request.json.get("token")
 	if token is None or token is "":
-		return json.dumps({ 'username':'ERROR, No token' })
+		return abort(401)
 	
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
-		return json.dumps({ 'username':'ERROR, No user' })
+		return abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return json.dumps({ 'username':'ERROR, Wrong token'})
+		return abort(401)
 
 	if db_manager.username_exists(username):
 		if db_manager.listname_exists_for_user(username, listname):
