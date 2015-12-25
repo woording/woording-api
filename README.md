@@ -40,6 +40,15 @@ http://api.woording.com/cor                    # loads user cor
 http://api.woording.com/cor/engelse_woorden    # loads the cor/engelse_woorden list
 ```
 
+### How to handle error respones
+This is done just by using the standard http status codes wich are defined [here](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html). I will short descripe some examples of when you get what error below.
+
+##### 400 - Bad request
+You get this error when your request is not in JSON format and/or you did not fill in all needed fields. E.g. sending an authorization request without sending an password.
+
+##### 401 - Unauthorized
+When you send an expired token or a wrong token get this error. NOTE: When you send no token you get a bad request (400) error.
+
 ### For registering users, do:
 ```bash
 curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
