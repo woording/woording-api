@@ -117,9 +117,9 @@ def save_list():
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
-		return abort(401)
+		abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return abort(401)
+		abort(401)
 	elif token_credentials[0] != username:
 		abort(401)
 
@@ -158,9 +158,9 @@ def delete_list():
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
-		return json.dumps({ 'username':'ERROR, No user' })
+		abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return json.dumps({ 'username':'ERROR, Wrong token'})
+		abort(401)
 	elif token_credentials[0] != username:
 		abort(401)
 
