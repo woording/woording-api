@@ -235,7 +235,7 @@ def get_friends():
 	# It is unsafe to send your friends password hash to the browser... 	email_verified and id aren't needed
 	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
 
-	return json.dumps(friends)
+	return json.dumps({"friends":friends})
 
 @app.route('/changePassword', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
