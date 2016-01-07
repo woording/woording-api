@@ -37,7 +37,7 @@ def register():
 		return "ERROR, username and/or email do already exist" # username and/or email do already exist
 		
 	else:
-		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=True)
+		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
 		# Email verification
 		token = generate_confirmation_token(email)
