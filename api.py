@@ -327,9 +327,7 @@ def get(username):
 				})
 
 	else:
-		return json.dumps({
-			'username': 'ERROR: This shouldn\'t happen'
-			})
+		return 'ERROR: This shouldn\'t happen'
 
 @app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -384,13 +382,9 @@ def show_user_list(username, listname):
 				abort(401)
 
 		else:
-			return json.dumps({
-				'username': 'ERROR: This shouldn\'t happen'
-				})
+			return 'ERROR: This shouldn\'t happen'
 	else:
-		return json.dumps({
-			'username': 'ERROR: This shouldn\'t happen'
-			})
+		return 'ERROR: This shouldn\'t happen'
 
 @app.after_request
 def after_request(response):
