@@ -2,7 +2,6 @@ from flask import Flask, request, abort, url_for, render_template, session, Resp
 from flask import g
 from flask.ext.cors import CORS
 from flask_restful import Resource, Api
-from flask_mail import Mail
 from passlib.hash import sha512_crypt
 import json
 from corsDecorator import crossdomain
@@ -13,26 +12,11 @@ from myemail import *
 SECRET_KEY = "development key"
 # Encryption config
 SECURITY_PASSWORD_SALT = 'securitykey'
-# Email config
-MAIL_SERVER = "smtp.gmail.com" # SMTP Server
-MAIL_PORT = 465 # SMTP Port
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-
-MAIL_DEBUG = True
-# Login information
-MAIL_USERNAME = "noreply.wording@gmail.com"
-MAIL_PASSWORD = "TestingPassword"
-# Mail sender addres
-MAIL_DEFAULT_SENDER = "noreply.wording@gmail.com"
 
 app = Flask(__name__)
 CORS(app)
 app.config.from_object(__name__)
 api = Api(app)
-
-# Setup email
-mail = Mail(app)
 
 # Register
 @app.route('/register', methods = ['POST', 'OPTIONS'])
@@ -53,7 +37,7 @@ def register():
 		return "ERROR, username and/or email do already exist" # username and/or email do already exist
 		
 	else:
-		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=True)
+		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
 		# Email verification
 		token = generate_confirmation_token(email)
@@ -235,7 +219,7 @@ def get_friends():
 	# It is unsafe to send your friends password hash to the browser... 	email_verified and id aren't needed
 	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
 
-	return json.dumps(friends)
+	return json.dumps({"friends":friends})
 
 @app.route('/changePassword', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")

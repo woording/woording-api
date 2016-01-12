@@ -1,7 +1,8 @@
 from itsdangerous import URLSafeTimedSerializer
-from flask.ext.mail import Message
+import smtplib
+from email.mime.text import MIMEText
 
-from api import app, mail
+from api import app
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -20,10 +21,12 @@ def confirm_token(token, expiration=3600):
     return email
 
 def send_email(to, subject, template):
-    msg = Message(
-        subject,
-        recipients=[to],
-        html=template,
-        sender=app.config['MAIL_DEFAULT_SENDER']
-    )
-    mail.send(msg)
+    me = "Woording <noreply@woording.com>"
+    msg = MIMEText(template, 'html')
+    msg["From"] = me
+    msg["Subject"] = subject
+    msg["To"] = to
+
+    server = smtplib.SMTP('localhost')
+    server.sendmail(me, [to], msg.as_string())
+    server.quit()
