@@ -79,9 +79,9 @@ def authenticate():
 						"token": db_manager.generate_auth_token(username, password).decode("utf-8")
 						})
 			else:
-				return "ERROR, Email not verified"
+				return json.dumps({"error":"Email not verified"})
 		else:
-			return "ERROR, User not found"
+			return json.dumps({"error":"User not found"})
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -311,7 +311,7 @@ def get(username):
 				})
 
 	else:
-		return 'ERROR: This shouldn\'t happen'
+		return json.dumps({"error":"User not found"})
 
 @app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -366,9 +366,9 @@ def show_user_list(username, listname):
 				abort(401)
 
 		else:
-			return 'ERROR: This shouldn\'t happen'
+			return json.dumps({"error":"List not found"})
 	else:
-		return 'ERROR: This shouldn\'t happen'
+		return json.dumps({"error":"User not found"})
 
 @app.after_request
 def after_request(response):
