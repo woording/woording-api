@@ -17,6 +17,8 @@ All user data gets stored in a SQL database, and database.py let's you use that 
 
 
 ## How to use the API
+For full explaination of all different requests, please check the wiki.
+
 You will first need to get a token from the server, to do this, send a POST to request to http://api.woording.com/authenticate   
 This post request should have `Content-Type: application/json` in the header and also contain the username and password in json format as data, like this:
 ```json
@@ -48,8 +50,3 @@ You get this error when your request is not in JSON format and/or you did not fi
 
 ##### 401 - Unauthorized
 When you send an expired token or a wrong token get this error. NOTE: When you send no token you get a bad request (400) error.
-
-### For registering users, do:
-```bash
-curl -i -X POST -H "Content-Type: application/json" -d '{"username":"username","password":"password","email":"valid_email"}' http://127.0.0.1:5000/register
-```
