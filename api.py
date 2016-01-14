@@ -3,10 +3,10 @@ from flask import g
 from flask.ext.cors import CORS
 from flask_restful import Resource, Api
 from passlib.hash import sha512_crypt
-import json
 from corsDecorator import crossdomain
 from database import DatabaseManager
 from myemail import *
+import json
 
 # Config
 SECRET_KEY = "development key"
@@ -17,6 +17,12 @@ app = Flask(__name__)
 CORS(app)
 app.config.from_object(__name__)
 api = Api(app)
+
+# Set caching header
+def response_cache_header(response, max_age=3600):
+	r = Response(response)
+	r.headers['Cache-Control'] = "max-age=" + str(max_age) # One hour by default
+	return r
 
 # Register
 @app.route('/register', methods = ['POST', 'OPTIONS'])
@@ -34,7 +40,8 @@ def register():
 
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
-		return "ERROR, username and/or email do already exist" # username and/or email do already exist
+		# username and/or email do already exist
+		return response_cache_header("ERROR, username and/or email do already exist", max_age="no-cache")
 		
 	else:
 		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
@@ -46,7 +53,7 @@ def register():
 		subject = "Please confirm your email"
 		send_email(email, subject, html)
 
-		return "Successfully created user, please verify email.\n"
+		return response_cache_header("Successfully created user, please verify email.\n", max_age="no-cache")
 
 # Verify email
 @app.route('/verify/<token>')
@@ -55,11 +62,11 @@ def verify_email(token):
 	email = confirm_token(token)
 
 	if db_manager.email_is_verified(email):
-		return "Email already verified.\n"
+		return response_cache_header("Email already verified.\n", max_age="no-cache")
 	else:
 		# Verify
 		db_manager.verify_email(email)
-		return "Email Successfully verified.\n"
+		return response_cache_header("Email Successfully verified.\n", max_age="no-cache")
 
 # Authenticate user
 @app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
@@ -75,13 +82,13 @@ def authenticate():
 			if db_manager.get_user(username).get('email_verified'):
 				# Check password
 				if db_manager.check_password(username, password):
-					return json.dumps({
+					return response_cache_header(json.dumps({
 						"token": db_manager.generate_auth_token(username, password).decode("utf-8")
-						})
+						}))
 			else:
-				return json.dumps({"error":"Email not verified"})
+				return response_cache_header(json.dumps({"error":"Email not verified"}), max_age="no-cache")
 		else:
-			return json.dumps({"error":"User not found"})
+			return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -125,7 +132,7 @@ def save_list():
 			continue
 		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-	return "Saved list"
+	return response_cache_header("Saved list", max_age="no-cache")
 
 @app.route('/deleteList', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers='content-type')
@@ -149,11 +156,11 @@ def delete_list():
 		abort(401)
 
 	if not db_manager.listname_exists_for_user(username, listname):
-		return "No list found"
+		return response_cache_header("No list found", max_age="no-cache")
 
 	if db_manager.listname_exists_for_user(username, listname):
 		db_manager.delete_list(username, listname)
-		return "Successfully deleted list"
+		return response_cache_header("Successfully deleted list", max_age="no-cache")
 
 	return abort(401)
 
@@ -180,9 +187,9 @@ def friend_request():
 			subject = "New friend request"
 			send_email(email, subject, html)
 
-			return "Email sent"
+			return response_cache_header("Email sent", max_age="no-cache")
 		else:
-			return "ERROR, already friends"
+			return response_cache_header("ERROR, already friends", max_age="no-cache")
 
 @app.route('/acceptFriend/<token>')
 def accept_friend(token):
@@ -190,10 +197,10 @@ def accept_friend(token):
 	names = confirm_token(token)
 
 	if db_manager.users_are_friends(names[0], names[1]):
-		return "Already friends"
+		return response_cache_header("Already friends", max_age="no-cache")
 	else:
 		db_manager.create_friendship(names[0], names[1])
-		return "Now friends"
+		return response_cache_header("Now friends", max_age="no-cache")
 
 @app.route('/getFriends', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -219,7 +226,7 @@ def get_friends():
 	# It is unsafe to send your friends password hash to the browser... 	email_verified and id aren't needed
 	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
 
-	return json.dumps({"friends":friends})
+	return response_cache_header(json.dumps({"friends":friends}))
 
 @app.route('/changePassword', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -246,9 +253,9 @@ def change_password():
 
 	if db_manager.check_password(username, old_password):
 		db_manager.change_password(username, old_password, new_password)
-		return "Changed password"
+		return response_cache_header("Changed password", max_age="no-cache")
 	else:
-		return "ERROR, Wrong password"
+		return response_cache_header("ERROR, Wrong password", max_age="no-cache")
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
@@ -274,11 +281,11 @@ def get(username):
 			list_lists = db_manager.get_lists_for_user(username)
 			for l in list_lists: del l['user_id']; del l['id']
 
-			return json.dumps({
+			return response_cache_header(json.dumps({
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'lists' : list_lists
-				})
+				}))
 		# Return friend lists if you are friends
 		elif db_manager.users_are_friends(username, token_credentials[0]):
 			user_info = db_manager.get_user(username)
@@ -290,11 +297,11 @@ def get(username):
 				del l['user_id']
 				del l['id']
 
-			return json.dumps({
+			return response_cache_header(json.dumps({
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'lists' : list_lists
-				})
+				}))
 		# Return everyone shared lists
 		else:
 			user_info = db_manager.get_user(username)
@@ -305,14 +312,14 @@ def get(username):
 				del l['user_id']
 				del l['id']
 
-			return json.dumps({
+			return response_cache_header(json.dumps({
 				'username': user_info.get("username"),
 				'email' : user_info.get("email"),
 				'lists' : list_lists
-				})
+				}))
 
 	else:
-		return json.dumps({"error":"User not found"})
+		return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
 
 @app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -339,37 +346,37 @@ def show_user_list(username, listname):
 			
 			# Check if is owner
 			if username == token_credentials[0]:
-				return json.dumps({
+				return response_cache_header(json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
 					'language_2_tag' : list_data.get("language_2_tag"),
 					'words' : translations,
 					'shared_with' : shared_with
-				})
+				}))
 			# Check if is friend
 			elif shared_with == '1' and db_manager.users_are_friends(username, token_credentials[0]):
-				return json.dumps({
+				return response_cache_header(json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
 					'language_2_tag' : list_data.get("language_2_tag"),
 					'words' : translations,
 					'shared_with' : shared_with
-				})
+				}))
 			elif shared_with == '2':
-				return json.dumps({
+				return response_cache_header(json.dumps({
 					'listname' : listname,
 					'language_1_tag' : list_data.get("language_1_tag"),
 					'language_2_tag' : list_data.get("language_2_tag"),
 					'words' : translations,
 					'shared_with' : shared_with
-				})
+				}))
 			else:
 				abort(401)
 
 		else:
-			return json.dumps({"error":"List not found"})
+			return response_cache_header(json.dumps({"error":"List not found"}), max_age="no-cache")
 	else:
-		return json.dumps({"error":"User not found"})
+		return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
 
 @app.after_request
 def after_request(response):
@@ -377,9 +384,8 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-	response.cache_control.max_age = 3600 * 2  # Two hours
 	return response
 
 # Run app
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, debug=False)
+	app.run(host='0.0.0.0', port=5000, debug=True)
