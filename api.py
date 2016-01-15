@@ -19,9 +19,9 @@ app.config.from_object(__name__)
 api = Api(app)
 
 # Set caching header
-def response_cache_header(response, max_age=3600):
+def response_cache_header(response, cache_control="max-age=120"):
 	r = Response(response)
-	r.headers['Cache-Control'] = "max-age=" + str(max_age) # One hour by default
+	r.headers['Cache-Control'] = cache_control # Two minutes by default
 	return r
 
 # Register
@@ -41,7 +41,7 @@ def register():
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		# username and/or email do already exist
-		return response_cache_header("ERROR, username and/or email do already exist", max_age="no-cache")
+		return response_cache_header("ERROR, username and/or email do already exist", cache_control="no-cache")
 		
 	else:
 		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
@@ -53,7 +53,7 @@ def register():
 		subject = "Please confirm your email"
 		send_email(email, subject, html)
 
-		return response_cache_header("Successfully created user, please verify email.\n", max_age="no-cache")
+		return response_cache_header("Successfully created user, please verify email.\n", cache_control="no-cache")
 
 # Verify email
 @app.route('/verify/<token>')
@@ -62,11 +62,11 @@ def verify_email(token):
 	email = confirm_token(token)
 
 	if db_manager.email_is_verified(email):
-		return response_cache_header("Email already verified.\n", max_age="no-cache")
+		return response_cache_header("Email already verified.\n", cache_control="no-cache")
 	else:
 		# Verify
 		db_manager.verify_email(email)
-		return response_cache_header("Email Successfully verified.\n", max_age="no-cache")
+		return response_cache_header("Email Successfully verified.\n", cache_control="no-cache")
 
 # Authenticate user
 @app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
@@ -86,9 +86,9 @@ def authenticate():
 						"token": db_manager.generate_auth_token(username, password).decode("utf-8")
 						}))
 			else:
-				return response_cache_header(json.dumps({"error":"Email not verified"}), max_age="no-cache")
+				return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
 		else:
-			return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
+			return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
 	else:
 		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -132,7 +132,7 @@ def save_list():
 			continue
 		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-	return response_cache_header("Saved list", max_age="no-cache")
+	return response_cache_header("Saved list", cache_control="no-cache")
 
 @app.route('/deleteList', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers='content-type')
@@ -156,11 +156,11 @@ def delete_list():
 		abort(401)
 
 	if not db_manager.listname_exists_for_user(username, listname):
-		return response_cache_header("No list found", max_age="no-cache")
+		return response_cache_header("No list found", cache_control="no-cache")
 
 	if db_manager.listname_exists_for_user(username, listname):
 		db_manager.delete_list(username, listname)
-		return response_cache_header("Successfully deleted list", max_age="no-cache")
+		return response_cache_header("Successfully deleted list", cache_control="no-cache")
 
 	return abort(401)
 
@@ -187,9 +187,9 @@ def friend_request():
 			subject = "New friend request"
 			send_email(email, subject, html)
 
-			return response_cache_header("Email sent", max_age="no-cache")
+			return response_cache_header("Email sent", cache_control="no-cache")
 		else:
-			return response_cache_header("ERROR, already friends", max_age="no-cache")
+			return response_cache_header("ERROR, already friends", cache_control="no-cache")
 
 @app.route('/acceptFriend/<token>')
 def accept_friend(token):
@@ -197,10 +197,10 @@ def accept_friend(token):
 	names = confirm_token(token)
 
 	if db_manager.users_are_friends(names[0], names[1]):
-		return response_cache_header("Already friends", max_age="no-cache")
+		return response_cache_header("Already friends", cache_control="no-cache")
 	else:
 		db_manager.create_friendship(names[0], names[1])
-		return response_cache_header("Now friends", max_age="no-cache")
+		return response_cache_header("Now friends", cache_control="no-cache")
 
 @app.route('/getFriends', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -253,9 +253,9 @@ def change_password():
 
 	if db_manager.check_password(username, old_password):
 		db_manager.change_password(username, old_password, new_password)
-		return response_cache_header("Changed password", max_age="no-cache")
+		return response_cache_header("Changed password", cache_control="no-cache")
 	else:
-		return response_cache_header("ERROR, Wrong password", max_age="no-cache")
+		return response_cache_header("ERROR, Wrong password", cache_control="no-cache")
 
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST", "OPTIONS"])
@@ -319,7 +319,7 @@ def get(username):
 				}))
 
 	else:
-		return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
+		return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
 
 @app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers="content-type")
@@ -374,9 +374,9 @@ def show_user_list(username, listname):
 				abort(401)
 
 		else:
-			return response_cache_header(json.dumps({"error":"List not found"}), max_age="no-cache")
+			return response_cache_header(json.dumps({"error":"List not found"}), cache_control="no-cache")
 	else:
-		return response_cache_header(json.dumps({"error":"User not found"}), max_age="no-cache")
+		return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
 
 @app.after_request
 def after_request(response):
@@ -388,4 +388,4 @@ def after_request(response):
 
 # Run app
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, debug=True)
+	app.run(host='0.0.0.0', port=5000, debug=False)
