@@ -306,7 +306,7 @@ def get(username):
 		else:
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
-			for l in list_lists:
+			for l in list_lists[:]:  # Make a slice copy of the entire list
 				if l['shared_with'] != "2":
 					list_lists.remove(l)
 				del l['user_id']
