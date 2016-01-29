@@ -1,12 +1,12 @@
 from flask import Flask, request, abort, url_for, render_template, session, Response
 from flask import g
-from flask.ext.cors import CORS
+from flask.ext.cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from passlib.hash import sha512_crypt
-from corsDecorator import crossdomain
 from database import DatabaseManager
 from myemail import *
 import json
+from urllib.request import urlopen
 
 # Config
 SECRET_KEY = "development key"
@@ -17,6 +17,7 @@ app = Flask(__name__)
 CORS(app)
 app.config.from_object(__name__)
 api = Api(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Set caching header
 def response_cache_header(response, cache_control="max-age=120"):
@@ -25,8 +26,7 @@ def response_cache_header(response, cache_control="max-age=120"):
 	return r
 
 # Register
-@app.route('/register', methods = ['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers='content-type')
+@app.route('/register', methods = ['POST'])
 def register():
 	db_manager = DatabaseManager()
 
@@ -42,7 +42,7 @@ def register():
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		# username and/or email do already exist
 		return response_cache_header("ERROR, username and/or email do already exist", cache_control="no-cache")
-		
+
 	else:
 		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
@@ -69,32 +69,43 @@ def verify_email(token):
 		return response_cache_header("Email Successfully verified.\n", cache_control="no-cache")
 
 # Authenticate user
-@app.route('/authenticate', methods=['POST','OPTIONS']) # Options is for the browser to validate
-@crossdomain(origin='*', headers='content-type') # Headers need to be set
+@app.route('/authenticate', methods=['POST'])
 def authenticate():
-	db_manager = DatabaseManager()
+        db_manager = DatabaseManager()
 
-	username = request.json.get('username')
-	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+        username = request.json.get('username')
+        password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
 
-	if username and password:
-		if db_manager.get_user(username):
-			if db_manager.get_user(username).get('email_verified'):
-				# Check password
-				if db_manager.check_password(username, password):
-					return response_cache_header(json.dumps({
-						"token": db_manager.generate_auth_token(username, password).decode("utf-8")
-						}))
-			else:
-				return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
-		else:
-			return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
-	else:
-		return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
+        if username and password:
+                if db_manager.get_user(username):
+                        if db_manager.get_user(username).get('email_verified'):
+                                # Check password
+                                if db_manager.check_password(username, password):
+                                        return response_cache_header(json.dumps({
+                                                "token": db_manager.generate_auth_token(username, password).decode("utf-8")
+                                                }))
+                        else:
+                                return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
+                else:
+                        return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
+        else:
+                return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
+
+# Validate Captcha
+@app.route('/validateCaptcha', methods=['POST'])
+def validate():
+    url = request.json.get('url')
+    if url == None:
+        abort(400)
+    else:
+        response = urlopen(url)
+        data = response.read()
+        success = json.loads(data.decode('utf-8'))['success']
+
+        return response_cache_header(json.dumps({'answer':success}), cache_control="no-cache")
 
 # Save list
-@app.route('/savelist', methods=["POST", "OPTIONS"])
-@crossdomain(origin='*', headers="content-type")
+@app.route('/savelist')
 def save_list():
 	db_manager = DatabaseManager()
 
@@ -125,7 +136,7 @@ def save_list():
 
 	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
 	words = list_data.get('words')
-	
+
 	for i in range(len(words)):
 		word = words[i]
 		if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
@@ -134,15 +145,14 @@ def save_list():
 
 	return response_cache_header("Saved list", cache_control="no-cache")
 
-@app.route('/deleteList', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers='content-type')
+@app.route('/deleteList', methods=['POST'])
 def delete_list():
 	db_manager = DatabaseManager()
 
 	username = request.json.get('username')
 	listname = request.json.get('listname')
 	token = request.json.get('token')
-	
+
 	if username == None or listname == None or token == None:
 		abort(400)
 
@@ -165,8 +175,7 @@ def delete_list():
 	return abort(401)
 
 # Friends
-@app.route('/friendRequest', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers='content-type')
+@app.route('/friendRequest', methods=['POST'])
 def friend_request():
 	db_manager = DatabaseManager()
 
@@ -202,14 +211,13 @@ def accept_friend(token):
 		db_manager.create_friendship(names[0], names[1])
 		return response_cache_header("Now friends", cache_control="no-cache")
 
-@app.route('/getFriends', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers="content-type")
+@app.route('/getFriends', methods=['POST'])
 def get_friends():
 	db_manager = DatabaseManager()
 
 	username = request.json.get('username')
 	token = request.json.get('token')
-	
+
 	if username == None or token == None:
 		abort(400)
 
@@ -228,8 +236,7 @@ def get_friends():
 
 	return response_cache_header(json.dumps({"friends":friends}))
 
-@app.route('/changePassword', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers="content-type")
+@app.route('/changePassword', methods=['POST'])
 def change_password():
 	db_manager = DatabaseManager()
 
@@ -258,22 +265,21 @@ def change_password():
 		return response_cache_header("ERROR, Wrong password", cache_control="no-cache")
 
 # REST Recource with app.route
-@app.route('/<username>', methods=["POST", "OPTIONS"])
-@crossdomain(origin='*', headers="content-type")
+@app.route('/<username>', methods=["POST"])
 def get(username):
 	db_manager = DatabaseManager()
 
 	token = request.json.get('token')
 	if token is None or token is "":
 		return abort(401)
-	
+
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
 		return abort(401)
 	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
 		return abort(401)
-	
+
 	if db_manager.username_exists(username):
 		# Return all lists
 		if token_credentials[0] == username:
@@ -290,7 +296,7 @@ def get(username):
 		elif db_manager.users_are_friends(username, token_credentials[0]):
 			user_info = db_manager.get_user(username)
 			list_lists = db_manager.get_lists_for_user(username)
-			
+
 			for l in list_lists[:]:  # Make a slice copy of the entire list
 				if l['shared_with'] == "0":
 					list_lists.remove(l)
@@ -321,15 +327,14 @@ def get(username):
 	else:
 		return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
 
-@app.route('/<username>/<listname>', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers="content-type")
+@app.route('/<username>/<listname>', methods=['POST'])
 def show_user_list(username, listname):
 	db_manager = DatabaseManager()
 
 	token = request.json.get("token")
 	if token is None or token is "":
 		return abort(401)
-	
+
 	# Verifiy token
 	token_credentials = db_manager.verify_auth_token(token=token)
 	if token_credentials is None:
@@ -343,7 +348,7 @@ def show_user_list(username, listname):
 			shared_with = list_data.get("shared_with")
 			translations = db_manager.get_translations_for_list(username, listname)
 			for translation in translations: del translation['id']; del translation['list_id']
-			
+
 			# Check if is owner
 			if username == token_credentials[0]:
 				return response_cache_header(json.dumps({
