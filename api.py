@@ -105,45 +105,45 @@ def validate():
         return response_cache_header(json.dumps({'answer':success}), cache_control="no-cache")
 
 # Save list
-@app.route('/savelist')
+@app.route('/savelist', methods=['POST'])
 def save_list():
-	db_manager = DatabaseManager()
+        db_manager = DatabaseManager()
 
-	username = request.json.get('username')
-	list_data = request.json.get('list_data')
-	token = request.json.get('token')
+        username = request.json.get('username')
+        list_data = request.json.get('list_data')
+        token = request.json.get('token')
 
-	if username == None or list_data == None or token == None:
-		abort(400)
+        if username == None or list_data == None or token == None:
+                abort(400)
 
-	# Verifiy token
-	token_credentials = db_manager.verify_auth_token(token=token)
-	if token_credentials is None:
-		abort(401)
-	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		abort(401)
-	elif token_credentials[0] != username:
-		abort(401)
+        # Verifiy token
+        token_credentials = db_manager.verify_auth_token(token=token)
+        if token_credentials is None:
+                abort(401)
+        elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+                abort(401)
+        elif token_credentials[0] != username:
+                abort(401)
 
-	if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None or list_data.get('shared_with') is None:
-		abort(400)
+        if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None or list_data.get('shared_with') is None:
+                abort(400)
 
-	if list_data.get('listname') is "" or list_data.get('language_1_tag') is "" or list_data.get('language_2_tag') is "" or list_data.get('shared_with') is "":
-		abort(400)
+        if list_data.get('listname') is "" or list_data.get('language_1_tag') is "" or list_data.get('language_2_tag') is "" or list_data.get('shared_with') is "":
+                abort(400)
 
-	if db_manager.listname_exists_for_user(username, list_data.get('listname')):
-		db_manager.delete_list(username, list_data.get('listname'))
+        if db_manager.listname_exists_for_user(username, list_data.get('listname')):
+                db_manager.delete_list(username, list_data.get('listname'))
 
-	db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
-	words = list_data.get('words')
+        db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
+        words = list_data.get('words')
 
-	for i in range(len(words)):
-		word = words[i]
-		if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
-			continue
-		db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
+        for i in range(len(words)):
+                word = words[i]
+                if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
+                        continue
+                db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-	return response_cache_header("Saved list", cache_control="no-cache")
+        return response_cache_header(json.dumps( { 'response' : 'Saved list' } ), cache_control="no-cache")
 
 @app.route('/deleteList', methods=['POST'])
 def delete_list():
@@ -170,7 +170,7 @@ def delete_list():
 
 	if db_manager.listname_exists_for_user(username, listname):
 		db_manager.delete_list(username, listname)
-		return response_cache_header("Successfully deleted list", cache_control="no-cache")
+		return response_cache_header(json.dumps( { 'response':'Successfully deleted list' } ), cache_control="no-cache")
 
 	return abort(401)
 
@@ -325,7 +325,7 @@ def get(username):
 				}))
 
 	else:
-		return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
+		return response_cache_header(json.dumps({"error":"User not found" + username}), cache_control="no-cache")
 
 @app.route('/<username>/<listname>', methods=['POST'])
 def show_user_list(username, listname):
