@@ -84,6 +84,9 @@ def authenticate():
                                         return response_cache_header(json.dumps({
                                                 "token": db_manager.generate_auth_token(username, password).decode("utf-8")
                                                 }))
+                                else:
+                                    print(request.remote_addr)
+                                    return Response('Login!', 401, {'error': 'Not exist'})
                         else:
                                 return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
                 else:
