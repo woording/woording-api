@@ -5,6 +5,7 @@ from flask_restful import Resource, Api
 from passlib.hash import sha512_crypt
 from database import DatabaseManager
 from myemail import *
+import ssl
 import json
 from urllib.request import urlopen
 
@@ -12,8 +13,9 @@ from urllib.request import urlopen
 SECRET_KEY = "development key"
 # Encryption config
 SECURITY_PASSWORD_SALT = 'securitykey'
-
+    
 app = Flask(__name__)
+
 CORS(app)
 app.config.from_object(__name__)
 api = Api(app)
@@ -41,19 +43,20 @@ def register():
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		# username and/or email do already exist
-		return response_cache_header("ERROR, username and/or email do already exist", cache_control="no-cache")
+		return response_cache_header(json.dumps({"ERROR, username and/or email do already exist"}), cache_control='no-cache')
 
 	else:
-		db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
+                db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
-		# Email verification
-		token = generate_confirmation_token(email)
-		confirm_url = url_for('verify_email', token=token, _external=True)
-		html = render_template('email.html', confirm_url=confirm_url)
-		subject = "Please confirm your email"
-		send_email(email, subject, html)
+                # Email verification
+                token = generate_confirmation_token(email)
+                # confirm_url = url_for('verify_email', token=token, _external=True)
+                confirm_url = 'https://api.woording.com/verify/' + token
+                html = render_template('email.html', confirm_url=confirm_url)
+                subject = "Please confirm your email"
+                send_email(email, subject, html)
 
-		return response_cache_header("Successfully created user, please verify email.\n", cache_control="no-cache")
+                return response_cache_header(json.dumps({"response":"Successfully created user, please verify email."}), cache_control="no-cache")
 
 # Verify email
 @app.route('/verify/<token>')
@@ -394,6 +397,9 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain('apicert.crt', 'apikey.key')
+
 # Run app
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, debug=False)
+	app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)

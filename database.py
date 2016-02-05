@@ -28,7 +28,7 @@ class DatabaseConnection(object):
 class DatabaseManager(object):
 
 	def __init__(self):
-		self.database_path = 'wording.db'
+		self.database_path = '/var/www/woording.com/woording-api/wording.db'
 
 	# Token
 	def generate_auth_token(self, username, password, expiration = 0):
