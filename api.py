@@ -43,20 +43,19 @@ def register():
 	# Check if already exists
 	elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		# username and/or email do already exist
-		return response_cache_header(json.dumps({"ERROR, username and/or email do already exist"}), cache_control='no-cache')
+                return response_cache_header(json.dumps({"response":"ERROR, username and/or email already exist", "success": False}), cache_control="no-cache")
 
 	else:
                 db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
                 # Email verification
                 token = generate_confirmation_token(email)
-                # confirm_url = url_for('verify_email', token=token, _external=True)
                 confirm_url = 'https://api.woording.com/verify/' + token
                 html = render_template('email.html', confirm_url=confirm_url)
                 subject = "Please confirm your email"
                 send_email(email, subject, html)
 
-                return response_cache_header(json.dumps({"response":"Successfully created user, please verify email."}), cache_control="no-cache")
+                return response_cache_header(json.dumps({"response":"Succesfully created user, please verify email.", "success": True}), cache_control="no-cache")
 
 # Verify email
 @app.route('/verify/<token>')
@@ -88,7 +87,7 @@ def authenticate():
                                                 "token": db_manager.generate_auth_token(username, password).decode("utf-8")
                                                 }))
                                 else:
-                                    print(request.remote_addr)
+                                    print(request.headers['HTTP_CLIENT_IP'])
                                     return Response('Login!', 401, {'error': 'Not exist'})
                         else:
                                 return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
