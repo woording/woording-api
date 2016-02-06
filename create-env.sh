@@ -19,4 +19,5 @@ pip3 install flask-mail
 pip3 install flask-cors
 pip3 install flask-sqlalchemy
 pip3 install passlib
+pip3 install validate_email
 pip3 install flask-httpauth

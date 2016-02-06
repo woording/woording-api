@@ -1,10 +1,11 @@
-from flask import Flask, request, abort, url_for, render_template, session, Response
+from flask import Flask, request, abort, url_for, render_template, session, Response, redirect
 from flask import g
 from flask.ext.cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from passlib.hash import sha512_crypt
 from database import DatabaseManager
 from myemail import *
+from validate_email import validate_email
 import ssl
 import json
 from urllib.request import urlopen
@@ -13,7 +14,7 @@ from urllib.request import urlopen
 SECRET_KEY = "development key"
 # Encryption config
 SECURITY_PASSWORD_SALT = 'securitykey'
-    
+
 app = Flask(__name__)
 
 CORS(app)
@@ -27,25 +28,33 @@ def response_cache_header(response, cache_control="max-age=120"):
 	r.headers['Cache-Control'] = cache_control # Two minutes by default
 	return r
 
+@app.route('/')
+def redirect_homepage():
+    return redirect("https://woording.com")
+
+
 # Register
 @app.route('/register', methods = ['POST'])
 def register():
-	db_manager = DatabaseManager()
+        db_manager = DatabaseManager()
 
-	username = request.json.get('username')
-	password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-	email = request.json.get('email')
+        username = request.json.get('username')
+        password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+        email = request.json.get('email')
+
+        if not validate_email(email,verify=True):
+                return response_cache_header(json.dumps({"response":"Not a valid email address", "success": False}), cache_control="no-cache")
 
 	# Check if everything filled in
-	if username is None or password is None or email is None:
-		return abort(400) # missing arguments
+        elif username is None or password is None or email is None:
+                return abort(400) # missing arguments
 
 	# Check if already exists
-	elif db_manager.username_exists(username) or db_manager.email_exists(email):
+        elif db_manager.username_exists(username) or db_manager.email_exists(email):
 		# username and/or email do already exist
                 return response_cache_header(json.dumps({"response":"ERROR, username and/or email already exist", "success": False}), cache_control="no-cache")
 
-	else:
+        else:
                 db_manager.create_user(username=username, password_hash=password, email=email, email_verified=False)
 
                 # Email verification
@@ -84,15 +93,15 @@ def authenticate():
                                 # Check password
                                 if db_manager.check_password(username, password):
                                         return response_cache_header(json.dumps({
-                                                "token": db_manager.generate_auth_token(username, password).decode("utf-8")
-                                                }))
+                                                "token": db_manager.generate_auth_token(username, password).decode("utf-8"),
+                                                "success": True
+                                        }))
                                 else:
-                                    print(request.headers['HTTP_CLIENT_IP'])
-                                    return Response('Login!', 401, {'error': 'Not exist'})
+                                    return response_cache_header(json.dumps({"error":"Incorrect password and/or username", "success":False}), cache_control="no-cache")
                         else:
-                                return response_cache_header(json.dumps({"error":"Email not verified"}), cache_control="no-cache")
+                            return response_cache_header(json.dumps({"error":"Email not verified", "success":False}), cache_control="no-cache")
                 else:
-                        return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
+                    return response_cache_header(json.dumps({"error":"Incorrect password and/or username", "success":False}), cache_control="no-cache")
         else:
                 return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -396,9 +405,13 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain('apicert.crt', 'apikey.key')
+# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+# context.load_cert_chain('apicert.crt', 'apikey.key')
 
-# Run app
+# # Run app
+# if __name__ == '__main__':
+        # app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+
+# Run app no ssl
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+    app.run(host='0.0.0.0', port=5000, debug=True)

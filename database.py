@@ -28,7 +28,7 @@ class DatabaseConnection(object):
 class DatabaseManager(object):
 
 	def __init__(self):
-		self.database_path = '/var/www/woording.com/woording-api/wording.db'
+		self.database_path = 'wording.db'
 
 	# Token
 	def generate_auth_token(self, username, password, expiration = 0):
@@ -302,16 +302,15 @@ class DatabaseManager(object):
 
 	def get_username_list(self):
 
- 		# Create a DatabaseConnection
- 		db_conn = DatabaseConnection(self.database_path)
- 
- 		# Get all the username rows
- 		username_rows = db_conn.query('SELECT username FROM user').fetchall()
- 
- 		# Extract the first item
- 		usernames = tuple(username[0] for username in username_rows)
- 		
- 		return usernames
+                # Create a DatabaseConnection
+                db_conn = DatabaseConnection(self.database_path)
+
+                # Get all the username rows
+                username_rows = db_conn.query('SELECT username FROM user').fetchall()
+                # Extract the first item
+                usernames = tuple(username[0] for username in username_rows)
+                
+                return usernames
 
 	def get_email_list(self):
 		# Create a DatabaseConnection
