@@ -140,17 +140,17 @@ class DatabaseManager(object):
 		# Check if the user exists
 		if self.username_exists(username):
 
-			# Create a DatabaseConnection
-			db_conn = DatabaseConnection(self.database_path)
+                        # Create a DatabaseConnection
+                        db_conn = DatabaseConnection(self.database_path)
 
-			# Generate the query
-			query_text = 'SELECT * FROM user WHERE username = "' + username + '"'
+                        # Generate the query
+                        query_text = 'SELECT * FROM user WHERE LOWER(username) = "' + username.lower() + '"'
 
-			# Fetch the first record
-			user_record = db_conn.query(query_text).fetchone()
+                        # Fetch the first record
+                        user_record = db_conn.query(query_text).fetchone()
 
-			# Create a dictionary from the user_info and return it
-			return self.get_dictionary_from_user_record(user_record)
+                        # Create a dictionary from the user_info and return it
+                        return self.get_dictionary_from_user_record(user_record)
 
 		else:
 			print ('ERROR: User does not exist')
@@ -189,7 +189,7 @@ class DatabaseManager(object):
 			# Create database connection
 			db_conn = DatabaseConnection(self.database_path)
 
-			query_text = 'SELECT * FROM user WHERE username = "' + username + '" AND password_hash = "' + password + '"'
+			query_text = 'SELECT * FROM user WHERE LOWER(username) = "' + username.lower() + '" AND password_hash = "' + password + '"'
 
 			user = db_conn.query(query_text).fetchone();
 
@@ -233,7 +233,9 @@ class DatabaseManager(object):
 	def username_exists(self, username):
 
 		# If the username is in the username list, it exists
-		return username in self.get_username_list()
+                usernames = [x.lower() for x in self.get_username_list()]
+                return username.lower() in usernames
+		# return username in self.get_username_list()
 
 	def email_exists(self, email):
 		return email in self.get_email_list()

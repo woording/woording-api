@@ -42,7 +42,9 @@ def register():
         password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
         email = request.json.get('email')
 
-        if not validate_email(email,verify=True):
+        email = email.lower()
+
+        if not validate_email(email):
                 return response_cache_header(json.dumps({"response":"Not a valid email address", "success": False}), cache_control="no-cache")
 
 	# Check if everything filled in
@@ -92,8 +94,10 @@ def authenticate():
                         if db_manager.get_user(username).get('email_verified'):
                                 # Check password
                                 if db_manager.check_password(username, password):
+                                        token = db_manager.generate_auth_token(username.lower(), password).decode("utf-8")
+                                        print(token)
                                         return response_cache_header(json.dumps({
-                                                "token": db_manager.generate_auth_token(username, password).decode("utf-8"),
+                                                "token": token,
                                                 "success": True
                                         }))
                                 else:
@@ -101,7 +105,7 @@ def authenticate():
                         else:
                             return response_cache_header(json.dumps({"error":"Email not verified", "success":False}), cache_control="no-cache")
                 else:
-                    return response_cache_header(json.dumps({"error":"Incorrect password and/or username", "success":False}), cache_control="no-cache")
+                    return response_cache_header(json.dumps({"error":"User does not exist", "success":False}), cache_control="no-cache")
         else:
                 return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
@@ -229,7 +233,7 @@ def accept_friend(token):
 def get_friends():
 	db_manager = DatabaseManager()
 
-	username = request.json.get('username')
+	username = request.json.get('username').lower()
 	token = request.json.get('token')
 
 	if username == None or token == None:
@@ -281,121 +285,124 @@ def change_password():
 # REST Recource with app.route
 @app.route('/<username>', methods=["POST"])
 def get(username):
-	db_manager = DatabaseManager()
+        db_manager = DatabaseManager()
+        username = username.lower()
 
-	token = request.json.get('token')
-	if token is None or token is "":
-		return abort(401)
+        token = request.json.get('token')
+        if token is None or token is "":
+                print('No token')
+                return abort(401)
 
-	# Verifiy token
-	token_credentials = db_manager.verify_auth_token(token=token)
-	if token_credentials is None:
-		return abort(401)
-	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return abort(401)
+        # Verifiy token
+        token_credentials = db_manager.verify_auth_token(token=token)
+        if token_credentials is None:
+                return abort(401)
+        elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+                return abort(401)
 
-	if db_manager.username_exists(username):
-		# Return all lists
-		if token_credentials[0] == username:
-			user_info = db_manager.get_user(username)
-			list_lists = db_manager.get_lists_for_user(username)
-			for l in list_lists: del l['user_id']; del l['id']
+        if db_manager.username_exists(username):
+                # Return all lists
+                if token_credentials[0] == username:
+                        user_info = db_manager.get_user(username)
+                        list_lists = db_manager.get_lists_for_user(username)
+                        for l in list_lists: del l['user_id']; del l['id']
 
-			return response_cache_header(json.dumps({
-				'username': user_info.get("username"),
-				'email' : user_info.get("email"),
-				'lists' : list_lists
-				}))
-		# Return friend lists if you are friends
-		elif db_manager.users_are_friends(username, token_credentials[0]):
-			user_info = db_manager.get_user(username)
-			list_lists = db_manager.get_lists_for_user(username)
+                        return response_cache_header(json.dumps({
+                                'username': user_info.get("username"),
+                                'email' : user_info.get("email"),
+                                'lists' : list_lists
+                                }))
+                # Return friend lists if you are friends
+                elif db_manager.users_are_friends(username, token_credentials[0]):
+                        user_info = db_manager.get_user(username)
+                        list_lists = db_manager.get_lists_for_user(username)
 
-			for l in list_lists[:]:  # Make a slice copy of the entire list
-				if l['shared_with'] == "0":
-					list_lists.remove(l)
-				del l['user_id']
-				del l['id']
+                        for l in list_lists[:]:  # Make a slice copy of the entire list
+                                if l['shared_with'] == "0":
+                                        list_lists.remove(l)
+                                del l['user_id']
+                                del l['id']
 
-			return response_cache_header(json.dumps({
-				'username': user_info.get("username"),
-				'email' : user_info.get("email"),
-				'lists' : list_lists
-				}))
-		# Return everyone shared lists
-		else:
-			user_info = db_manager.get_user(username)
-			list_lists = db_manager.get_lists_for_user(username)
-			for l in list_lists[:]:  # Make a slice copy of the entire list
-				if l['shared_with'] != "2":
-					list_lists.remove(l)
-				del l['user_id']
-				del l['id']
+                        return response_cache_header(json.dumps({
+                                'username': user_info.get("username"),
+                                'email' : user_info.get("email"),
+                                'lists' : list_lists
+                                }))
+                # Return everyone shared lists
+                else:
+                        user_info = db_manager.get_user(username)
+                        list_lists = db_manager.get_lists_for_user(username)
+                        for l in list_lists[:]:  # Make a slice copy of the entire list
+                                if l['shared_with'] != "2":
+                                        list_lists.remove(l)
+                                del l['user_id']
+                                del l['id']
 
-			return response_cache_header(json.dumps({
-				'username': user_info.get("username"),
-				'email' : user_info.get("email"),
-				'lists' : list_lists
-				}))
+                        return response_cache_header(json.dumps({
+                                'username': user_info.get("username"),
+                                'email' : user_info.get("email"),
+                                'lists' : list_lists
+                                }))
 
-	else:
-		return response_cache_header(json.dumps({"error":"User not found" + username}), cache_control="no-cache")
+        else:
+                return response_cache_header(json.dumps({"error":"User not found" + username}), cache_control="no-cache")
 
 @app.route('/<username>/<listname>', methods=['POST'])
 def show_user_list(username, listname):
-	db_manager = DatabaseManager()
+        db_manager = DatabaseManager()
+        username = username.lower()
 
-	token = request.json.get("token")
-	if token is None or token is "":
-		return abort(401)
+        token = request.json.get("token")
+        if token is None or token is "":
+                return abort(401)
 
-	# Verifiy token
-	token_credentials = db_manager.verify_auth_token(token=token)
-	if token_credentials is None:
-		return abort(401)
-	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		return abort(401)
+        # Verifiy token
+        token_credentials = db_manager.verify_auth_token(token=token)
+        if token_credentials is None:
+                return abort(401)
+        elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+                return abort(401)
 
-	if db_manager.username_exists(username):
-		if db_manager.listname_exists_for_user(username, listname):
-			list_data = db_manager.get_list(username, listname)
-			shared_with = list_data.get("shared_with")
-			translations = db_manager.get_translations_for_list(username, listname)
-			for translation in translations: del translation['id']; del translation['list_id']
+        if db_manager.username_exists(username):
+                if db_manager.listname_exists_for_user(username, listname):
+                        list_data = db_manager.get_list(username, listname)
+                        shared_with = list_data.get("shared_with")
+                        translations = db_manager.get_translations_for_list(username, listname)
+                        for translation in translations: del translation['id']; del translation['list_id']
 
-			# Check if is owner
-			if username == token_credentials[0]:
-				return response_cache_header(json.dumps({
-					'listname' : listname,
-					'language_1_tag' : list_data.get("language_1_tag"),
-					'language_2_tag' : list_data.get("language_2_tag"),
-					'words' : translations,
-					'shared_with' : shared_with
-				}))
-			# Check if is friend
-			elif shared_with == '1' and db_manager.users_are_friends(username, token_credentials[0]):
-				return response_cache_header(json.dumps({
-					'listname' : listname,
-					'language_1_tag' : list_data.get("language_1_tag"),
-					'language_2_tag' : list_data.get("language_2_tag"),
-					'words' : translations,
-					'shared_with' : shared_with
-				}))
-			elif shared_with == '2':
-				return response_cache_header(json.dumps({
-					'listname' : listname,
-					'language_1_tag' : list_data.get("language_1_tag"),
-					'language_2_tag' : list_data.get("language_2_tag"),
-					'words' : translations,
-					'shared_with' : shared_with
-				}))
-			else:
-				abort(401)
+                        # Check if is owner
+                        if username == token_credentials[0]:
+                                return response_cache_header(json.dumps({
+                                        'listname' : listname,
+                                        'language_1_tag' : list_data.get("language_1_tag"),
+                                        'language_2_tag' : list_data.get("language_2_tag"),
+                                        'words' : translations,
+                                        'shared_with' : shared_with
+                                }))
+                        # Check if is friend
+                        elif shared_with == '1' and db_manager.users_are_friends(username, token_credentials[0]):
+                                return response_cache_header(json.dumps({
+                                        'listname' : listname,
+                                        'language_1_tag' : list_data.get("language_1_tag"),
+                                        'language_2_tag' : list_data.get("language_2_tag"),
+                                        'words' : translations,
+                                        'shared_with' : shared_with
+                                }))
+                        elif shared_with == '2':
+                                return response_cache_header(json.dumps({
+                                        'listname' : listname,
+                                        'language_1_tag' : list_data.get("language_1_tag"),
+                                        'language_2_tag' : list_data.get("language_2_tag"),
+                                        'words' : translations,
+                                        'shared_with' : shared_with
+                                }))
+                        else:
+                                abort(401)
 
-		else:
-			return response_cache_header(json.dumps({"error":"List not found"}), cache_control="no-cache")
-	else:
-		return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
+                else:
+                        return response_cache_header(json.dumps({"error":"List not found"}), cache_control="no-cache")
+        else:
+                return response_cache_header(json.dumps({"error":"User not found"}), cache_control="no-cache")
 
 @app.after_request
 def after_request(response):
@@ -414,4 +421,4 @@ if __name__ == '__main__':
 
 # Run app no ssl
 # if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000, debug=True)
+    # app.run(host='0.0.0.0', port=5000, debug=True)
