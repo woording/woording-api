@@ -127,7 +127,7 @@ def validate():
 def save_list():
         db_manager = DatabaseManager()
 
-        username = request.json.get('username')
+        username = request.json.get('username').lower()
         list_data = request.json.get('list_data')
         token = request.json.get('token')
 
@@ -150,7 +150,19 @@ def save_list():
                 abort(400)
 
         if db_manager.listname_exists_for_user(username, list_data.get('listname')):
+                old_list = db_manager.get_list(username, list_data['listname'])
+                old_words = db_manager.get_translations_for_list(username, list_data['listname'])
                 db_manager.delete_list(username, list_data.get('listname'))
+                db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
+                words = list_data.get('words')
+
+                for i in range(len(words)):
+                        word = words[i]
+                        if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
+                                continue
+                        db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
+
+                return response_cache_header(json.dumps( { 'response' : 'List exists', 'old_list':old_list, 'old_words':old_words } ), cache_control="no-cache")
 
         db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
         words = list_data.get('words')
@@ -167,7 +179,7 @@ def save_list():
 def delete_list():
 	db_manager = DatabaseManager()
 
-	username = request.json.get('username')
+	username = request.json.get('username').lower()
 	listname = request.json.get('listname')
 	token = request.json.get('token')
 
