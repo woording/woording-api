@@ -110,38 +110,12 @@ class DatabaseManager(object):
 
                                 query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
 
-                                # db_conn.query(query_text)
-                                conn = sqlite3.connect('wording.db')
-                                c = conn.cursor()
-                                c.execute(query_text)
-                                conn.commit()
+                                db_conn.query(query_text)
                         else:
                                 print('ERROR: List does not exist')
 
                 else:
                         print('ERROR: User does not exist')
-
-	def add_translations(self, username, listname, words):
-            print("ETSTERSITUETIEUTIEIT")
-            if self.username_exists(username):
-                    # Check if list exists
-                    if self.listname_exists_for_user(username, listname):
-                        db_conn = DatabaseConnection(self.database_path)
-                        list_id = self.get_list(username, listname).get("id")
-                        print(words)
-                        newwords = []
-                        for word in words:
-                            tup = ('test', 'test', 'test')
-                            print(tup)
-                            newwords.append((str(list_id), language_1_text, language_2_text))
-                        print('Newwords:')
-                        print(newwords)
-                    else:
-                            print('ERROR: List does not exist')
-
-            else:
-                    print('ERROR: User does not exist')
-
 
 	def delete_list(self, username, listname):
 		if self.username_exists(username):
@@ -160,7 +134,25 @@ class DatabaseManager(object):
 		else:
 			print('ERROR: User does not exist')	
 
+	def add_auth_token(self, token, user_id):
+            db_conn = DatabaseConnection(self.database_path)
+            
+            query_text = 'INSERT INTO auth_tokens (token, user_id, expires) VALUES ("' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
+            db_conn.query(query_text)
 
+	def get_auth_id(self, token):
+            db_conn = DatabaseConnection(self.database_path)
+
+            query_text = 'SELECT user_id FROM auth_tokens WHERE token=token'
+
+            user_id = db_conn.query(query_text).fetchone()[0]
+
+            query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
+
+            username = db_conn.query(query_text).fetchone()[0]
+
+            return username
+            
 	# Get all user data from a database record by username
 	def get_user(self, username): 
 

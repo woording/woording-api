@@ -90,6 +90,7 @@ def authenticate():
 
         username = request.json.get('username')
         password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+        keep_logged_in = request.json.get('keepLoggedIn')
 
         if username and password:
                 if db_manager.get_user(username):
@@ -97,19 +98,31 @@ def authenticate():
                                 # Check password
                                 if db_manager.check_password(username, password):
                                         token = db_manager.generate_auth_token(username.lower(), password).decode("utf-8")
-                                        print(token)
+                                        user_id = db_manager.get_user(username).get("id")
+                                        if keep_logged_in:
+                                            db_manager.add_auth_token(token, user_id)
                                         return response_cache_header(json.dumps({
                                                 "token": token,
                                                 "success": True
                                         }))
                                 else:
-                                    return response_cache_header(json.dumps({"error":"Incorrect password and/or username", "success":False}), cache_control="no-cache")
+                                    return response_cache_header( json.dumps({ "error":"Incorrect password and/or username", "success":False }), cache_control="no-cache")
                         else:
                             return response_cache_header(json.dumps({"error":"Email not verified", "success":False}), cache_control="no-cache")
                 else:
                     return response_cache_header(json.dumps({"error":"User does not exist", "success":False}), cache_control="no-cache")
         else:
                 return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
+
+@app.route('/remember', methods=['POST'])
+def remember():
+    db_manager = DatabaseManager()
+
+    token = request.json.get('token')
+
+    if token:
+            username = db_manager.get_auth_id(token)
+            return response_cache_header(json.dumps({"response":username, "success":True}), cache_control="no-cache")
 
 # Validate Captcha
 @app.route('/validateCaptcha', methods=['POST'])
@@ -169,18 +182,12 @@ def save_list():
         db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
         words = list_data.get('words')
 
-        totaltimeStart = int(round(time.time() * 1000))
-        print(words)
-        db_manager.add_translations(username, words, list_data.get('listname'))
 
         for i in range(len(words)):
                 word = words[i]
                 if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
                         continue
                 db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
-
-        totaltimeEnd = int(round(time.time() * 1000))
-        print("Takes: " + str(totaltimeEnd - totaltimeStart) + " milliseconds")
 
         return response_cache_header(json.dumps( { 'response' : 'Saved list!' } ), cache_control="no-cache")
 

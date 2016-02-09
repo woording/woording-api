@@ -41,3 +41,11 @@ CREATE TABLE friendship (
 	FOREIGN KEY(user_1_id) REFERENCES user(id) ON DELETE CASCADE,
 	FOREIGN KEY(user_2_id) REFERENCES user(id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS auth_tokens;
+CREATE TABLE auth_tokens (
+    id integer primary key autoincrement not null,
+    token text not null,
+    user_id integer not null,
+    expires text not null
+);
