@@ -120,9 +120,12 @@ def remember():
 
     token = request.json.get('token')
 
-    if token:
+    if token and token != "0":
             username = db_manager.get_auth_id(token)
             return response_cache_header(json.dumps({"response":username, "success":True}), cache_control="no-cache")
+    else:
+            return response_cache_header(json.dumps({"error":"no token", "success":False}), cache_control="no-cache")
+ 
 
 # Validate Captcha
 @app.route('/validateCaptcha', methods=['POST'])
@@ -440,13 +443,13 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-# context.load_cert_chain('apicert.crt', 'apikey.key')
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain('apicert.crt', 'apikey.key')
 
-# # Run app
-# if __name__ == '__main__':
-        # app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+# Run app
+if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
 
 # Run app no ssl
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# if __name__ == '__main__':
+    # app.run(host='0.0.0.0', port=5000, debug=True)
