@@ -6,6 +6,8 @@ from passlib.hash import sha512_crypt
 from database import DatabaseManager
 from myemail import *
 from validate_email import validate_email
+import time
+import time
 import ssl
 import json
 from urllib.request import urlopen
@@ -167,11 +169,18 @@ def save_list():
         db_manager.create_list(username, list_data.get('listname'), list_data.get('language_1_tag'), list_data.get('language_2_tag'), list_data.get('shared_with'))
         words = list_data.get('words')
 
+        totaltimeStart = int(round(time.time() * 1000))
+        print(words)
+        db_manager.add_translations(username, words, list_data.get('listname'))
+
         for i in range(len(words)):
                 word = words[i]
                 if word.get('language_1_text') is u'' or word.get('language_2_text') is u'':
                         continue
                 db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
+
+        totaltimeEnd = int(round(time.time() * 1000))
+        print("Takes: " + str(totaltimeEnd - totaltimeStart) + " milliseconds")
 
         return response_cache_header(json.dumps( { 'response' : 'Saved list!' } ), cache_control="no-cache")
 
@@ -424,13 +433,13 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain('apicert.crt', 'apikey.key')
+# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+# context.load_cert_chain('apicert.crt', 'apikey.key')
 
-# Run app
-if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+# # Run app
+# if __name__ == '__main__':
+        # app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
 
 # Run app no ssl
-# if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

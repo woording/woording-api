@@ -1,4 +1,5 @@
 import sqlite3, json
+import time
 from itsdangerous import (JSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 SECRET_KEY = "SECRET"
@@ -14,9 +15,9 @@ class DatabaseConnection(object):
 		self.cur = self.conn.cursor()
 
 	def query(self, arg):
-		self.cur.execute(arg)
-		self.conn.commit()
-		return self.cur
+                self.cur.execute(arg)
+                self.conn.commit()
+                return self.cur
 
 	def __del__(self):
 		# Close the database connection when done
@@ -96,25 +97,51 @@ class DatabaseManager(object):
 	# so both the username and listname must exist.
 	def create_translation(self, username, listname, language_1_text, language_2_text):
 
-		# Check if user exists
-		if self.username_exists(username):
 
-			# Check if list exists
-			if self.listname_exists_for_user(username, listname):
+                # Check if user exists
+                if self.username_exists(username):
 
-				db_conn = DatabaseConnection(self.database_path)
+                        # Check if list exists
+                        if self.listname_exists_for_user(username, listname):
 
-				list_id = self.get_list(username, listname).get("id")
+                                db_conn = DatabaseConnection(self.database_path)
 
-				query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
+                                list_id = self.get_list(username, listname).get("id")
 
-				db_conn.query(query_text)
+                                query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
 
-			else:
-				print('ERROR: List does not exist')
+                                # db_conn.query(query_text)
+                                conn = sqlite3.connect('wording.db')
+                                c = conn.cursor()
+                                c.execute(query_text)
+                                conn.commit()
+                        else:
+                                print('ERROR: List does not exist')
 
-		else:
-			print('ERROR: User does not exist')
+                else:
+                        print('ERROR: User does not exist')
+
+	def add_translations(self, username, listname, words):
+            print("ETSTERSITUETIEUTIEIT")
+            if self.username_exists(username):
+                    # Check if list exists
+                    if self.listname_exists_for_user(username, listname):
+                        db_conn = DatabaseConnection(self.database_path)
+                        list_id = self.get_list(username, listname).get("id")
+                        print(words)
+                        newwords = []
+                        for word in words:
+                            tup = ('test', 'test', 'test')
+                            print(tup)
+                            newwords.append((str(list_id), language_1_text, language_2_text))
+                        print('Newwords:')
+                        print(newwords)
+                    else:
+                            print('ERROR: List does not exist')
+
+            else:
+                    print('ERROR: User does not exist')
+
 
 	def delete_list(self, username, listname):
 		if self.username_exists(username):
