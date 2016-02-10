@@ -90,7 +90,6 @@ def authenticate():
 
         username = request.json.get('username')
         password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
-        keep_logged_in = request.json.get('keepLoggedIn')
 
         if username and password:
                 if db_manager.get_user(username):
@@ -99,8 +98,7 @@ def authenticate():
                                 if db_manager.check_password(username, password):
                                         token = db_manager.generate_auth_token(username.lower(), password).decode("utf-8")
                                         user_id = db_manager.get_user(username).get("id")
-                                        if keep_logged_in:
-                                            db_manager.add_auth_token(token, user_id)
+
                                         return response_cache_header(json.dumps({
                                                 "token": token,
                                                 "success": True
@@ -114,18 +112,45 @@ def authenticate():
         else:
                 return Response('Login!', 401, {'WWW-Authenticate': 'Basic realm="Login!"'})
 
-@app.route('/remember', methods=['POST'])
+@app.route('/storeSession', methods=['POST'])
+def store():
+    db_manager = DatabaseManager()
+
+    username = request.json.get('username')
+    token = request.json.get('token')
+    # password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
+    selector = request.json.get('selector')
+
+    if username and selector:
+            if db_manager.get_user(username):
+                    # token = db_manager.generate_auth_token(username.lower(), password).decode("utf-8")
+                    user_id = db_manager.get_user(username).get("id")
+
+                    db_manager.add_auth_token(selector, token, user_id)
+
+                    return response_cache_header(json.dumps({"response":"Stored session", "success":True}), cache_control="no-cache")
+
+            else:
+                    return response_cache_header(json.dumps({"error":"User does not exist", "success":False}), cache_control="no-cache")
+    else:
+            return response_cache_header(json.dumps({"error":"Not satisfied", "success":False}), cache_control="no-cache")
+
+@app.route('/retrieveSession', methods=['POST'])
 def remember():
     db_manager = DatabaseManager()
 
-    token = request.json.get('token')
+    selector = request.json.get('selector')
 
-    if token and token != "0":
-            username = db_manager.get_auth_id(token)
-            return response_cache_header(json.dumps({"response":username, "success":True}), cache_control="no-cache")
+    if selector:
+            print('succes')
+            data = db_manager.get_auth_id(selector)
+            username = json.loads(data)['username']
+            token = json.loads(data)['token']
+
+            return response_cache_header(json.dumps({"username":username,"token":token, "success":True}), cache_control="no-cache")
     else:
-            return response_cache_header(json.dumps({"error":"no token", "success":False}), cache_control="no-cache")
- 
+            return response_cache_header(json.dumps({"error":"no session", "success":False}), cache_control="no-cache")
+
 
 # Validate Captcha
 @app.route('/validateCaptcha', methods=['POST'])
@@ -443,13 +468,13 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain('apicert.crt', 'apikey.key')
+# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+# context.load_cert_chain('apicert.crt', 'apikey.key')
 
-# Run app
-if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+# # Run app
+# if __name__ == '__main__':
+        # app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
 
 # Run app no ssl
-# if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

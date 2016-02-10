@@ -134,24 +134,30 @@ class DatabaseManager(object):
 		else:
 			print('ERROR: User does not exist')	
 
-	def add_auth_token(self, token, user_id):
+	def add_auth_token(self, selector, token, user_id):
             db_conn = DatabaseConnection(self.database_path)
             
-            query_text = 'INSERT INTO auth_tokens (token, user_id, expires) VALUES ("' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
+            query_text = 'INSERT INTO auth_tokens (selector, token, user_id, expires) VALUES ("' + selector + '", "' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
             db_conn.query(query_text)
 
-	def get_auth_id(self, token):
+	def get_auth_id(self, selector):
+            print('GET AUTH ID CALLED')
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'SELECT user_id FROM auth_tokens WHERE token=token'
+            query_text = 'SELECT user_id, token FROM auth_tokens WHERE selector=selector'
 
             user_id = db_conn.query(query_text).fetchone()[0]
+            token = db_conn.query(query_text).fetchone()[1]
 
             query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
 
             username = db_conn.query(query_text).fetchone()[0]
 
-            return username
+            # query_text = 'DELETE FROM auth_tokens WHERE selector=selector'
+
+            # db_conn.query(query_text)
+
+            return json.dumps({'username':username, 'token':token})
             
 	# Get all user data from a database record by username
 	def get_user(self, username): 
