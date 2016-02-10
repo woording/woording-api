@@ -140,6 +140,13 @@ class DatabaseManager(object):
             query_text = 'INSERT INTO auth_tokens (selector, token, user_id, expires) VALUES ("' + selector + '", "' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
             db_conn.query(query_text)
 
+	def remove_auth_token(self, selector):
+            db_conn = DatabaseConnection(self.database_path)
+
+            query_text = 'DELETE FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
+            
+            db_conn.query(query_text)
+
 	def get_auth_id(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
@@ -153,13 +160,6 @@ class DatabaseManager(object):
                 query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
 
                 username = db_conn.query(query_text).fetchone()[0]
-
-                query_text = 'SELECT id FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
-
-                query_text = 'DELETE FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
-                print(query_text)
-
-                db_conn.query(query_text)
 
                 return json.dumps({'username':username, 'token':token})
 

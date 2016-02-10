@@ -134,6 +134,19 @@ def store():
     else:
             return response_cache_header(json.dumps({"error":"Not satisfied", "success":False}), cache_control="no-cache")
 
+@app.route('/removeSession', methods=['POST'])
+def remove():
+    db_manager = DatabaseManager()
+
+    selector = request.json.get('selector')
+
+    if selector:
+        db_manager.remove_auth_token(selector)
+
+        return response_cache_header(json.dumps({"response":"Removed Session", "success":True}), cache_control="no-cache")
+    else:
+        return response_cache_header(json.dumps({"response":"Did not remove session", "success":False}), cache_control="no-cache")
+
 @app.route('/retrieveSession', methods=['POST'])
 def remember():
     db_manager = DatabaseManager()
