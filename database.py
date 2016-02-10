@@ -141,23 +141,31 @@ class DatabaseManager(object):
             db_conn.query(query_text)
 
 	def get_auth_id(self, selector):
-            print('GET AUTH ID CALLED')
             db_conn = DatabaseConnection(self.database_path)
 
             query_text = 'SELECT user_id, token FROM auth_tokens WHERE selector=selector'
 
-            user_id = db_conn.query(query_text).fetchone()[0]
-            token = db_conn.query(query_text).fetchone()[1]
+            if db_conn.query(query_text).fetchone() is not None:
 
-            query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
+                user_id = db_conn.query(query_text).fetchone()[0]
+                token = db_conn.query(query_text).fetchone()[1]
 
-            username = db_conn.query(query_text).fetchone()[0]
+                query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
 
-            # query_text = 'DELETE FROM auth_tokens WHERE selector=selector'
+                username = db_conn.query(query_text).fetchone()[0]
 
-            # db_conn.query(query_text)
+                query_text = 'SELECT id FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
 
-            return json.dumps({'username':username, 'token':token})
+                query_text = 'DELETE FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
+                print(query_text)
+
+                db_conn.query(query_text)
+
+                return json.dumps({'username':username, 'token':token})
+
+            else:
+                return False
+
             
 	# Get all user data from a database record by username
 	def get_user(self, username): 

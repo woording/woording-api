@@ -123,7 +123,6 @@ def store():
 
     if username and selector:
             if db_manager.get_user(username):
-                    # token = db_manager.generate_auth_token(username.lower(), password).decode("utf-8")
                     user_id = db_manager.get_user(username).get("id")
 
                     db_manager.add_auth_token(selector, token, user_id)
@@ -142,12 +141,14 @@ def remember():
     selector = request.json.get('selector')
 
     if selector:
-            print('succes')
             data = db_manager.get_auth_id(selector)
-            username = json.loads(data)['username']
-            token = json.loads(data)['token']
+            if data:
+                username = json.loads(data)['username']
+                token = json.loads(data)['token']
 
-            return response_cache_header(json.dumps({"username":username,"token":token, "success":True}), cache_control="no-cache")
+                return response_cache_header(json.dumps({"username":username,"token":token, "success":True}), cache_control="no-cache")
+            else:
+                return response_cache_header(json.dumps({"error":"no session", "success":False}), cache_control="no-cache")
     else:
             return response_cache_header(json.dumps({"error":"no session", "success":False}), cache_control="no-cache")
 
