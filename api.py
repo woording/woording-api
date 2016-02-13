@@ -360,7 +360,6 @@ def get(username):
 
         token = request.json.get('token')
         if token is None or token is "":
-                print('No token')
                 return abort(401)
 
         # Verifiy token

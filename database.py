@@ -136,6 +136,7 @@ class DatabaseManager(object):
 
 	def add_auth_token(self, selector, token, user_id):
             db_conn = DatabaseConnection(self.database_path)
+
             
             query_text = 'INSERT INTO auth_tokens (selector, token, user_id, expires) VALUES ("' + selector + '", "' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
             db_conn.query(query_text)
@@ -150,7 +151,7 @@ class DatabaseManager(object):
 	def get_auth_id(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'SELECT user_id, token FROM auth_tokens WHERE selector=selector'
+            query_text = 'SELECT user_id, token FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
 
             if db_conn.query(query_text).fetchone() is not None:
 
