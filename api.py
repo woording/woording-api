@@ -278,7 +278,7 @@ def friend_request():
 
 			# Email request
 			token = generate_confirmation_token([ username, friendname])
-			confirm_url = url_for('accept_friend', token=token, _external=True)
+			confirm_url = 'https://api.woording.com/acceptFrien/' + token
 			html = render_template('friend.html', confirm_url=confirm_url, name=username)
 			subject = "New friend request"
 			send_email(email, subject, html)
