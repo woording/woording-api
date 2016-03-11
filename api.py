@@ -7,7 +7,6 @@ from database import DatabaseManager
 from myemail import *
 from validate_email import validate_email
 import time
-import time
 import ssl
 import json
 from urllib.request import urlopen
