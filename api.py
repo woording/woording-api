@@ -7,7 +7,6 @@ from database import DatabaseManager
 from myemail import *
 from validate_email import validate_email
 import time
-import time
 import ssl
 import json
 from urllib.request import urlopen
@@ -279,7 +278,7 @@ def friend_request():
 
 			# Email request
 			token = generate_confirmation_token([ username, friendname])
-			confirm_url = url_for('accept_friend', token=token, _external=True)
+			confirm_url = 'https://api.woording.com/acceptFrien/' + token
 			html = render_template('friend.html', confirm_url=confirm_url, name=username)
 			subject = "New friend request"
 			send_email(email, subject, html)
@@ -486,7 +485,7 @@ context.load_cert_chain('apicert.crt', 'apikey.key')
 
 # Run app
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, debug=True, ssl_context=context)
+        app.run(host='0.0.0.0', port=5000, ssl_context=context)
 
 # Run app no ssl
 # if __name__ == '__main__':
