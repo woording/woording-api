@@ -231,7 +231,7 @@ def save_list():
                         continue
                 db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-        return response_cache_header(json.dumps( { 'response' : 'Saved list!' } ), cache_control="no-cache")
+        return response_cache_header(json.dumps( { 'response' : 'Saved list!', 'listname' : list_data.get('listname') } ), cache_control="no-cache")
 
 @app.route('/deleteList', methods=['POST'])
 def delete_list():
