@@ -265,10 +265,9 @@ class DatabaseManager(object):
 			return False
 
 	def username_exists(self, username):
-
 		# If the username is in the username list, it exists
                 usernames = [x.lower() for x in self.get_username_list()]
-                return username.lower() in usernames
+                return str(username).lower() in usernames
 		# return username in self.get_username_list()
 
 	def email_exists(self, email):
@@ -309,18 +308,20 @@ class DatabaseManager(object):
 	# Get all users friends
 	def get_friends_for_user(self, username):
 
-		# TODO: Sanity checks
+                print('Test for username')
+                print(username)
+                # TODO: Sanity checks
 
-		# get all friend id's
-		friend_ids = self.get_friend_ids_for_user(username)
+                # get all friend id's
+                friend_ids = self.get_friend_ids_for_user(username)
 
-		# Map the results of get_username and firend_ids on friends_usernames
-		friend_usernames = list(map(self.get_username, friend_ids))
+                # Map the results of get_username and firend_ids on friends_usernames
+                friend_usernames = list(map(self.get_username, friend_ids))
 
-		# Map the results of get_user and friend_usernames on friends
-		friends = list(map(self.get_user, friend_usernames))
+                # Map the results of get_user and friend_usernames on friends
+                friends = list(map(self.get_user, friend_usernames))
 
-		return friends
+                return friends
 
 	# Create a friendship between users
 	def create_friendship(self, username_1, username_2):

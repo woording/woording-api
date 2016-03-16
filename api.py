@@ -304,28 +304,36 @@ def accept_friend(token):
 
 @app.route('/getFriends', methods=['POST'])
 def get_friends():
-	db_manager = DatabaseManager()
+        print('test if function works')
+        db_manager = DatabaseManager()
 
-	username = request.json.get('username').lower()
-	token = request.json.get('token')
+        username = request.json.get('username').lower()
+        token = request.json.get('token')
 
-	if username == None or token == None:
-		abort(400)
+        print('test if parameters work')
 
-	# Verifiy token
-	token_credentials = db_manager.verify_auth_token(token=token)
-	if token_credentials is None:
-		abort(401)
-	elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
-		abort(401)
-	elif token_credentials[0] != username:
-		abort(401)
+        if username == None or token == None:
+                abort(400)
 
-	friends = db_manager.get_friends_for_user(username)
-	# It is unsafe to send your friends password hash to the browser... 	email_verified and id aren't needed
-	for friend in friends: del friend['password_hash']; del friend['email_verified']; del friend['id']
+        # Verifiy token
+        token_credentials = db_manager.verify_auth_token(token=token)
+        if token_credentials is None:
+                abort(401)
+        elif not db_manager.check_password(token_credentials[0], token_credentials[1]):
+                abort(401)
+        elif token_credentials[0] != username:
+                abort(401)
 
-	return response_cache_header(json.dumps({"friends":friends}))
+        friends = db_manager.get_friends_for_user(username)
+        print(friends)
+        # It is unsafe to send your friends password hash to the browser...         email_verified and id aren't needed
+        for friend in friends:
+            if friend == None:
+                friends.remove(friend)
+                continue
+            del friend['password_hash']; del friend['email_verified']; del friend['id']
+
+        return response_cache_header(json.dumps({"friends":friends}))
 
 @app.route('/changePassword', methods=['POST'])
 def change_password():
@@ -489,7 +497,7 @@ context.load_cert_chain('apicert.crt', 'apikey.key')
 
 # Run app
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, ssl_context=context)
+        app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
 
 # # Run app no ssl
 # if __name__ == '__main__':
