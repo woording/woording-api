@@ -200,6 +200,10 @@ def save_list():
         elif token_credentials[0] != username:
                 abort(401)
 
+        if len(list_data.get('listname')) > 20:
+            print(list_data['listname'][:20])
+            list_data['listname'] = list_data['listname'][:20]
+
         if list_data.get('listname') is None or list_data.get('language_1_tag') is None or list_data.get('language_2_tag') is None or list_data.get('shared_with') is None:
                 abort(400)
 
@@ -231,7 +235,7 @@ def save_list():
                         continue
                 db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-        return response_cache_header(json.dumps( { 'response' : 'Saved list!' } ), cache_control="no-cache")
+        return response_cache_header(json.dumps( { 'response' : 'Saved list!', 'listname' : list_data['listname']} ), cache_control="no-cache")
 
 @app.route('/deleteList', methods=['POST'])
 def delete_list():
