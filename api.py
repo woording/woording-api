@@ -7,7 +7,6 @@ from database import DatabaseManager
 from myemail import *
 from validate_email import validate_email
 import time
-import time
 import ssl
 import json
 from urllib.request import urlopen
@@ -235,7 +234,7 @@ def save_list():
                         continue
                 db_manager.create_translation(username, list_data.get('listname'), word.get('language_1_text'), word.get('language_2_text'))
 
-        return response_cache_header(json.dumps( { 'response' : 'Saved list!', 'listname' : list_data['listname']} ), cache_control="no-cache")
+        return response_cache_header(json.dumps( { 'response' : 'Saved list!', 'listname' : list_data.get('listname') } ), cache_control="no-cache")
 
 @app.route('/deleteList', methods=['POST'])
 def delete_list():
@@ -283,7 +282,7 @@ def friend_request():
 
 			# Email request
 			token = generate_confirmation_token([ username, friendname])
-			confirm_url = url_for('accept_friend', token=token, _external=True)
+			confirm_url = 'https://api.woording.com/acceptFriend/' + token
 			html = render_template('friend.html', confirm_url=confirm_url, name=username)
 			subject = "New friend request"
 			send_email(email, subject, html)
@@ -492,6 +491,6 @@ context.load_cert_chain('apicert.crt', 'apikey.key')
 if __name__ == '__main__':
         app.run(host='0.0.0.0', port=5000, ssl_context=context)
 
-# Run app no ssl
+# # Run app no ssl
 # if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000, debug=True)
