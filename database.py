@@ -132,44 +132,38 @@ class DatabaseManager(object):
 				print('ERROR: List does not exist')
 
 		else:
-			print('ERROR: User does not exist')	
+			print('ERROR: User does not exist')
 
-	def add_auth_token(self, selector, token, user_id):
+	def add_auth_token(self, selector, token):
             db_conn = DatabaseConnection(self.database_path)
 
-            
-            query_text = 'INSERT INTO auth_tokens (selector, token, user_id, expires) VALUES ("' + selector + '", "' + token + '", ' + str(user_id) + ', + "' + "2037" + '")'
+            query_text = 'INSERT INTO auth_tokens (selector, token, expires) VALUES ("' + selector + '", "' + token + '", + "' + "2037" + '")'
             db_conn.query(query_text)
 
 	def remove_auth_token(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
             query_text = 'DELETE FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
-            
+
             db_conn.query(query_text)
 
 	def get_auth_id(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'SELECT user_id, token FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
+            query_text = 'SELECT token FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
 
             if db_conn.query(query_text).fetchone() is not None:
 
-                user_id = db_conn.query(query_text).fetchone()[0]
-                token = db_conn.query(query_text).fetchone()[1]
+                token = db_conn.query(query_text).fetchone()[0]
 
-                query_text = 'SELECT username FROM user WHERE id=' + str(user_id)
-
-                username = db_conn.query(query_text).fetchone()[0]
-
-                return json.dumps({'username':username, 'token':token})
+                return json.dumps({'token':token})
 
             else:
                 return False
 
-            
+
 	# Get all user data from a database record by username
-	def get_user(self, username): 
+	def get_user(self, username):
 
 		# Check if the user exists
 		if self.username_exists(username):
@@ -197,7 +191,7 @@ class DatabaseManager(object):
 			query_text = 'SELECT username FROM user WHERE id = "' + str(user_id) + '"'
 
 			username = db_conn.query(query_text).fetchone()
-			
+
 			return username[0]
 
 	def user_id_exists(self, user_id):
@@ -206,13 +200,13 @@ class DatabaseManager(object):
 	def get_user_id_list(self):
 		# Create a DatabaseConnection
  		db_conn = DatabaseConnection(self.database_path)
- 
+
  		# Get all the username rows
  		user_id_rows = db_conn.query('SELECT id FROM user').fetchall()
- 
+
  		# Extract the first item
  		user_ids = tuple(user_id[0] for user_id in user_id_rows)
- 		
+
  		return user_ids
 
  	# Check if the password is correct
@@ -250,7 +244,7 @@ class DatabaseManager(object):
 			query_text = 'UPDATE user SET email_verified = 1 WHERE email = "' + email_to_verify + '"'
 
 			db_conn.query(query_text)
-		
+
 	# Check if a email address is verified, returns a Boolean
 	def email_is_verified(self, email_to_check):
 
@@ -308,8 +302,6 @@ class DatabaseManager(object):
 	# Get all users friends
 	def get_friends_for_user(self, username):
 
-                print('Test for username')
-                print(username)
                 # TODO: Sanity checks
 
                 # get all friend id's
@@ -346,7 +338,7 @@ class DatabaseManager(object):
                 username_rows = db_conn.query('SELECT username FROM user').fetchall()
                 # Extract the first item
                 usernames = tuple(username[0] for username in username_rows)
-                
+
                 return usernames
 
 	def get_email_list(self):

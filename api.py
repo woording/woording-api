@@ -115,21 +115,14 @@ def authenticate():
 def store():
     db_manager = DatabaseManager()
 
-    username = request.json.get('username')
     token = request.json.get('token')
     # password = sha512_crypt.encrypt(request.json.get('password'), salt=app.config['SECURITY_PASSWORD_SALT'], rounds=5000)
     selector = request.json.get('selector')
 
-    if username and selector:
-            if db_manager.get_user(username):
-                    user_id = db_manager.get_user(username).get("id")
+    if selector:
+            db_manager.add_auth_token(selector, token)
 
-                    db_manager.add_auth_token(selector, token, user_id)
-
-                    return response_cache_header(json.dumps({"response":"Stored session", "success":True}), cache_control="no-cache")
-
-            else:
-                    return response_cache_header(json.dumps({"error":"User does not exist", "success":False}), cache_control="no-cache")
+            return response_cache_header(json.dumps({"response":"Stored session", "success":True}), cache_control="no-cache")
     else:
             return response_cache_header(json.dumps({"error":"Not satisfied", "success":False}), cache_control="no-cache")
 
@@ -155,10 +148,9 @@ def remember():
     if selector:
             data = db_manager.get_auth_id(selector)
             if data:
-                username = json.loads(data)['username']
                 token = json.loads(data)['token']
 
-                return response_cache_header(json.dumps({"username":username,"token":token, "success":True}), cache_control="no-cache")
+                return response_cache_header(json.dumps({"token":token, "success":True}), cache_control="no-cache")
             else:
                 return response_cache_header(json.dumps({"error":"no session", "success":False}), cache_control="no-cache")
     else:
@@ -304,13 +296,10 @@ def accept_friend(token):
 
 @app.route('/getFriends', methods=['POST'])
 def get_friends():
-        print('test if function works')
         db_manager = DatabaseManager()
 
         username = request.json.get('username').lower()
         token = request.json.get('token')
-
-        print('test if parameters work')
 
         if username == None or token == None:
                 abort(400)
@@ -325,7 +314,6 @@ def get_friends():
                 abort(401)
 
         friends = db_manager.get_friends_for_user(username)
-        print(friends)
         # It is unsafe to send your friends password hash to the browser...         email_verified and id aren't needed
         for friend in friends:
             if friend == None:
@@ -486,7 +474,6 @@ def show_user_list(username, listname):
 
 @app.after_request
 def after_request(response):
-	print("after_request happening")
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
@@ -499,6 +486,6 @@ context.load_cert_chain('apicert.crt', 'apikey.key')
 if __name__ == '__main__':
         app.run(host='0.0.0.0', port=5000, ssl_context=context)
 
-# # Run app no ssl
+# Run app no ssl
 # if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000, debug=True)
