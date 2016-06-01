@@ -1,6 +1,6 @@
 from flask import Flask, request, abort, url_for, render_template, session, Response, redirect
 from flask import g
-from flask.ext.cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from passlib.hash import sha512_crypt
 from database import DatabaseManager
