@@ -1,0 +1,9 @@
+flask
+flask-restful
+flask-login
+flask-mail
+flask-cors
+flask-sqlalchemy
+passlib
+validate_email
+flask-httpauth
