@@ -10,8 +10,9 @@ woording-api is a RESTful API that is being used in all other woording projects 
 First, install `docker`, after that do this
 ```bash
 docker build -t woording-api .
-docker run -v /Users/cor/Developer/woording/woording-api:/source-files woording-api
+docker run -P -d -v /Users/cor/Developer/woording/woording-api:/source-files woording-api
 ```
+Now run `docker ps` and look for the correct container, and use the mapped port to access the api
 
 ## How it works
 All user data gets stored in a SQL database, and database.py let's you use that database with Python functions, api.py uses Flask with a REST plug in and calls those functions.
