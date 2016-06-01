@@ -479,12 +479,12 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain('apicert.crt', 'apikey.key')
+# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+# context.load_cert_chain('apicert.crt', 'apikey.key')
 
 # Run app
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, ssl_context=context)
+        app.run(host='0.0.0.0', port=5000)
 
 # Run app no ssl
 # if __name__ == '__main__':

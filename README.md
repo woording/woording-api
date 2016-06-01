@@ -7,9 +7,10 @@ woording-api
 woording-api is a RESTful API that is being used in all other woording projects such as woording-web, woording-ios and woording-android.  
 
 ## How to set up woording-api on your machine
+First, install `docker`, after that do this
 ```bash
-./initalize.sh
-./start-server.sh
+docker build -t woording-api .
+docker run -v /Users/cor/Developer/woording/woording-api:/source-files woording-api
 ```
 
 ## How it works

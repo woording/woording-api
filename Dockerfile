@@ -11,6 +11,7 @@ COPY requirements.txt /tmp/
 # Install dependencies using pip
 RUN pip install --requirement /tmp/requirements.txt
 
+EXPOSE 5000
 
 RUN pwd
 
