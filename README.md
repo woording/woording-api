@@ -10,7 +10,7 @@ woording-api is a RESTful API that is being used in all other woording projects 
 First, install `docker`, after that do this
 ```bash
 docker build -t woording-api .
-docker run -P -d -v /Users/cor/Developer/woording/woording-api:/source-files woording-api
+docker run -P -d -v "$PWD":/source-files woording-api
 ```
 Now run `docker ps` and look for the correct container, and use the mapped port to access the api
 
