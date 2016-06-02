@@ -3,8 +3,7 @@ flask-restful
 flask-login
 flask-mail
 flask-cors
-flask-sqlalchemy
-mysqlclient
+psycopg2
 passlib
 validate_email
 flask-httpauth
