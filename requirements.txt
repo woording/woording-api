@@ -4,6 +4,8 @@ flask-login
 flask-mail
 flask-cors
 flask-sqlalchemy
+mysqlclient
 passlib
 validate_email
 flask-httpauth
+
