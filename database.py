@@ -1,4 +1,5 @@
 import sqlite3, json
+import psycopg2
 import time
 from itsdangerous import (JSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
@@ -8,9 +9,9 @@ SECRET_KEY = "SECRET"
 class DatabaseConnection(object):
 	def __init__(self, db):
 		# Create a database connection when initializing
-		self.conn = sqlite3.connect(db)
+		self.conn = psycopg2.connect('dbname=postgres host=woording-db user=postgres password=mysecretpassword')
 		# Enable foreign_keys for extra safety
-		self.conn.execute('pragma foreign_keys = on')
+		# self.conn.execute('pragma foreign_keys = on')
 		self.conn.commit()
 		self.cur = self.conn.cursor()
 
