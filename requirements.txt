@@ -7,3 +7,4 @@ flask-sqlalchemy
 passlib
 validate_email
 flask-httpauth
+flask-mysql
