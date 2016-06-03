@@ -54,11 +54,8 @@ class DatabaseManager(object):
 		# Check if the username is available
 		if not self.username_exists(username):
 
-			# Create a DatabaseConnection
+			# Username available, create user
 			db_conn = DatabaseConnection(self.database_path)
-
-			# Genereate the query=
-
 			db_conn.query("INSERT INTO users (username, email, email_verified, password_hash) VALUES (%s, %s, %s, %s)", (username, email, email_verified, password_hash))
 
 		else:
@@ -199,10 +196,11 @@ class DatabaseManager(object):
 
 		# Check if the user does exist
 		if self.username_exists(username):
-			# Create database connection
+
 			db_conn = DatabaseConnection(self.database_path)
 			lowercase_username = username.lower()
 
+			# Get user
 			user = db_conn.query("SELECT * FROM users WHERE LOWER(username) = %s AND password_hash = %s", (lowercase_username, password)).fetchone();
 
 			return user is not None
