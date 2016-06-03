@@ -11,8 +11,8 @@ COPY requirements.txt /tmp/
 # Install dependencies using pip
 RUN pip install --requirement /tmp/requirements.txt
 
+# Expose the correct port
 EXPOSE 5000
 
-RUN pwd
 
 ENTRYPOINT ["python", "api.py"]

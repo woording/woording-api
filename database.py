@@ -1,4 +1,5 @@
 import sqlite3, json
+import psycopg2
 import time
 from itsdangerous import (JSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
@@ -8,14 +9,14 @@ SECRET_KEY = "SECRET"
 class DatabaseConnection(object):
 	def __init__(self, db):
 		# Create a database connection when initializing
-		self.conn = sqlite3.connect(db)
+		self.conn = psycopg2.connect('dbname=postgres host=woording-db user=postgres password=mysecretpassword')
 		# Enable foreign_keys for extra safety
-		self.conn.execute('pragma foreign_keys = on')
+		# self.conn.execute('pragma foreign_keys = on') 
 		self.conn.commit()
 		self.cur = self.conn.cursor()
 
-	def query(self, arg):
-                self.cur.execute(arg)
+	def query(self, arg, args):
+                self.cur.execute(arg, args)
                 self.conn.commit()
                 return self.cur
 
@@ -53,14 +54,9 @@ class DatabaseManager(object):
 		# Check if the username is available
 		if not self.username_exists(username):
 
-			# Create a DatabaseConnection
+			# Username available, create user
 			db_conn = DatabaseConnection(self.database_path)
-
-			# Genereate the query
-			query_text = 'INSERT INTO user (username, email, email_verified, password_hash) VALUES ("' + username + '", "' + email + '", "' + str(int(email_verified)) + '", "' + password_hash + '")'
-
-			# Use the query to create a new user
-			db_conn.query(query_text)
+			db_conn.query("INSERT INTO users (username, email, email_verified, password_hash) VALUES (%s, %s, %s, %s)", (username, email, email_verified, password_hash))
 
 		else:
 			# TODO Handle username is not available error
@@ -78,14 +74,10 @@ class DatabaseManager(object):
 
 				user_id = self.get_user(username).get("id")
 
-				# Generate the query
-				query_text = 'INSERT INTO list (user_id, listname, language_1_tag, language_2_tag, shared) VALUES (' + str(user_id) + ', "' + listname + '", "' + language_1_tag + '", "' + language_2_tag + '", "' + shared_with + '")'
-
-				# Use the query to create a new list
-
 				#Create a DatabaseConnection
 				db_conn = DatabaseConnection(self.database_path)
-				db_conn.query(query_text)
+
+				db_conn.query("INSERT INTO lists (user_id, listname, language_1_tag, language_2_tag, shared) VALUES (%s, %s, %s, %s, %s)", (user_id, listname, language_1_tag, language_2_tag, shared_with))
 			else:
 				print ('ERROR: Listname already exists for user')
 
@@ -108,9 +100,7 @@ class DatabaseManager(object):
 
                                 list_id = self.get_list(username, listname).get("id")
 
-                                query_text = 'INSERT INTO translation (list_id, language_1_text, language_2_text) VALUES (' + str(list_id) + ', "' + language_1_text + '", "' + language_2_text + '")'
-
-                                db_conn.query(query_text)
+                                db_conn.query("INSERT INTO translations (list_id, language_1_text, language_2_text) VALUES (%s, %s, %s)", (list_id, language_1_text, language_2_text))
                         else:
                                 print('ERROR: List does not exist')
 
@@ -125,8 +115,7 @@ class DatabaseManager(object):
 				list_id = self.get_list(username, listname).get("id")
 
 				# Delete list
-				query_text = 'DELETE FROM list WHERE id = ' + str(list_id)
-				db_conn.query(query_text)
+				db_conn.query("DELETE FROM lists WHERE id = %s", (list_id, ))
 
 			else:
 				print('ERROR: List does not exist')
@@ -137,24 +126,20 @@ class DatabaseManager(object):
 	def add_auth_token(self, selector, token):
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'INSERT INTO auth_tokens (selector, token, expires) VALUES ("' + selector + '", "' + token + '", + "' + "2037" + '")'
-            db_conn.query(query_text)
+            db_conn.query("INSERT INTO auth_tokens (selector, token, expires) VALUES (%s, %s, %s)", (selector, token, 2037))
+            # 2037?
 
 	def remove_auth_token(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'DELETE FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
-
-            db_conn.query(query_text)
+            db_conn.query("DELETE FROM auth_tokens WHERE selector = %s", (selector, ))
 
 	def get_auth_id(self, selector):
             db_conn = DatabaseConnection(self.database_path)
 
-            query_text = 'SELECT token FROM auth_tokens WHERE selector = ' + "'" + str(selector) + "'"
+            if db_conn.query("SELECT token FROM auth_tokens WHERE selector = %s", (selector, )).fetchone() is not None:
 
-            if db_conn.query(query_text).fetchone() is not None:
-
-                token = db_conn.query(query_text).fetchone()[0]
+                token = db_conn.query("SELECT token FROM auth_tokens WHERE selector = %s", (selector, )).fetchone()[0]
 
                 return json.dumps({'token':token})
 
@@ -165,32 +150,29 @@ class DatabaseManager(object):
 	# Get all user data from a database record by username
 	def get_user(self, username):
 
-		# Check if the user exists
+		# check if the user exists
 		if self.username_exists(username):
 
-                        # Create a DatabaseConnection
-                        db_conn = DatabaseConnection(self.database_path)
+			# create a databaseconnection
+			db_conn = DatabaseConnection(self.database_path)
 
-                        # Generate the query
-                        query_text = 'SELECT * FROM user WHERE LOWER(username) = "' + username.lower() + '"'
+			lowercase_username = username.lower()
 
-                        # Fetch the first record
-                        user_record = db_conn.query(query_text).fetchone()
+			# fetch the first record
+			user_record = db_conn.query("SELECT * FROM users WHERE LOWER(username) = %s", (lowercase_username,)).fetchone()
 
-                        # Create a dictionary from the user_info and return it
-                        return self.get_dictionary_from_user_record(user_record)
+			# create a dictionary from the user_info and return it
+			return self.get_dictionary_from_user_record(user_record)
 
 		else:
-			print ('ERROR: User does not exist')
+			print ('error: user does not exist')
 
 	def get_username(self, user_id):
 
 		if self.user_id_exists(user_id):
 			db_conn = DatabaseConnection(self.database_path)
 
-			query_text = 'SELECT username FROM user WHERE id = "' + str(user_id) + '"'
-
-			username = db_conn.query(query_text).fetchone()
+			username = db_conn.query("SELECT username FROM users WHERE id = %s", (user_id, )).fetchone()
 
 			return username[0]
 
@@ -202,7 +184,7 @@ class DatabaseManager(object):
  		db_conn = DatabaseConnection(self.database_path)
 
  		# Get all the username rows
- 		user_id_rows = db_conn.query('SELECT id FROM user').fetchall()
+ 		user_id_rows = db_conn.query("SELECT id FROM users", ()).fetchall()
 
  		# Extract the first item
  		user_ids = tuple(user_id[0] for user_id in user_id_rows)
@@ -214,12 +196,12 @@ class DatabaseManager(object):
 
 		# Check if the user does exist
 		if self.username_exists(username):
-			# Create database connection
+
 			db_conn = DatabaseConnection(self.database_path)
+			lowercase_username = username.lower()
 
-			query_text = 'SELECT * FROM user WHERE LOWER(username) = "' + username.lower() + '" AND password_hash = "' + password + '"'
-
-			user = db_conn.query(query_text).fetchone();
+			# Get user
+			user = db_conn.query("SELECT * FROM users WHERE LOWER(username) = %s AND password_hash = %s", (lowercase_username, password)).fetchone();
 
 			return user is not None
 
@@ -231,8 +213,7 @@ class DatabaseManager(object):
 			if self.check_password(username, old_password):
 				db_conn = DatabaseConnection(self.database_path)
 
-				query_text = 'UPDATE user SET password_hash = "' + new_password + '" WHERE username = "' + username + '" AND password_hash = "' + old_password + '"'
-				db_conn.query(query_text)
+				db_conn.query("UPDATE users SET password_hash = %s WHERE username = %s AND password_hash = %s", (new_password, username, old_password))
 
 	def verify_email(self, email_to_verify):
 		if self.email_is_verified(email_to_verify):
@@ -241,9 +222,7 @@ class DatabaseManager(object):
 
 			db_conn = DatabaseConnection(self.database_path)
 
-			query_text = 'UPDATE user SET email_verified = 1 WHERE email = "' + email_to_verify + '"'
-
-			db_conn.query(query_text)
+			db_conn.query("UPDATE users SET email_verified = True WHERE email = %s", (email_to_verify, ))
 
 	# Check if a email address is verified, returns a Boolean
 	def email_is_verified(self, email_to_check):
@@ -251,7 +230,7 @@ class DatabaseManager(object):
 		db_conn = DatabaseConnection(self.database_path)
 
 		if self.email_exists(email_to_check):
-			record = db_conn.query('SELECT email_verified FROM user WHERE email = "' + email_to_check + '"').fetchone()
+			record = db_conn.query("SELECT email_verified FROM users WHERE email = %s", (email_to_check, ) ).fetchone()
 
 			return record[0] is 1
 
@@ -280,8 +259,8 @@ class DatabaseManager(object):
 		user_id = self.get_user(username).get("id")
 
 		# Both user_1_id and user_2_id can match our user_id, so we'll have to do two queries
-		friend_id_rows_part1 = db_conn.query('SELECT user_1_id FROM friendship WHERE user_2_id = "' + str(user_id) + '"').fetchall()
-		friend_id_rows_part2 = db_conn.query('SELECT user_2_id FROM friendship WHERE user_1_id = "' + str(user_id) + '"').fetchall()
+		friend_id_rows_part1 = db_conn.query("SELECT user_1_id FROM friendships WHERE user_2_id = %s", (user_id, )).fetchall()
+		friend_id_rows_part2 = db_conn.query("SELECT user_2_id FROM friendships WHERE user_1_id = %s", (user_id, )).fetchall()
 
 		# Join the retrieved parts in one array
 		friend_id_rows = friend_id_rows_part1 + friend_id_rows_part2
@@ -326,8 +305,8 @@ class DatabaseManager(object):
 		if not self.users_are_friends(username_1, username_2):
 
 			db_conn = DatabaseConnection(self.database_path)
-			db_conn.query("INSERT into friendship (user_1_id, user_2_id) VALUES (" + str(user_1_id) + ", " + str(user_2_id) + ")")
-
+			db_conn.query("INSERT into friendships (user_1_id, user_2_id) VALUES (%s, %s)",(user_1_id, user_2_id))
+			
 
 	def get_username_list(self):
 
@@ -335,7 +314,7 @@ class DatabaseManager(object):
                 db_conn = DatabaseConnection(self.database_path)
 
                 # Get all the username rows
-                username_rows = db_conn.query('SELECT username FROM user').fetchall()
+                username_rows = db_conn.query("SELECT username FROM users", ()).fetchall()
                 # Extract the first item
                 usernames = tuple(username[0] for username in username_rows)
 
@@ -346,7 +325,7 @@ class DatabaseManager(object):
 		db_conn = DatabaseConnection(self.database_path)
 
 		# Get all email rows
-		email_rows = db_conn.query('SELECT email FROM user').fetchall()
+		email_rows = db_conn.query("SELECT email FROM users", ()).fetchall()
 
 		emails = tuple(email[0] for email in email_rows)
 
@@ -356,7 +335,7 @@ class DatabaseManager(object):
 
 		# function to get listname from list dictionary
 		def get_listname(list_dictionary):
-			return list_dictionary.get('listname')
+			return list_dictionary.get("listname")
 
 		# Map the function on every list dictionary
 		listnames = list(map(get_listname, self.get_lists_for_user(username)))
@@ -370,7 +349,8 @@ class DatabaseManager(object):
 		user_id = self.get_user(username).get("id")
 
 		# Get all list rows
-		list_rows = db_conn.query('SELECT * FROM list WHERE user_id = "' + str(user_id) + '"').fetchall()
+		list_rows = db_conn.query("SELECT * FROM lists WHERE user_id = %s", (user_id, )).fetchall()
+
 
 		# Map the results of dictionary_from_list on list_dictionaries
 		list_dictionaries = list(map(self.get_dictionary_from_list_record, list_rows))
@@ -389,10 +369,7 @@ class DatabaseManager(object):
 
 				db_conn = DatabaseConnection(self.database_path)
 
-				# Generate the query
-				query_text = 'SELECT * FROM list WHERE user_id = ' + str(user_id) + ' AND listname = "' + listname + '"'
-
-				list_row = db_conn.query(query_text).fetchone()
+				list_row = db_conn.query("SELECT * FROM lists WHERE user_id = %s AND listname = %s", (user_id, listname)).fetchone()
 
 				return self.get_dictionary_from_list_record(list_row)
 
@@ -408,9 +385,7 @@ class DatabaseManager(object):
 		list_id = self.get_list(username, listname).get("id")
 		db_conn = DatabaseConnection(self.database_path)
 
-		query_text = 'SELECT * FROM translation WHERE list_id = ' + str(list_id)
-
-		translation_rows = db_conn.query(query_text).fetchall()
+		translation_rows = db_conn.query("SELECT * FROM translations WHERE list_id = %s", (list_id, )).fetchall()
 
 		# Map the results of dictionary_from_translation on translation_dictionaries
 		translation_dictionaries = list(map(self.get_dictionary_from_translation_record, translation_rows))
