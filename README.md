@@ -8,9 +8,10 @@ woording-api is a RESTful API that is being used in all other woording projects 
 
 ## How to set up woording-api on your machine
 First, install `docker`, after that do this
+first, run `woording-db`, then
 ```bash
 docker build -t woording-api .
-docker run -P -d -v "$PWD":/source-files woording-api
+docker run --name woordapi -P -v "$PWD":/source-files --link woorddb:woording-db -d woording-api
 ```
 Now run `docker ps` and look for the correct container, and use the mapped port to access the api
 
