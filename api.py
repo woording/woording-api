@@ -421,8 +421,20 @@ def show_user_list(username, listname):
         username = username.lower()
 
         token = request.json.get("token")
-        if token is None or token is "":
-                return abort(401)
+        if token is None or token is "" and db_manager.username_exists(username) and db_manager.listname_exists_for_user(username, listname):
+            list_data = db_manager.get_list(username, listname)
+            shared_with = list_data.get("shared_with")
+            translations = db_manager.get_translations_for_list(username, listname)
+            for translation in translations: del translation['id']; del translation['list_id']
+            return response_cache_header(json.dumps({
+                    'listname' : listname,
+                    'language_1_tag' : list_data.get("language_1_tag"),
+                    'language_2_tag' : list_data.get("language_2_tag"),
+                    'words' : translations,
+                    'shared_with' : shared_with
+            }))
+        else:
+            return abort(401)
 
         # Verifiy token
         token_credentials = db_manager.verify_auth_token(token=token)
@@ -479,8 +491,8 @@ def after_request(response):
 	response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 	return response
 
-# context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-# context.load_cert_chain('apicert.crt', 'apikey.key')
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain('apicert.crt', 'apikey.key')
 
 # Run app
 if __name__ == '__main__':
