@@ -22,7 +22,7 @@ All user data gets stored in a SQL database, and database.py let's you use that 
 ## How to use the API
 For full explaination of all different requests, please check the wiki.
 
-You will first need to get a token from the server, to do this, send a POST to request to http://api.woording.com/authenticate   
+You will first need to get a token from the server, to do this, send a POST to request to https://api.woording.com/authenticate   
 This post request should have `Content-Type: application/json` in the header and also contain the username and password in json format as data, like this:
 ```json
 {
@@ -41,8 +41,8 @@ This will send you a new JSON object containing the token:
 To retrieve data from the API, use POST requests with the token json object (see above)  
 Then, use the super simple url schema
 ```
-http://api.woording.com/cor                    # loads user cor
-http://api.woording.com/cor/engelse_woorden    # loads the cor/engelse_woorden list
+https://api.woording.com/cor                    # loads user cor
+https://api.woording.com/cor/engelse_woorden    # loads the cor/engelse_woorden list
 ```
 
 ### How to handle error respones
