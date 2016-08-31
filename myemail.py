@@ -27,6 +27,7 @@ def send_email(to, subject, template):
     msg["Subject"] = subject
     msg["To"] = to
 
-    server = smtplib.SMTP('localhost')
+    server = smtplib.SMTP('woording-mail')
+    server.login("noreply@woording.com", "SecretPassw0rd")
     server.sendmail(me, [to], msg.as_string())
     server.quit()
